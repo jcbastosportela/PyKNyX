@@ -52,7 +52,7 @@ Usage
 =====
 
 >>> sig = Signal()
->>> def test(value): print "test(): %s" % repr(value)
+>>> def test(value): print("test(): %s" % repr(value))
 >>> sig.connect(test)
 >>> sig.emit("Hello World!")
 test(): 'Hello World!'

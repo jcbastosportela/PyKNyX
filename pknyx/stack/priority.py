@@ -144,8 +144,8 @@ if __name__ == '__main__':
             pass
 
         def test_display(self):
-            print repr(self.priority1)
-            print self.priority1
+            print(repr(self.priority1))
+            print(self.priority1)
 
         def test_constructor(self):
             with self.assertRaises(PriorityValueError):

@@ -334,8 +334,8 @@ if __name__ == '__main__':
             pass
 
         def test_display(self):
-            print repr(self.frame2)
-            print self.frame3
+            print(repr(self.frame2))
+            print(self.frame3)
 
         def test_constructor(self):
             with self.assertRaises(CEMIValueError):

@@ -106,7 +106,7 @@ class DPTXlator2ByteFloat(DPTXlatorBase):
         sign = (data & 0x8000) >> 15
         exp = (data & 0x7800) >> 11
         mant = data & 0x07ff
-        if sign <> 0:
+        if sign != 0:
             mant = -(~(mant - 1) & 0x07ff)
         value = (1 << exp) * 0.01 * mant
         #Logger().debug("DPT2ByteFloat.dataToValue(): sign=%d, exp=%d, mant=%r" % (sign, exp, mant))

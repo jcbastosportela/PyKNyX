@@ -61,20 +61,20 @@ Usage
 
 >>> mapper = GroupAddressTableMapper()
 >>> mapper.loadFrom("/tmp")
->>> print mapper.table
+>>> print(mapper.table)
 {'1/2/1': {'name': 'light_state_test', 'desc': 'Test'}, '1/3/-': {'name': 'light_delay', 'desc': 'Delays'},
 '1/2/-': {'name': 'light_state', 'desc': 'States'}, '1/1/-': {'name': 'light_cmd', 'desc': 'Commands'},
 '1/-/-': {'name': 'light', 'desc': 'Lights'}, '1/1/1': {'name': 'light_cmd_test', 'desc': 'Test'},
 '1/3/1': {'name': 'light_delay_test', 'desc': 'Test'}}
->>> print mapper.deepTable
+>>> print(mapper.deepTable)
 
->>> print mapper.getNickname("1/1/1")
+>>> print(mapper.getNickname("1/1/1"))
 'light_cmd_test'
->>> print mapper.getGad("light_state_test")
+>>> print(mapper.getGad("light_state_test"))
 '1/2/1'
->>> print mapper.getDesc("1/3/1")
+>>> print(mapper.getDesc("1/3/1"))
 'Test (1/3/1)'
->>> print mapper.getDesc("light_state_test")
+>>> print(mapper.getDesc("light_state_test"))
 'Test (1/3/1)'
 
 @author: Frédéric Mantegazza

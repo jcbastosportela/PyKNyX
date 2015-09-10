@@ -15,7 +15,7 @@ class Scheduler(object):
         """
         super(Scheduler, self).__init__()
 
-        print "Scheduler.__init__()"
+        print("Scheduler.__init__()")
 
         self._funcs = []
 
@@ -28,7 +28,7 @@ class Scheduler(object):
             self._funcs.append(func)
             return func
 
-        print "Scheduler.every(hours=%s, minutes=%s, seconds=%s)" % (hours, minutes, seconds)
+        print("Scheduler.every(hours=%s, minutes=%s, seconds=%s)" % (hours, minutes, seconds))
         return decorated
 
     def at(self):
@@ -40,7 +40,7 @@ class Scheduler(object):
             self._funcs.append(func)
             return func
 
-        print "Scheduler.at()"
+        print("Scheduler.at()")
         return decorated
 
     def after(self, hours=None, minutes=None, seconds=None):
@@ -52,7 +52,7 @@ class Scheduler(object):
             self._funcs.append(func)
             return func
 
-        print "Scheduler.after(hours=%s, minutes=%s, seconds=%s)" % (hours, minutes, seconds)
+        print("Scheduler.after(hours=%s, minutes=%s, seconds=%s)" % (hours, minutes, seconds))
         return decorated
 
     def cron(self):
@@ -64,7 +64,7 @@ class Scheduler(object):
             self._funcs.append(func)
             return func
 
-        print "Scheduler.cron()"
+        print("Scheduler.cron()")
         return decorated
 
 
@@ -76,20 +76,20 @@ class Group(object):
         """
         super(Group, self).__init__()
 
-        print "Group.__init__()"
+        print("Group.__init__()")
 
         self._funcs = []
 
     def __call__(self, ga=None, id=None):
         """
         """
-        print "Group.__call__(ga=%s, id=%s)" % (ga, id)
+        print("Group.__call__(ga=%s, id=%s)" % (ga, id))
         return self
 
     def find(self, ga=None, id_=None):
         """
         """
-        print "Group.find(ga=%s, id_=%s)" % (ga, id)
+        print("Group.find(ga=%s, id_=%s)" % (ga, id))
 
     def changed(self, from_=None, to=None):
         """ Decorator
@@ -100,7 +100,7 @@ class Group(object):
             self._funcs.append(func)
             return func
 
-        print "Group.changed(from_=%s, to=%s)" % (from_, to)
+        print("Group.changed(from_=%s, to=%s)" % (from_, to))
         return decorated
 
 
@@ -112,7 +112,7 @@ class System(object):
         """
         super(System, self).__init__()
 
-        print "System.__init__()"
+        print("System.__init__()")
 
         self._funcs = []
 
@@ -125,7 +125,7 @@ class System(object):
             self._funcs.append(func)
             return func
 
-        print "System.start()"
+        print("System.start()")
         return decorated
 
     def stop(self):
@@ -137,7 +137,7 @@ class System(object):
             self._funcs.append(func)
             return func
 
-        print "System.stop()"
+        print("System.stop()")
         return decorated
 
 
@@ -149,7 +149,7 @@ class Trigger(object):
         """
         super(Trigger, self).__init__()
 
-        print "Trigger.__init__()"
+        print("Trigger.__init__()")
 
         self.schedule = Scheduler()
         self.group = Group()
@@ -167,19 +167,19 @@ myTrig = trigger.group(ga="1/1/1").changed()
 def heatingBathroomManagement(event):
     """
     """
-    print "heatingBathroomManagement(): event=%s" % event
+    print("heatingBathroomManagement(): event=%s" % event)
 
 
 class Test(object):
 
     @trigger.schedule.every(minutes=1)
     def test(self):
-        print "test"
+        print("test")
 
 t = Test()
-print t.test.im_func
+print(t.test.im_func)
 
 
-print "Scheduler funcs=%s" % trigger.schedule._funcs
-print "Group funcs=%s" % trigger.group._funcs
-print "System funcs=%s" % trigger.system._funcs
+print("Scheduler funcs=%s" % trigger.schedule._funcs)
+print("Group funcs=%s" % trigger.group._funcs)
+print("System funcs=%s" % trigger.system._funcs)

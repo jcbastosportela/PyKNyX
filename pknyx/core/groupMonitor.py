@@ -152,8 +152,8 @@ if __name__ == '__main__':
             pass
 
         def test_display(self):
-            print repr(self.group)
-            print self.group
+            print(repr(self.group))
+            print(self.group)
 
         def test_constructor(self):
             pass

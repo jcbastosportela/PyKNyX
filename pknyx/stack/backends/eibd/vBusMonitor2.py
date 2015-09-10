@@ -87,7 +87,7 @@ class VBusMonitor2(object):
                 Logger().critical("VBusMonitor2.run(): %s" % os.strerror(self._connection.errno))
                 Logger().critical("VBusMonitor2.run(): call to EIBConnection.EIBGetBusmonitorPacket() failed")
                 sys.exit(-1)
-            print buffer_
+            print(buffer_)
 
 
 class KNX(object):
@@ -112,7 +112,7 @@ class KNX(object):
             data = self.pipe.readline()
             if not data:
                 break
-            print repr(data)
+            print(repr(data))
 
     def stop_listen(self):
         self._read = False

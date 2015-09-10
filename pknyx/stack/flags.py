@@ -176,8 +176,8 @@ if __name__ == '__main__':
             pass
 
         def test_display(self):
-            print repr(self.flags)
-            print self.flags
+            print(repr(self.flags))
+            print(self.flags)
 
         def test_constructor(self):
             with self.assertRaises(FlagsValueError):

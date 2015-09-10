@@ -82,7 +82,7 @@ class AdminUtility(object):
     def _createDevice(self, args):
         """
         """
-        print "Generate '%s' structure from template..." % args.name  # must be a simple name, not a path
+        print("Generate '%s' structure from template..." % args.name)  # must be a simple name, not a path
 
         topDir = args.name
         deviceDir = os.path.join(topDir, args.name)
@@ -97,45 +97,45 @@ class AdminUtility(object):
 
         # Top dir
         TemplateGenerator.createDir(topDir)
-        print "'%s' dir created" % topDir
+        print("'%s' dir created" % topDir)
 
         adminGen = TemplateGenerator(ADMIN)
         dest = os.path.join(topDir, "admin.py")
         adminGen.generateToFile(dest, replaceDict=replace, script=True)
-        print "'%s' file generated" % dest
+        print("'%s' file generated" % dest)
 
         # Device dir
         TemplateGenerator.createDir(deviceDir)
-        print "'%s' dir created" % deviceDir
+        print("'%s' dir created" % deviceDir)
 
         initGen = TemplateGenerator(INIT)
         dest = os.path.join(deviceDir, "__init__.py")
         initGen.generateToFile(dest, {}, script=False)
-        print "'%s' file generated" % dest
+        print("'%s' file generated" % dest)
 
         configGen = TemplateGenerator(SETTINGS)
         dest = os.path.join(deviceDir, "settings.py")
         configGen.generateToFile(dest, replaceDict=replace, script=False)
-        print "'%s' file generated" % dest
+        print("'%s' file generated" % dest)
 
         deviceGen = TemplateGenerator(DEVICE)
         dest = os.path.join(deviceDir, "device.py")
         deviceGen.generateToFile(dest, replaceDict=replace, script=False)
-        print "'%s' file generated" % dest
+        print("'%s' file generated" % dest)
 
         fbGen = TemplateGenerator(FB)
         dest = os.path.join(deviceDir, "%sFB.py" % deviceName)
         fbGen.generateToFile(dest, replaceDict=replace, script=False)
-        print "'%s' file generated" % dest
+        print("'%s' file generated" % dest)
 
-        print "'%s' structure done" % deviceName
+        print("'%s' structure done" % deviceName)
 
     def _checkConfig(self, args):
         """
         """
         PKNYX_DEVICE_PATH = args.devicePath
         if PKNYX_DEVICE_PATH == "$PKNYX_DEVICE_PATH":
-            print "$PKNYX_DEVICE_PATH not set"
+            print("$PKNYX_DEVICE_PATH not set")
             sys.exit(1)
 
     def _checkDevice(self, args):

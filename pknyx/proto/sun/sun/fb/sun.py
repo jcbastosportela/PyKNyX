@@ -198,38 +198,38 @@ def main():
         tm_min, tm_sec = 0, 0
     else:
         tm_year, tm_mon, tm_day, tm_hour, tm_min, tm_sec, tm_wday, tm_yday, tm_isdst = time.localtime()
-        print u"Date/hour        : %s" % time.ctime()
+        print(u"Date/hour        : %s" % time.ctime())
 
     # Compute julian day
     julianDay =  sun.computeJulianDay(tm_year, tm_mon, tm_day, tm_hour, tm_min, tm_sec)
-    print u"Julian day       : %14.6f" % julianDay
+    print(u"Julian day       : %14.6f" % julianDay)
 
     # Compute Sidereal time
     siderealTime = sun.siderealTime(julianDay)
-    print u"Sidereal time    : %.6f" % siderealTime
-    print
+    print(u"Sidereal time    : %.6f" % siderealTime)
+    print("")
 
     # Compute equatorial coordinates
     rightAscension, declination = sun.equatorialCoordinates(tm_year, tm_mon, tm_day, tm_hour, tm_min, tm_sec)
     d, m, s = dd2dms(rightAscension)
-    print u"Right ascension  : %10.6f° (%3d°%02d'%06.3f\")" % (rightAscension, d, m, s)
+    print(u"Right ascension  : %10.6f° (%3d°%02d'%06.3f\")" % (rightAscension, d, m, s))
     d, m, s = dd2dms(declination)
-    print u"Declination      : %10.6f° (%3d°%02d'%06.3f\")" % (declination, d, m, s)
-    print
+    print(u"Declination      : %10.6f° (%3d°%02d'%06.3f\")" % (declination, d, m, s))
+    print("")
 
     # Compute azimuthal coordinates
     elevation, azimuth = sun.azimuthalCoordinates(tm_year, tm_mon, tm_day, tm_hour, tm_min, tm_sec)
     d, m, s = dd2dms(elevation)
-    print u"Elevation        : %10.6f° (%3d°%02d'%06.3f\")" % (elevation, d, m, s)
+    print(u"Elevation        : %10.6f° (%3d°%02d'%06.3f\")" % (elevation, d, m, s))
     d, m, s = dd2dms(azimuth)
-    print u"Azimuth          : %10.6f° (%3d°%02d'%06.3f\")" % (azimuth, d, m, s)
+    print(u"Azimuth          : %10.6f° (%3d°%02d'%06.3f\")" % (azimuth, d, m, s))
 
     from math import cos, sin, radians
-    print
-    print cos(radians(azimuth - 90)) * cos(radians(elevation));
-    print sin(radians(azimuth - 90)) * cos(radians(elevation));
-    print sin(radians(elevation));
-    print
+    print("")
+    print(cos(radians(azimuth - 90)) * cos(radians(elevation));)
+    print(sin(radians(azimuth - 90)) * cos(radians(elevation));)
+    print(sin(radians(elevation));)
+    print("")
 
 
 if __name__ == "__main__":

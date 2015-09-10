@@ -204,8 +204,8 @@ if __name__ == '__main__':
             pass
 
         def test_display(self):
-            print repr(self.dptId)
-            print self.dptId1
+            print(repr(self.dptId))
+            print(self.dptId1)
 
         def test_constructor(self):
             with self.assertRaises(DPTIDValueError):
