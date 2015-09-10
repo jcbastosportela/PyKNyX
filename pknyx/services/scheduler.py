@@ -72,7 +72,8 @@ __revision__ = "$Id$"
 
 import traceback
 
-import apscheduler.scheduler
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.events import EVENT_JOB_ERROR,EVENT_JOB_MISSED
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
@@ -113,8 +114,8 @@ class Scheduler(object):
 
         self._pendingFuncs = []
 
-        self._apscheduler = apscheduler.scheduler.Scheduler()
-        self._apscheduler.add_listener(self._listener, mask=(apscheduler.scheduler.EVENT_JOB_ERROR|apscheduler.scheduler.EVENT_JOB_MISSED))
+        self._apscheduler = BackgroundScheduler()
+        self._apscheduler.add_listener(self._listener, mask=(EVENT_JOB_ERROR|EVENT_JOB_MISSED))
 
         if autoStart:
             scheduler.start()
@@ -223,11 +224,11 @@ class Scheduler(object):
                 Logger().debug("Scheduler.doRegisterJobs(): add method %s() of %s" % (method.im_func.func_name, method.im_self))
                 if method.im_func is func:
                     if type_ == Scheduler.TYPE_EVERY:
-                        self._apscheduler.add_interval_job(method, **kwargs)
+                        self._apscheduler.add_job(method, trigger="interval", **kwargs)
                     elif type_ == Scheduler.TYPE_AT:
-                        self._apscheduler.add_date_job(method, **kwargs)
+                        self._apscheduler.add_job(method, trigger="date", **kwargs)
                     elif type_ == Scheduler.TYPE_CRON:
-                        self._apscheduler.add_cron_job(method, **kwargs)
+                        self._apscheduler.add_job(method, trigger="cron", **kwargs)
 
     def printJobs(self):
         """ Print pending jobs

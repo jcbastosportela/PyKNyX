@@ -92,6 +92,6 @@ setup(name=config.APP_NAME,
       scripts=["pknyx/scripts/pknyx-group.py",
                "pknyx/scripts/pknyx-admin.py"],
 
-      install_requires=["APScheduler == 2.1.2",
+      install_requires=["APScheduler >= 3",
                         "argparse"],
 )
