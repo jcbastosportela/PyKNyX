@@ -72,10 +72,11 @@ class CEMILData(CEMI):
     MC_LDATA_CON = 0x2E  # message code for L-Data confirmation
     MC_LDATA_IND = 0x29  # message code for L-Data indication
 
-    MESSAGE_CODES = (MC_LDATA_REQ,
-                     MC_LDATA_CON,
-                     MC_LDATA_IND
-                    )
+    MESSAGE_CODES = (
+        MC_LDATA_REQ,
+        MC_LDATA_CON,
+        MC_LDATA_IND
+    )
 
     FT_EXT_FRAME = 0
     FT_STD_FRAME = 1
@@ -164,7 +165,9 @@ class CEMILData(CEMI):
 
     @property
     def repeat(self):
-        """ According to calimero:
+        """
+
+        According to calimero:
         // ind: flag 0 = repeated frame, 1 = not repeated
         if (mc == MC_LDATA_IND)
             return (ctrl1 & 0x20) == 0;

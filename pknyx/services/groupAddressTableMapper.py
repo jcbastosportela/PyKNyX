@@ -45,14 +45,15 @@ from B{GAD_MAP_TABLE} dict.
 
 The GAD map table must be in the form:
 
-GAD_MAP_TABLE = {"1/-/-": dict(name="light", desc="Lights (1/-/-)"),
-                 "1/1/-": dict(name="light_cmd", desc="Commands (1/1/-)"),
-                 "1/1/1": dict(name="light_cmd_test", desc="Test (1/1/1)"),
-                 "1/2/-": dict(name="light_state", desc="States (1/2/-)"),
-                 "1/2/1": dict(name="light_state_test", desc="Test (1/2/1)"),
-                 "1/3/-": dict(name="light_delay", desc="Delays (1/3/-)"),
-                 "1/3/1": dict(name="light_delay_test", desc="Test (1/3/1)"),
-                }
+GAD_MAP_TABLE = {
+    "1/-/-": dict(name="light", desc="Lights (1/-/-)"),
+    "1/1/-": dict(name="light_cmd", desc="Commands (1/1/-)"),
+    "1/1/1": dict(name="light_cmd_test", desc="Test (1/1/1)"),
+    "1/2/-": dict(name="light_state", desc="States (1/2/-)"),
+    "1/2/1": dict(name="light_state_test", desc="Test (1/2/1)"),
+    "1/3/-": dict(name="light_delay", desc="Delays (1/3/-)"),
+    "1/3/1": dict(name="light_delay_test", desc="Test (1/3/1)"),
+}
 
 GroupAddressTableMapper object is a singleton.
 
@@ -146,7 +147,7 @@ class GroupAddressTableMapper(object):
         """ Do load the GAD map table from module.
 
         @param path: path from where import module
-        @type paht: str
+        @type path: str
         """
         gadMapTable = {}
         if os.path.exists(path):
@@ -217,8 +218,8 @@ class GroupAddressTableMapper(object):
     def getNickname(self, gad):
         """ Convert GAD to GAD nickname.
 
-        @param: real GAD
-        @type: str
+        @param gad: real GAD
+        @type gad: str
 
         @return: GAD nickname
         @rtype: str
@@ -233,8 +234,8 @@ class GroupAddressTableMapper(object):
     def getDesc(self, gad):
         """ Return the description of the given GAD/nickname.
 
-        @param: GAD/nickname
-        @type: str
+        @param gad: GAD/nickname
+        @type gad: str
 
         @return: GAD/nickname description
         @rtype: str

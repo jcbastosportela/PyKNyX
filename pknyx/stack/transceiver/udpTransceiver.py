@@ -39,6 +39,10 @@ Implements
 Documentation
 =============
 
+The UDPTransceiver uses the local address as returned by socket.gethostbyname(socket.gethostname()).
+If the hostname is binded to the loopback interface (lo), then, all datas will only be sent/received on this interface.
+You may need to configure this in /etc/hosts.
+
 Usage
 =====
 
