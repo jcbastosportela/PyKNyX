@@ -113,9 +113,9 @@ class CEMILData(CEMI):
             if self.messageCode not in CEMILData.MESSAGE_CODES:
                 raise CEMIValueError("invalid Message Code (%d)" % mc)
             elif self._frame.addIL:
-                raise CEMIValueError("Additional Informations not supported")
+                Logger().warning("Additional Informations not supported and ignored")
             elif self.frameType == CEMILData.FT_EXT_FRAME:
-                raise CEMIValueError("only standard frame supported")
+                raise CEMIValueError("Extended Frame not supported")
         else:
             self.frameType = CEMILData.FT_STD_FRAME
 
@@ -140,7 +140,7 @@ class CEMILData(CEMI):
     @messageCode.setter
     def messageCode(self, mc):
         if mc not in CEMILData.MESSAGE_CODES:
-            raise("invalid Message Code (%d)" % mc)
+            raise CEMIValueError("invalid Message Code (%d)" % mc)
         if mc == CEMILData.MC_LDATA_REQ:
             self.systemBroadcast = CEMILData.SB_BROADCAST
             self.confirm = CEMILData.C_NO_ERROR
