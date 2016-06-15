@@ -6,6 +6,10 @@ x bug fix
 
 0000-00-00 Version GIT
 
+2016-06-15 Version 1.0.1 (stable)
+    x do not drop anymore frames with Additional Informations
+    x minor typo fixes
+
 2016-02-18 Version 1.0.0 (stable)
     + added GAD map table management
     + added average and replay examples
