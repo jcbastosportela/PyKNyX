@@ -84,7 +84,7 @@ class Group(A_GroupDataListener):
         @type gad: L{GroupAddress}
 
         @param agds: Application Group Data Service object
-        @type agds: L{GroupDataService}
+        @type agds: L{A_GroupDataService}
 
         raise GroupValueError:
         """
