@@ -55,9 +55,28 @@ Documentation
 __revision__ = "$Id$"
 
 from pprint import PrettyPrinter
+import six
 
 from pknyx.common import config
 
+if six.PY2:
+    def func_name(f):
+        return f.func_name
+    def meth_name(m):
+        return m.im_func.func_name
+    def meth_self(m):
+        return m.im_self
+    def meth_func(m):
+        return m.im_func
+else:
+    def func_name(f):
+        return f.__name__
+    def meth_name(m):
+        return m.__func__.__name__
+    def meth_self(m):
+        return m.__self__
+    def meth_func(m):
+        return m.__func__
 
 def reprStr(obj):
     """ Return a simple name for the object instance.

@@ -78,6 +78,7 @@ from apscheduler.events import EVENT_JOB_ERROR,EVENT_JOB_MISSED
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
+from pknyx.common.utils import func_name, meth_name,meth_self,meth_func
 from pknyx.services.logger import Logger, LEVELS
 
 scheduler = None
@@ -218,11 +219,11 @@ class Scheduler(object):
         Logger().debug("Scheduler.doRegisterJobs(): obj=%s" % repr(obj))
 
         for type_, func, kwargs in self._pendingFuncs:
-            Logger().debug("Scheduler.doRegisterJobs(): type_=\"%s\", func=%s, kwargs=%s" % (type_, func.func_name, repr(kwargs)))
-            method = getattr(obj, func.func_name, None)
+            Logger().debug("Scheduler.doRegisterJobs(): type_=\"%s\", func=%s, kwargs=%s" % (type_, func_name(func), repr(kwargs)))
+            method = getattr(obj, func_name(func), None)
             if method is not None:
-                Logger().debug("Scheduler.doRegisterJobs(): add method %s() of %s" % (method.im_func.func_name, method.im_self))
-                if method.im_func is func:
+                Logger().debug("Scheduler.doRegisterJobs(): add method %s() of %s" % (meth_name(method), meth_self(method)))
+                if meth_func(method) is func:
                     if type_ == Scheduler.TYPE_EVERY:
                         self._apscheduler.add_job(method, trigger="interval", **kwargs)
                     elif type_ == Scheduler.TYPE_AT:

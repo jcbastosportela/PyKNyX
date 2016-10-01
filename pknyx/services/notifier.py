@@ -206,13 +206,14 @@ class Notifier(object):
         Logger().debug("Notifier.doRegisterJobs(): obj=%s" % repr(obj))
 
         for type_, func, args in self._pendingFuncs:
-            Logger().debug("Notifier.doRegisterJobs(): type_=\"%s\", func=%s, args=%s" % (type_, func.func_name, repr(args)))
+            Logger().debug("Notifier.doRegisterJobs(): type_=\"%s\", func=%s, args=%s" % (type_, func_name(func), repr(args)))
 
-            method = getattr(obj, func.func_name, None)
+            method = getattr(obj, func_name(func), None)
             if method is not None:
-                Logger().debug("Notifier.doRegisterJobs(): add method %s() of %s" % (method.im_func.func_name, method.im_self))
+                import pdb;pdb.set_trace()
+                Logger().debug("Notifier.doRegisterJobs(): add method %s() of %s" % (meth_name(method), meth_self(method)))
 
-                if method.im_func is func:  # avoid name clash between FB methods
+                if meth_func(method) is func:  # avoid name clash between FB methods
 
                     if type_ == "datapoint":
                         dp, condition, thread = args
@@ -255,7 +256,7 @@ class Notifier(object):
                 for method, condition, thread_ in self._datapointJobs[obj][dp]:
                     if oldValue != newValue and condition == "change" or condition == "always":
                         try:
-                            Logger().debug("Notifier.datapointNotify(): trigger method %s() of %s" % (method.im_func.func_name, method.im_self))
+                            Logger().debug("Notifier.datapointNotify(): trigger method %s() of %s" % (meth_name(method), meth_self(method)))
                             event = dict(name="datapoint", dp=dp, oldValue=oldValue, newValue=newValue, condition=condition, thread=thread_)
 
                             if thread_:
