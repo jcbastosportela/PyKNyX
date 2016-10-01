@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function
+
 from pprint import pprint
 
 from pknyx.api import Device, Stack, ETS
@@ -56,8 +60,10 @@ ets._gadName = {1: {'name': "heating",
                     }
                 }
 
-#pprint(ets.computeMapTable())
-ets.printMapTable(by="gad")
-print
-print
-ets.printMapTable(by="dp")
+#ets.printGroat()
+ets.printGroat(dev1,by="gad")
+ets.printGroat(dev2,by="gad")
+print()
+print()
+ets.printGroat(dev1,by="go")
+ets.printGroat(dev2,by="go")

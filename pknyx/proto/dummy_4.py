@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 import time
 
 from pknyx.api import Device, Stack, ETS
@@ -48,12 +50,12 @@ ets.register(lights)
 
 ets.link(dev=lights, dp="lights_annexe", gad=("6/0/8", "6/1/8"))
 
-ets.printMapTable(by="gad")
-print
-print
-ets.printMapTable(by="dp")
-print
-print
+ets.printGroat(lights,by="gad")
+print()
+print()
+ets.printGroat(lights,by="go")
+print()
+print()
 
 stack.start()
 while True:

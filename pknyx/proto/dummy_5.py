@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 from pknyx.api import Device, Stack, ETS, FunctionalBlock
 
 GAD_MAP = {1: {'root': "heating",
@@ -119,9 +121,9 @@ ets.link(dev=station, dp="wind_alarm", gad="1/1/4")
 ets.link(dev=station, dp="wind_speed_limit", gad="1/1/5")
 ets.link(dev=station, dp="wind_alarm_enable", gad="1/1/6")
 
-print
-print
-ets.printMapTable("gad")
-print
-print
-ets.printMapTable("go")
+print()
+print()
+ets.printGroat(dev,"gad")
+print()
+print()
+ets.printGroat(dev,"go")

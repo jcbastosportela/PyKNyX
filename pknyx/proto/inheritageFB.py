@@ -1,3 +1,4 @@
+from __future__ import print_function
 import copy
 
 from pknyx.common.utils import reprStr
@@ -13,7 +14,7 @@ class Datapoint(object):
 class FunctionalBlock(object):
     def __new__(cls, *args, **kwargs):
         self = super(FunctionalBlock, cls).__new__(cls)
-        print "FunctionalBlock.new()", cls.__dict__
+        print("FunctionalBlock.new()", cls.__dict__)
 
         self.datapoints = {}
         classes = cls.__bases__ + (cls,)
@@ -59,7 +60,7 @@ class FB(FunctionalBlock):
     DP_ = dict(name="cmd", access="output", dptId="1.001", default="Off")
 
     def init(self):
-        print "init():", self.name, repr(self.datapoints)
+        print("init():", self.name, repr(self.datapoints))
 
 class FB1(FB):
     pass
@@ -70,11 +71,11 @@ class FB2(FB):
 
 def main():
     fb = FB("fb")
-    print "main():", repr(fb)
+    print("main():", repr(fb))
     fb1 = FB1("fb1")
-    print "main():", repr(fb1)
+    print("main():", repr(fb1))
     fb2 = FB2("fb2")
-    print "main():", repr(fb2)
+    print("main():", repr(fb2))
 
 
 if __name__ == "__main__":

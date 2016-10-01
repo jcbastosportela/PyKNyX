@@ -60,10 +60,12 @@ ets.link(dev=dev2, dp="dp_2", gad=("1/2/2", "2/2/2"))
 ets.link(dev=dev2, dp="dp_3", gad="1/1/3")
 #ets.link(dev=dev2, dp="dp_4", gad="1/1/4")
 
-ets.printMapTable(by="gad")
+ets.printGroat(dev1,by="gad")
+ets.printGroat(dev2,by="gad")
 print
 print
-ets.printMapTable(by="dp")
+ets.printGroat(dev1,by="go")
+ets.printGroat(dev2,by="go")
 print
 print
 

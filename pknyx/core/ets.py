@@ -243,6 +243,10 @@ class ETS(object):
 
         return output
 
+    def printGroat(self, *a,**k):
+        print(self.getGrOAT(*a,**k))
+        
+
 
 if __name__ == '__main__':
     import unittest

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 import math
 import time
 
@@ -258,19 +260,19 @@ def main():
     ets.weave(fb="weather_sun_position", dp="saving_time", gad="1/1/10")
     ets.weave(fb="weather_sun_position", dp="saving_time", gad="1/1/11")
 
-    #print
-    #print
-    #ets.printMapTable("gad")
-    #print
-    #print
-    #ets.printMapTable("go")
+    #print()
+    #print()
+    #ets.printGroat(dev,"gad")
+    #print()
+    #print()
+    #ets.printGroat(dev,"go")
 
     # Start the scheduler
     # @todo: move to a better place
-    print
+    print()
     schedule.start()
     schedule.printJobs()
-    print
+    print()
 
     # Run the stack main loop (blocking call)
     stack.mainLoop()
