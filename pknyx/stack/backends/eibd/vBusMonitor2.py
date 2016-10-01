@@ -82,7 +82,7 @@ class VBusMonitor2(object):
             sys.exit(-1)
         while True:
             buffer_ = EIBBuffer()
-            lenght = self._connection.EIBGetBusmonitorPacket(buffer_)
+            length = self._connection.EIBGetBusmonitorPacket(buffer_)
             if length == -1:
                 Logger().critical("VBusMonitor2.run(): %s" % os.strerror(self._connection.errno))
                 Logger().critical("VBusMonitor2.run(): call to EIBConnection.EIBGetBusmonitorPacket() failed")
