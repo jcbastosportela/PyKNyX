@@ -2,7 +2,10 @@
 """
 """
 
-import SocketServer
+try:
+    import socketserver as SocketServer
+except ImportError:
+    import SocketServer
 
 
 class BaseConnectionHandler(SocketServer.BaseRequestHandler):
