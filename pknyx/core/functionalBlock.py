@@ -101,7 +101,7 @@ class FunctionalBlock(object):
                 if key.startswith("DP_"):
                     Logger().debug("FunctionalBlock.__new__(): %s=(%s)" % (key, repr(value)))
                     name = value['name']
-                    if datapoints.has_key(name):
+                    if name in datapoints:
                         raise FunctionalBlockValueError("duplicated Datapoint (%s)" % name)
                     datapoints[name] = Datapoint(self, **value)
         self._datapoints = FrozenDict(datapoints)
@@ -117,7 +117,7 @@ class FunctionalBlock(object):
                     except KeyError:
                         raise FunctionalBlockValueError("unknown datapoint (%s)" % value['dp'])
                     name = datapoint.name
-                    if groupObjects.has_key(name):
+                    if name in groupObjects:
                         raise FunctionalBlockValueError("duplicated GroupObject (%s)" % name)
 
                     # Remove 'dp' key from GO_xxx dict

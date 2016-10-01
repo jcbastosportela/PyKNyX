@@ -172,7 +172,7 @@ class ETS(object):
             for gad in gads:
                 if gadMain != gad.main:
                     index = "%d/-/-" % gad.main
-                    if gadMapTable.has_key(index):
+                    if index in gadMapTable:
                         output +=  u"%2d %-33s" % (gad.main, gadMapTable[index]['desc'].decode("utf-8"))
                         output += "\n"
                     else:
@@ -182,7 +182,7 @@ class ETS(object):
                     gadMiddle = gadSub = -1
                 if gadMiddle != gad.middle:
                     index = "%d/%d/-" % (gad.main, gad.middle)
-                    if gadMapTable.has_key(index):
+                    if index in gadMapTable:
                         output +=  u" ├── %2d %-27s" % (gad.middle, gadMapTable[index]['desc'].decode("utf-8"))
                         output += "\n"
                     else:
@@ -192,7 +192,7 @@ class ETS(object):
                     gadSub = -1
                 if gadSub != gad.sub:
                     index = "%d/%d/%d" % (gad.main, gad.middle, gad.sub)
-                    if gadMapTable.has_key(index):
+                    if index in gadMapTable:
                         output +=  u" │    ├── %3d %-21s" % (gad.sub, gadMapTable[index]['desc'].decode("utf-8"))
                     else:
                         output +=  u" │    ├── %3d %-21s" % (gad.sub, "")

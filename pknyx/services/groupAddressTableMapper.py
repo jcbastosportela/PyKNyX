@@ -135,7 +135,7 @@ class GroupAddressTableMapper(object):
         """
         nicknames = {}
         for key, value in table.items():
-            if nicknames.has_key(value['name']):
+            if value['name'] in nicknames:
                 Logger().warning("Duplicated nickname '%s' in GAD map table" % value['name'])
                 return False
             else:

@@ -21,7 +21,7 @@ class FunctionalBlock(object):
             for key, value in cls.__dict__.items():
                 if key.startswith("DP_"):
                     name = value['name']
-                    if self.datapoints.has_key(name):
+                    if name in self.datapoints:
                         raise ValueError("duplicated Datapoint (%s)" % name)
                     self.datapoints[name] = Datapoint(self, **value)
 

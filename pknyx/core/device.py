@@ -84,7 +84,7 @@ class Device(object):
                     name = value['name']
 
                     # Check if already registered
-                    if functionalBlocks.has_key(name):
+                    if name in functionalBlocks:
                         raise DeviceValueError("duplicated FB (%s)" % name)
 
                     cls = value["cls"]
