@@ -57,6 +57,7 @@ __revision__ = "$Id$"
 
 import socket
 import struct
+import six
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.services.logger import Logger
@@ -129,7 +130,7 @@ class MulticastSocketReceive(MulticastSocketBase):
         """
         super(MulticastSocketReceive, self).__init__(localAddr, mcastPort, ttl, loop)
 
-        multicast = ord(socket.inet_aton(mcastAddr)[0]) in range(224, 240)
+        multicast = six.byte2int(socket.inet_aton(mcastAddr)) in range(224, 240)
         if not multicast:
             raise McastSockValueError("address is not a multicast destination (%s)" % repr(mcastAddr))
 
