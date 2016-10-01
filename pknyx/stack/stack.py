@@ -124,7 +124,7 @@ class Stack(object):
         # Iterate over Group to find those which need to send a initial read request
         # (depending on GroupObject init flag)
         Logger().debug("Stack.start(): initiate a read request for Group having at least one GroupObject with 'init' flag on")
-        for group in self._agds.groups.itervalues():
+        for group in self._agds.groups.values():
             for listener in group.listeners:
                 try:
                     if listener.flags.init:
