@@ -117,7 +117,7 @@ class ETS(object):
                 fb = device.fb[fb_]
 
             except KeyError:
-                raise ETSValueError("unregistered functional block (%s)" % fb)
+                raise ETSValueError("unregistered functional block (%s)" % fb_)
 
             # Retreive GroupObject from FunctionalBlock
             try:
