@@ -2,7 +2,8 @@
 
 from __future__ import print_function
 
-from pknyx.api import FunctionalBlock, Device, Stack, ETS
+from pknyx.api import FunctionalBlock, Device
+from pknyx.core.ets import ETS
 
 GAD_MAP = {1: {'root': "heating",
                1: {'root': "setpoint",
@@ -29,9 +30,8 @@ GAD_MAP = {1: {'root': "heating",
               }
           }
 
-stack = Stack()
-ets = ETS(stack)
-ets.gadMap = GAD_MAP
+ets = ETS()
+ets._gadMap = GAD_MAP
 
 
 class WeatherWindBlock(FunctionalBlock):
@@ -128,27 +128,28 @@ class WeatherSunPositionBlock(FunctionalBlock):
 # Weather station class definition
 class WeatherStation(Device):
 
-    FB_01 = WeatherWindBlock(name="weather_wind_block", desc="Wind")
-    FB_02 = WeatherTemperatureBlock(name="weather_temperature_block", desc="Temp")
-    FB_03 = WeatherSunPositionBlock(name="weather_sun_position_block", desc="Sun")
+    FB_01 = dict(cls=WeatherWindBlock, name="weather_wind_block", desc="Wind")
+    FB_02 = dict(cls=WeatherTemperatureBlock, name="weather_temperature_block", desc="Temp")
+    FB_03 = dict(cls=WeatherSunPositionBlock, name="weather_sun_position_block", desc="Sun")
 
+    LNK_01 = dict(fb="weather_temperature_block", dp="temperature", gad="1/1/1")
+    LNK_02 = dict(fb="weather_temperature_block", dp="humidity", gad="1/1/2")
+    LNK_03 = dict(fb="weather_wind_block", dp="wind_speed", gad="1/1/3")
+    LNK_04 = dict(fb="weather_wind_block", dp="wind_alarm", gad="1/1/4")
+    LNK_05 = dict(fb="weather_wind_block", dp="wind_speed_limit", gad="1/1/5")
+    LNK_06 = dict(fb="weather_wind_block", dp="wind_alarm_enable", gad="1/1/6")
 
 # Instanciation of the weather station device object
-station = WeatherStation(name="weather_station", desc="Instance-level description", address="1.2.3")
+station = WeatherStation("1.2.3")
 
 ets.register(station)
+ets.link(station)
 
 # Linking weather station Datapoints to Group Address
-ets.link(dev=station, dp="temperature", gad="1/1/1")
-ets.link(dev=station, dp="humidity", gad="1/1/2")
-ets.link(dev=station, dp="wind_speed", gad="1/1/3")
-ets.link(dev=station, dp="wind_alarm", gad="1/1/4")
-ets.link(dev=station, dp="wind_speed_limit", gad="1/1/5")
-ets.link(dev=station, dp="wind_alarm_enable", gad="1/1/6")
 
 print()
 print()
-ets.printGroat(dev,"gad")
+ets.printGroat(station,"gad")
 print()
 print()
-ets.printGroat(dev,"go")
+ets.printGroat(station,"go")

@@ -7,9 +7,10 @@ import time
 
 from pknyx.common.utils import dd2dms, dms2dd
 
-from pknyx.api import Logger
-from pknyx.api import FunctionalBlock, Stack, ETS
-from pknyx.api import Scheduler  #, Notifier
+from pknyx.services.logger import Logger
+from pknyx.services.scheduler import Scheduler
+from pknyx.api import FunctionalBlock, Device
+from pknyx.core.ets import ETS
 
 # ETS maps -> Group Object Association Table (GrOAT)
 # @todo: make a tool to import from ETS
@@ -34,8 +35,8 @@ GAD_MAP = {"1": dict(name="heat", desc="Chauffage"),
 #BUILDING_MAP = {
                #}
 
-stack = Stack(individualAddress="1.2.3")
-ets = ETS(stack, gadMap=GAD_MAP)  # , buildingMap=BUILDING_MAP
+ets = ETS()  # , buildingMap=BUILDING_MAP
+ets._gadMap=GAD_MAP
 
 schedule = Scheduler()
 #notify = Notifier()
@@ -231,34 +232,37 @@ class WeatherSunPositionBlock(FunctionalBlock):
         self.dp["elevation"].value = elevation
         self.dp["azimuth"].value = azimuth
 
+class WeatherStation(Device):
+
+    FB_01 = dict(cls=WeatherWindBlock, name="weather_wind_block", desc="Wind")
+    FB_02 = dict(cls=WeatherTemperatureBlock, name="weather_temperature_block", desc="Temp")
+    FB_03 = dict(cls=WeatherSunPositionBlock, name="weather_sun_position_block", desc="Sun")
+
+    LNK_01 = dict(fb="weather_temperature_block", dp="temperature", gad="1/1/1")
+    LNK_02 = dict(fb="weather_temperature_block", dp="humidity", gad="1/1/2")
+    LNK_03 = dict(fb="weather_wind_block", dp="wind_speed", gad="1/1/3")
+    LNK_04 = dict(fb="weather_wind_block", dp="wind_alarm", gad="1/1/4")
+    LNK_05 = dict(fb="weather_wind_block", dp="wind_speed_limit", gad="1/1/5")
+    LNK_06 = dict(fb="weather_wind_block", dp="wind_alarm_enable", gad="1/1/6")
+
+    LNK_11 = dict(fb="weather_sun_position_block", dp="right_ascension", gad="1/1/3")
+    LNK_12 = dict(fb="weather_sun_position_block", dp="declination", gad="1/1/4")
+    LNK_13 = dict(fb="weather_sun_position_block", dp="elevation", gad="1/1/5")
+    LNK_14 = dict(fb="weather_sun_position_block", dp="azimuth", gad="1/1/6")
+    LNK_15 = dict(fb="weather_sun_position_block", dp="latitude", gad="1/1/7")
+    LNK_16 = dict(fb="weather_sun_position_block", dp="longitude", gad="1/1/8")
+    LNK_17 = dict(fb="weather_sun_position_block", dp="timezone", gad="1/1/9")
+    LNK_18 = dict(fb="weather_sun_position_block", dp="saving_time", gad="1/1/10")
+    LNK_19 = dict(fb="weather_sun_position_block", dp="saving_time", gad="1/1/11")
 
 def main():
 
-    # Register FunctionalBlocks
-    ets.register(DummyBlock, name="dummy", desc="dummy")  # , building="mob/GTL")
-    ets.register(WeatherTemperatureBlock, name="weather_temperature", desc="temp 1")  # , building="mob/GTL")
-    ets.register(WeatherWindBlock, name="weather_wind", desc="wind 1")
-    ets.register(WeatherSunPositionBlock, name="weather_sun_position", desc="sun 1")
+    station = WeatherStation("1.2.3")
+
+    ets.register(station)
 
     # Weave weather station Datapoints to GroupAddresses
     # @todo: allow use of gad name, from GrOAT
-    ets.weave(fb="weather_temperature", dp="temperature", gad="1/1/1")
-    ets.weave(fb="weather_temperature", dp="humidity", gad="1/1/2")
-
-    ets.weave(fb="weather_wind", dp="wind_speed", gad="1/1/3")
-    ets.weave(fb="weather_wind", dp="wind_alarm", gad="1/1/4")
-    ets.weave(fb="weather_wind", dp="wind_speed_limit", gad="1/1/5")
-    ets.weave(fb="weather_wind", dp="wind_alarm_enable", gad="1/1/6")
-
-    ets.weave(fb="weather_sun_position", dp="right_ascension", gad="1/1/3")
-    ets.weave(fb="weather_sun_position", dp="declination", gad="1/1/4")
-    ets.weave(fb="weather_sun_position", dp="elevation", gad="1/1/5")
-    ets.weave(fb="weather_sun_position", dp="azimuth", gad="1/1/6")
-    ets.weave(fb="weather_sun_position", dp="latitude", gad="1/1/7")
-    ets.weave(fb="weather_sun_position", dp="longitude", gad="1/1/8")
-    ets.weave(fb="weather_sun_position", dp="timezone", gad="1/1/9")
-    ets.weave(fb="weather_sun_position", dp="saving_time", gad="1/1/10")
-    ets.weave(fb="weather_sun_position", dp="saving_time", gad="1/1/11")
 
     #print()
     #print()
@@ -275,7 +279,7 @@ def main():
     print()
 
     # Run the stack main loop (blocking call)
-    stack.mainLoop()
+    station.stack.mainLoop()
 
     schedule.stop()
 

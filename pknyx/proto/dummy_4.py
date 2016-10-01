@@ -4,7 +4,8 @@ from __future__ import print_function
 
 import time
 
-from pknyx.api import Device, Stack, ETS
+from pknyx.api import Device, FunctionalBlock
+from pknyx.core.ets import ETS
 
 GAD_MAP = {1: {'root': "heating",
                1: {'root': "setpoint",
@@ -32,23 +33,29 @@ GAD_MAP = {1: {'root': "heating",
           }
 
 
-class Lights(Device):
+class LightsFB(FunctionalBlock):
 
     # Datapoints (= Group Objects) definition
-    DP_01 = dict(name="lights_annexe", dptId="1.001", flags="CWTU", priority="low", defaultValue=0.)
+    DP_01 = dict(name="lights_annexe", dptId="1.001", default="Off", access="output")
+
+    GO_01 = dict(dp="lights_annexe", flags="CWTU", priority="low")
 
     DESC = "Lumières"
 
+class Lights(Device):
+    FB_01 = dict(cls=LightsFB, name="lights_fb", desc="lights fb")
 
-stack = Stack()   # Borg
-ets = ETS(stack)  # Borg
-ets.gadMap = GAD_MAP
+    LNK_01 = dict(fb="lights_fb", dp="lights_annexe", gad="6/0/8")
+    LNK_01a = dict(fb="lights_fb", dp="lights_annexe", gad="6/1/8")
 
-lights = Lights(name="lights", desc="Test état lumières", address="1.1.1")
+ets = ETS()  # Borg
+ets._gadMap = GAD_MAP
+
+lights = Lights("1.1.1")
 
 ets.register(lights)
 
-ets.link(dev=lights, dp="lights_annexe", gad=("6/0/8", "6/1/8"))
+ets.link(lights)
 
 ets.printGroat(lights,by="gad")
 print()
@@ -58,10 +65,10 @@ print()
 print()
 
 if __name__ == '__main__':
-    stack.start()
+    lights.start()
     while True:
         try:
-            time.sleep(0.1)
+            time.sleep(99999)
         except KeyboardInterrupt:
-            stack.stop()
+            lights.stop()
             break

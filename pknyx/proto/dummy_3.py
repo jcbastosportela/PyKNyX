@@ -6,7 +6,6 @@ import time
 
 from pknyx.api import Device, FunctionalBlock
 from pknyx.core.ets import ETS
-from pknyx.stack.stack import Stack
 
 GAD_MAP = {1: {'root': "heating",
                1: {'root': "setpoint",
