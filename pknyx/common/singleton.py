@@ -38,7 +38,7 @@ Implements
 Documentation
 =============
 
-Just set this class as __metaclass__ attribute value of your class which need to be a Singleton.
+Just set this class as the metaclass of the class which needs to be a Singleton.
 
 Usage
 =====
@@ -48,6 +48,7 @@ Usage
 @license: GPL
 """
 
+import six
 
 class Singleton(type):
     """ Singleton metaclass
@@ -77,10 +78,9 @@ if __name__ == '__main__':
     Logger().setLevel('error')
 
 
+    @six.add_metaclass(Singleton)
     class SingletonTest(object):
-
-        __metaclass__ = Singleton
-
+        pass
 
     class SingletonTestCase(unittest.TestCase):
 

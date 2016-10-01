@@ -43,6 +43,7 @@ Implements
 
 __revision__ = "$Id$"
 
+import six
 import logging
 import logging.handlers
 try:
@@ -72,11 +73,10 @@ class LoggerValueError(PKNyXValueError):
     """
     """
 
-
+@six.add_metaclass(Singleton)
 class Logger(object):
     """ Logger object.
     """
-    __metaclass__ = Singleton
 
     def __init__(self, deviceName=None):
         """ Init object.

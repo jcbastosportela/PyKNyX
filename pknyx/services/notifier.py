@@ -85,9 +85,11 @@ Idem for scheduler.
 
 __revision__ = "$Id$"
 
+import six
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.utils import reprStr
+from pknyx.common.utils import func_name, meth_name,meth_self,meth_func
 from pknyx.common.singleton import Singleton
 from pknyx.services.logger import Logger
 
@@ -98,7 +100,7 @@ class NotifierValueError(PKNyXValueError):
     """
     """
 
-
+@six.add_metaclass(Singleton)
 class Notifier(object):
     """ Notifier class
 
@@ -108,7 +110,6 @@ class Notifier(object):
     @ivar _datapointJobs:
     @type _registeredJobs: dict
     """
-    __metaclass__ = Singleton
 
     def __init__(self):
         """ Init the Notifier object

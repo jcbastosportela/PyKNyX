@@ -70,6 +70,7 @@ Usage
 
 __revision__ = "$Id$"
 
+import six
 import traceback
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -86,7 +87,7 @@ class SchedulerValueError(PKNyXValueError):
     """
     """
 
-
+@six.add_metaclass(Singleton)
 class Scheduler(object):
     """ Scheduler class
 
@@ -96,7 +97,6 @@ class Scheduler(object):
     @ivar _apscheduler: real scheduler
     @type _apscheduler: APScheduler
     """
-    __metaclass__ = Singleton
 
     TYPE_EVERY = 1
     TYPE_AT = 2

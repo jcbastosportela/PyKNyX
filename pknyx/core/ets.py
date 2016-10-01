@@ -48,6 +48,8 @@ Usage
 
 __revision__ = "$Id$"
 
+import six
+
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
 from pknyx.services.logger import Logger
@@ -62,7 +64,7 @@ class ETSValueError(PKNyXValueError):
     """
     """
 
-
+@six.add_metaclass(Singleton)
 class ETS(object):
     """ ETS class
 
@@ -74,8 +76,6 @@ class ETS(object):
 
     raise ETSValueError:
     """
-    __metaclass__ = Singleton
-
     def __init__(self):
         """
         """
