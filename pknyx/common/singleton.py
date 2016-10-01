@@ -38,7 +38,7 @@ Implements
 Documentation
 =============
 
-Juste set this class as __metaclass__ attribute value of your class which need to be a Singleton.
+Just set this class as __metaclass__ attribute value of your class which need to be a Singleton.
 
 Usage
 =====
@@ -48,28 +48,25 @@ Usage
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
-
 
 class Singleton(type):
     """ Singleton metaclass
+
+    @ivar _instance: instance of the class
+    @type _instance: object
     """
     def __init__(self, *args, **kwargs):
         """ Init the metaclass
-
-        @ivar __instances: instance of the class
-        @type __instance: object
         """
         super(Singleton, self).__init__(*args, **kwargs)
 
-        self.__instance = None
+        self._instance = None
 
     def __call__(self, *args, **kwargs):
-        if self.__instance is None:
-            self.__instance = super(Singleton, self).__call__(*args, **kwargs)
+        if self._instance is None:
+            self._instance = super(Singleton, self).__call__(*args, **kwargs)
 
-        return self.__instance
+        return self._instance
 
 
 if __name__ == '__main__':

@@ -73,22 +73,22 @@ class MulticastSocketBase(socket.socket):
     def __init__(self, localAddr, localPort, ttl=32, loop=1):
         """ Init the multicast socket base class
 
-        @ivar localAddr:
-        @type: localAddr:
+        @param localAddr: IP address used as local address
+        @type: localAddr: str
 
-        @ivar localPort:
-        @param: localPort:
+        @param localPort: port used as local port
+        @type: localPort: int
 
-        @ivar ttl:    0  Restricted to the same host (won't be output by any interface)
+        @param ttl:    0  Restricted to the same host (won't be output by any interface)
                       1  Restricted to the same subnet (won't be forwarded by a router)
                     <32  Restricted to the same site, organization or department
                     <64 Restricted to the same region
                    <128 Restricted to the same continent
                    <255 Unrestricted in scope. Global
-        @param ttl: int
+        @type ttl: int
 
-        @ivar loop:
-        @param loop: int
+        @param loop:
+        @type loop: int
         """
         super(MulticastSocketBase, self).__init__(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 
@@ -141,6 +141,8 @@ class MulticastSocketReceive(MulticastSocketBase):
 
     def _bind(self):
         """
+
+        @todo: use mcastAddr, instead of ""?
         """
         self._sock.bind(("", self._localPort))
 

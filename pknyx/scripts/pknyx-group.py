@@ -372,7 +372,7 @@ def main():
     # Parse
     args = parser.parse_args()
 
-    Logger(level=args.loggerLevel)
+    Logger().setLevel(args.loggerLevel)
 
     # If given GAD is a nick name, try to retreive real GAD from map table
     try:
@@ -380,7 +380,7 @@ def main():
     except GroupAddressValueError:
         mapper = GroupAddressTableMapper()
         mapper.loadFrom(args.gadMapPath)
-        args.gad = mapper.toGad(args.gad)
+        args.gad = mapper.getGad(args.gad)
     except AttributeError:
         pass
 

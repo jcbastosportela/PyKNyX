@@ -77,7 +77,7 @@ class GroupMonitor(A_GroupDataListener):
         """ Init the GroupMonitor object
 
         @param agds: Application Group Data Service object
-        @type agds: L{GroupDataService}
+        @type agds: L{A_GroupDataService}
 
         raise GroupValueError:
         """

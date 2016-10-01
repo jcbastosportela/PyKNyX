@@ -72,10 +72,11 @@ class CEMILData(CEMI):
     MC_LDATA_CON = 0x2E  # message code for L-Data confirmation
     MC_LDATA_IND = 0x29  # message code for L-Data indication
 
-    MESSAGE_CODES = (MC_LDATA_REQ,
-                     MC_LDATA_CON,
-                     MC_LDATA_IND
-                    )
+    MESSAGE_CODES = (
+        MC_LDATA_REQ,
+        MC_LDATA_CON,
+        MC_LDATA_IND
+    )
 
     FT_EXT_FRAME = 0
     FT_STD_FRAME = 1
@@ -112,9 +113,9 @@ class CEMILData(CEMI):
             if self.messageCode not in CEMILData.MESSAGE_CODES:
                 raise CEMIValueError("invalid Message Code (%d)" % mc)
             elif self._frame.addIL:
-                raise CEMIValueError("Additional Informations not supported")
+                Logger().warning("Additional Informations not supported and ignored")
             elif self.frameType == CEMILData.FT_EXT_FRAME:
-                raise CEMIValueError("only standard frame supported")
+                raise CEMIValueError("Extended Frame not supported")
         else:
             self.frameType = CEMILData.FT_STD_FRAME
 
@@ -139,7 +140,7 @@ class CEMILData(CEMI):
     @messageCode.setter
     def messageCode(self, mc):
         if mc not in CEMILData.MESSAGE_CODES:
-            raise("invalid Message Code (%d)" % mc)
+            raise CEMIValueError("invalid Message Code (%d)" % mc)
         if mc == CEMILData.MC_LDATA_REQ:
             self.systemBroadcast = CEMILData.SB_BROADCAST
             self.confirm = CEMILData.C_NO_ERROR
@@ -164,7 +165,9 @@ class CEMILData(CEMI):
 
     @property
     def repeat(self):
-        """ According to calimero:
+        """
+
+        According to calimero:
         // ind: flag 0 = repeated frame, 1 = not repeated
         if (mc == MC_LDATA_IND)
             return (ctrl1 & 0x20) == 0;

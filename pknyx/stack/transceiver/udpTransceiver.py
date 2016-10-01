@@ -39,6 +39,10 @@ Implements
 Documentation
 =============
 
+The UDPTransceiver uses the local address as returned by socket.gethostbyname(socket.gethostname()).
+If the hostname is binded to the loopback interface (lo), then, all datas will only be sent/received on this interface.
+You may need to configure this in /etc/hosts.
+
 Usage
 =====
 
@@ -51,6 +55,7 @@ Usage
 
 __revision__ = "$Id$"
 
+import time
 import threading
 import socket
 
@@ -189,9 +194,9 @@ class UDPTransceiver(Transceiver):
         while self._running:
             try:
                 transmission = self._tLSAP.getOutFrame()
-                Logger().debug("UDPTransceiver._transmitterLoop(): transmission=%s" % repr(transmission))
 
                 if transmission is not None:
+                    Logger().debug("UDPTransceiver._transmitterLoop(): transmission=%s" % repr(transmission))
 
                     cEMIFrame = transmission.payload
                     cEMIRawFrame = cEMIFrame.raw
@@ -214,6 +219,9 @@ class UDPTransceiver(Transceiver):
                         finally:
                             transmission.release()
                         Logger().debug("UDPTransceiver._transmitterLoop(): transmission=%s" % repr(transmission))
+
+                else:
+                    time.sleep(0.001)
 
             except:
                 Logger().exception("UDPTransceiver._transmitterLoop()")  #, debug=True)

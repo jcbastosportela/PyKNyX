@@ -33,8 +33,8 @@ Application management
 Implements
 ==========
 
- - B{FunctionalBlock}
  - B{FunctionalBlockValueError}
+ - B{FunctionalBlock}
 
 Documentation
 =============
@@ -48,8 +48,6 @@ Usage
 @copyright: (C) 2013-2015 Frédéric Mantegazza
 @license: GPL
 """
-
-__revision__ = "$Id$"
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.utils import reprStr
@@ -79,6 +77,9 @@ class FunctionalBlock(object):
     @ivar _desc: description of the device
     @type _desc:str
 
+    @ivar _params: additionnal user params
+    @type _params: dict
+
     @ivar _datapoints: Datapoints exposed by this FunctionalBlock
     @type _datapoints: dict of L{Datapoint}
 
@@ -90,44 +91,51 @@ class FunctionalBlock(object):
         """
         self = super(FunctionalBlock, cls).__new__(cls)
 
+        # Retreive all parents classes, to get all objects defined there
+        classes = cls.__bases__ + (cls,)
+
         # class objects named B{DP_xxx} are treated as Datapoint and added to the B{_datapoints} dict
         datapoints = {}
-        for key, value in cls.__dict__.iteritems():
-            if key.startswith("DP_"):
-                name = value['name']
-                if datapoints.has_key(name):
-                    raise FunctionalBlockValueError("duplicated Datapoint (%s)" % name)
-                datapoints[name] = Datapoint(self, **value)
+        for cls_ in classes:
+            for key, value in cls_.__dict__.iteritems():
+                if key.startswith("DP_"):
+                    Logger().debug("FunctionalBlock.__new__(): %s=(%s)" % (key, repr(value)))
+                    name = value['name']
+                    if datapoints.has_key(name):
+                        raise FunctionalBlockValueError("duplicated Datapoint (%s)" % name)
+                    datapoints[name] = Datapoint(self, **value)
         self._datapoints = FrozenDict(datapoints)
 
         # class objects named B{GO_xxx} are treated as GroupObjects and added to the B{_groupObjects} dict
         groupObjects = {}
-        for key, value in cls.__dict__.iteritems():
-            if key.startswith("GO_"):
-                try:
-                    datapoint = self._datapoints[value['dp']]
-                except KeyError:
-                    raise FunctionalBlockValueError("unknown datapoint (%s)" % value['dp'])
-                name = datapoint.name
-                if groupObjects.has_key(name):
-                    raise FunctionalBlockValueError("duplicated GroupObject (%s)" % name)
+        for cls_ in classes:
+            for key, value in cls_.__dict__.iteritems():
+                if key.startswith("GO_"):
+                    Logger().debug("FunctionalBlock.__new__(): %s=(%s)" % (key, repr(value)))
+                    try:
+                        datapoint = self._datapoints[value['dp']]
+                    except KeyError:
+                        raise FunctionalBlockValueError("unknown datapoint (%s)" % value['dp'])
+                    name = datapoint.name
+                    if groupObjects.has_key(name):
+                        raise FunctionalBlockValueError("duplicated GroupObject (%s)" % name)
 
-                # Remove 'dp' key from GO_xxx dict
-                # Use a copy to let original untouched
-                value_ = dict(value)
-                value_.pop('dp')
-                groupObjects[name] = GroupObject(datapoint, **value_)
+                    # Remove 'dp' key from GO_xxx dict
+                    # Use a copy to let original untouched
+                    value_ = dict(value)
+                    value_.pop('dp')
+                    groupObjects[name] = GroupObject(datapoint, **value_)
         self._groupObjects = FrozenDict(groupObjects)
 
         try:
             self._desc = cls.__dict__["DESC"]
         except KeyError:
             Logger().exception("FunctionalBlock.__new__()", debug=True)
-            self._desc = None
+            self._desc = "FB"
 
         return self
 
-    def __init__(self, name, desc=None):
+    def __init__(self, name, desc=None, params={}):
         """
 
         @param name: name of the device
@@ -136,13 +144,19 @@ class FunctionalBlock(object):
         @param desc: description of the device
         @type desc: str
 
+        @param params: additionnal user params
+        @type params: dict
+
         raise FunctionalBlockValueError:
         """
         super(FunctionalBlock, self).__init__()
 
         self._name = name
+
         if desc is not None:
-            self._desc = "%s - %s" % (desc, self._desc)
+            self._desc = "%s::%s" % (self._desc, desc)
+
+        self._params = params
 
         # Call for additionnal user init
         self.init()
@@ -165,6 +179,10 @@ class FunctionalBlock(object):
     @property
     def desc(self):
         return self._desc
+
+    @property
+    def params(self):
+        return self._params
 
     @property
     def dp(self):
@@ -190,9 +208,9 @@ class FunctionalBlock(object):
 
         @todo: use an Event as param
         """
-        Logger().debug("FuntionalBlock.notify(): dp=%s, oldValue=%s, newValue=%s" % (dp, oldValue, newValue))
+        Logger().debug("FunctionalBlock.notify(): dp=%s, oldValue=%s, newValue=%s" % (dp, oldValue, newValue))
 
-        Notifier().datapointNotify(dp, oldValue, newValue)
+        Notifier().datapointNotify(self, dp, oldValue, newValue)
 
 
 if __name__ == '__main__':

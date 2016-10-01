@@ -54,9 +54,11 @@ Should be used from an executable script. See scripts/pknyx-admin.py.
 
 __revision__ = "$Id$"
 
+import os
 import os.path
 import imp
 import sys
+import time
 
 from pknyx.common import config
 from pknyx.common.exception import PKNyXValueError
@@ -64,9 +66,18 @@ from pknyx.services.logger import Logger
 from pknyx.services.scheduler import Scheduler
 from pknyx.services.groupAddressTableMapper import GroupAddressTableMapper
 from pknyx.core.ets import ETS
-from pknyx.stack.stack import Stack
 from pknyx.stack.individualAddress import IndividualAddress
 from pknyx.stack.groupAddress import GroupAddress, GroupAddressValueError
+
+
+class _NullDevice:
+    """ A substitute for stdout/stderr that writes to nowhere.
+    """
+    def write(self, s):
+        pass
+
+    def flush(self):
+        pass
 
 
 class DeviceRunnerValueError(PKNyXValueError):
@@ -98,21 +109,43 @@ class DeviceRunner(object):
         Logger().info("Device path is '%s'" % devicePath)
         Logger().info("Device name is '%s'" % DEVICE_NAME)
 
-        deviceIndAddr = DEVICE_IND_ADDR
-        if not isinstance(deviceIndAddr, IndividualAddress):
-            deviceIndAddr = IndividualAddress(deviceIndAddr)
-        if deviceIndAddr.isNull:
+        self._deviceIndAddr = DEVICE_IND_ADDR
+        if not isinstance(self._deviceIndAddr, IndividualAddress):
+            self._deviceIndAddr = IndividualAddress(self._deviceIndAddr)
+        if self._deviceIndAddr.isNull:
             Logger().warning("Device Individual Address is null")
         else:
-            Logger().info("Device Individual Address is '%s'" % DEVICE_IND_ADDR)
+            Logger().info("Device Individual Address is '%s'" % self._deviceIndAddr)
 
         # Load GAD map table
         mapper = GroupAddressTableMapper()
         mapper.loadFrom(gadMapPath)
 
-        # Create KNX stack
-        self._stack = Stack(DEVICE_IND_ADDR)
-        self._ets = ETS(self._stack)
+    def _doubleFork(self):
+        """ Double fork.
+        """
+        if os.fork() != 0:  # launch child and ...
+            os._exit(0)     # kill off parent
+        os.setsid()
+        os.chdir("/")
+        os.umask(0)
+        if os.fork() != 0:  # fork again so we are not a session leader
+            os._exit(0)
+
+        # Close stdxxx
+        sys.stdin.close()
+        sys.__stdin__ = sys.stdin
+        sys.stdout.close()
+        sys.stdout = sys.__stdout__ = _NullDevice()
+        sys.stderr.close()
+        sys.stderr = sys.__stderr__ = _NullDevice()
+
+        # ??? does not work if enable
+        #for fd in xrange(4, 1024):
+            #try:
+                #os.close(fd)
+            #except OSError:
+                #pass
 
     def check(self, printGroat=False):
         """
@@ -120,31 +153,42 @@ class DeviceRunner(object):
 
         # Create device from user 'device' module
         from device import DEVICE
-        self._device = DEVICE()
+        self._device = DEVICE(self._deviceIndAddr)
 
-        self._device.register(self._ets)
-        self._device.weave(self._ets)
+        ETS().register(self._device)
+        ETS().weave(self._device)
 
         if printGroat:
-            Logger().info(self._ets.getGrOAT("gad"))
-            Logger().info(self._ets.getGrOAT("go"))
+            Logger().info(ETS().getGrOAT(self._device, "gad"))
+            Logger().info(ETS().getGrOAT(self._device, "go"))
 
-        self._device.init()
-
-    def run(self, detach):
+    def run(self, dameon=False):
         """
         """
         Logger().trace("Device.run()")
 
         self.check()
 
-        Logger().info("Detaching is '%s'" % detach)
+        if dameon:
+            Logger().info("Run process as daemon...")
+            self._doubleFork()
 
+        self._device.start()
         Scheduler().start()
-        self._stack.mainLoop()  # blocking call
-        Scheduler().stop()
+        time.sleep(1)  # wait for things to start
+        try:
+            self._device.mainLoop()
 
-        self._device.shutdown()
+        except KeyboardInterrupt:
+            Logger().warning("Device execution canceled (SIGTERM)")
+
+        except:
+            Logger().exception("deviceRunner.run()")
+
+        finally:
+            Scheduler().stop()
+            self._device.stop()
+            self._device.shutdown()
 
 
 if __name__ == '__main__':

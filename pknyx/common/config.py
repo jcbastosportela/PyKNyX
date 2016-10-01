@@ -43,7 +43,7 @@ import os.path
 
 # Name
 APP_NAME = "pKNyX"
-APP_VERSION = "0.9.post3"
+APP_VERSION = "1.0.1"
 
 # Logger
 LOGGER_STREAM_FORMAT = "%(threadName)s::%(message)s"
