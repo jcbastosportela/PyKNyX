@@ -133,7 +133,10 @@ class DPTXlatorBoolean(DPTXlatorBase):
     def valueToData(self, value):
         #Logger().debug("DPTXlatorBoolean.valueToData(): value=%d" % value)
         self.checkValue(value)
-        data = self._dpt.limits.index(value)
+        try:
+            data = self._dpt.limits.index(value)
+        except ValueError:
+            raise ValueError("Index not in tuple", self._dpt.limits,value)
         #Logger().debug("DPTXlatorBoolean.valueToData(): data=%s" % hex(data))
         return data
 
