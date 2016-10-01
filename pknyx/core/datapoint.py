@@ -234,7 +234,7 @@ class Datapoint(object):
         # @todo: check access
 
         # Notify associated GroupObject (if any)
-        self._signalChanged.emit(oldValue, self.value)
+        self._signalChanged.emit(oldValue=oldValue, newValue=self.value)
 
         # Notify owner (FunctionalBlock)
         self._owner.notify(self.name, oldValue, self.value)  # TBD

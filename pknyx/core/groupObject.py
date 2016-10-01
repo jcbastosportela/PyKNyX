@@ -115,7 +115,7 @@ class GroupObject(GroupListener):
     def __str__(self):
         return "<GroupObject('%s')>" % self.name
 
-    def _slotChanged(self, oldValue, newValue):
+    def _slotChanged(self, _sender, oldValue, newValue):
         """ Slot handling a changing value of the associated datapoint.
 
         @param oldValue: old value of the datapoint
