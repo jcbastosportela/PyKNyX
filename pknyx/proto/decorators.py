@@ -177,7 +177,7 @@ class Test(object):
         print("test")
 
 t = Test()
-print(t.test.im_func)
+#print(t.test.im_func)
 
 
 print("Scheduler funcs=%s" % trigger.schedule._funcs)
