@@ -45,7 +45,10 @@ __revision__ = "$Id$"
 
 import logging
 import logging.handlers
-import StringIO
+try:
+    from io import StringIO
+except ImportError:
+    import StringIO
 import traceback
 import os.path
 import time

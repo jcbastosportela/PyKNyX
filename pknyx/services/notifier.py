@@ -86,8 +86,6 @@ Idem for scheduler.
 __revision__ = "$Id$"
 
 
-import thread
-
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.utils import reprStr
 from pknyx.common.singleton import Singleton

@@ -45,7 +45,6 @@ __revision__ = "$Id$"
 import sys
 import os.path
 import shutil
-import sets
 
 from pknyx.common import config
 from pknyx.common.utils import isOdd
