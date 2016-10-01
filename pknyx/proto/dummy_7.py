@@ -260,6 +260,7 @@ def main():
     station = WeatherStation("1.2.3")
 
     ets.register(station)
+    ets.weave(station)
 
     # Weave weather station Datapoints to GroupAddresses
     # @todo: allow use of gad name, from GrOAT
