@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function
 
 import time
 
@@ -62,12 +65,12 @@ ets.link(dev=dev2, dp="dp_3", gad="1/1/3")
 
 ets.printGroat(dev1,by="gad")
 ets.printGroat(dev2,by="gad")
-print
-print
+print()
+print()
 ets.printGroat(dev1,by="go")
 ets.printGroat(dev2,by="go")
-print
-print
+print()
+print()
 
 stack.start()
 while True:
