@@ -62,6 +62,7 @@ KnxAddressValueError: address -0x1 not in range(0, 0xffff)
 
 __revision__ = "$Id$"
 
+import functools
 import struct
 
 from pknyx.common.exception import PKNyXValueError
@@ -73,6 +74,7 @@ class KnxAddressValueError(PKNyXValueError):
     """
 
 
+@functools.total_ordering
 class KnxAddress(object):
     """ KNX address hanlding class
 
@@ -106,6 +108,12 @@ class KnxAddress(object):
 
     def __cmp__(self, other):
         return cmp(self.raw, other.raw)
+
+    def __eq__(self, other):
+        return self.raw == other.raw
+
+    def __lt__(self, other):
+        return self.raw < other.raw
 
     @property
     def raw(self):
