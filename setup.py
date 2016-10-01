@@ -93,5 +93,7 @@ setup(name=config.APP_NAME,
                "pknyx/scripts/pknyx-admin.py"],
 
       install_requires=["APScheduler >= 3",
-                        "argparse"],
+                        "argparse",
+                        "blinker",
+                        ],
 )
