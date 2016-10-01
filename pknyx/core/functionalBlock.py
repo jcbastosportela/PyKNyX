@@ -97,7 +97,7 @@ class FunctionalBlock(object):
         # class objects named B{DP_xxx} are treated as Datapoint and added to the B{_datapoints} dict
         datapoints = {}
         for cls_ in classes:
-            for key, value in cls_.__dict__.iteritems():
+            for key, value in cls_.__dict__.items():
                 if key.startswith("DP_"):
                     Logger().debug("FunctionalBlock.__new__(): %s=(%s)" % (key, repr(value)))
                     name = value['name']
@@ -109,7 +109,7 @@ class FunctionalBlock(object):
         # class objects named B{GO_xxx} are treated as GroupObjects and added to the B{_groupObjects} dict
         groupObjects = {}
         for cls_ in classes:
-            for key, value in cls_.__dict__.iteritems():
+            for key, value in cls_.__dict__.items():
                 if key.startswith("GO_"):
                     Logger().debug("FunctionalBlock.__new__(): %s=(%s)" % (key, repr(value)))
                     try:

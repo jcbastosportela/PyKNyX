@@ -193,7 +193,7 @@ class DPTXlatorFactoryObject(object):
         """
         self = super(DPTXlatorFactoryObject, cls).__new__(cls)
         cls._handledMainDPTMappers = {}
-        for key, value in cls.__dict__.iteritems():
+        for key, value in cls.__dict__.items():
             if key.startswith("TYPE_"):
                 cls._handledMainDPTMappers[value.id] = value
 

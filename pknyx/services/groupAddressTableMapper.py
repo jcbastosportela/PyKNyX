@@ -134,7 +134,7 @@ class GroupAddressTableMapper(object):
         GAD and nickname should be unique (GAD are, as they are dict keys!)
         """
         nicknames = {}
-        for key, value in table.iteritems():
+        for key, value in table.items():
             if nicknames.has_key(value['name']):
                 Logger().warning("Duplicated nickname '%s' in GAD map table" % value['name'])
                 return False
@@ -209,7 +209,7 @@ class GroupAddressTableMapper(object):
 
         @raise GroupAddressTableMapperValueError:
         """
-        for key, value in self._gadMapTable.iteritems():
+        for key, value in self._gadMapTable.items():
             if nickname == value['name']:
                 return key
         else:

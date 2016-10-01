@@ -18,7 +18,7 @@ class FunctionalBlock(object):
         self.datapoints = {}
         classes = cls.__bases__ + (cls,)
         for cls in classes:
-            for key, value in cls.__dict__.iteritems():
+            for key, value in cls.__dict__.items():
                 if key.startswith("DP_"):
                     name = value['name']
                     if self.datapoints.has_key(name):

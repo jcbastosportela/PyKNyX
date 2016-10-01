@@ -78,7 +78,7 @@ class Device(object):
         # class objects named B{FB_xxx} are treated as FunctionalBlock and added to the B{_functionalBlocks} dict
         functionalBlocks = {}
         for cls_ in classes:
-            for key, value in cls_.__dict__.iteritems():
+            for key, value in cls_.__dict__.items():
                 if key.startswith("FB_"):
                     Logger().debug("Device.__new__(): %s=(%s)" % (key, repr(value)))
                     name = value['name']
@@ -97,7 +97,7 @@ class Device(object):
         # class objects named B{LNK_xxx} are treated as links and added to the B{_links} set
         links = set()
         for cls_ in classes:
-            for key, value in cls_.__dict__.iteritems():
+            for key, value in cls_.__dict__.items():
                 if key.startswith("LNK_"):
                     Logger().debug("Device.__new__(): %s=(%s)" % (key, repr(value)))
 
@@ -181,7 +181,7 @@ class Device(object):
         #"""
         #Logger().trace("Device._register()")
 
-        #for key, value in self.__class__.__dict__.iteritems():
+        #for key, value in self.__class__.__dict__.items():
             #if key.startswith("FB_"):
                 #Logger().debug("Device._register(): %s=(%s)" % (key, repr(value)))
                 #cls = value["cls"]
@@ -197,7 +197,7 @@ class Device(object):
         #"""
         #Logger().trace("Device._weave()")
 
-        #for key, value in self.__class__.__dict__.iteritems():
+        #for key, value in self.__class__.__dict__.items():
             #if key.startswith("LNK_"):
                 #Logger().debug("Device._weave(): %s=(%s)" % (key, repr(value)))
                 #ETS().weave(**value)
