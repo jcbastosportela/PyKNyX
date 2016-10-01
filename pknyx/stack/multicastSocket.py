@@ -145,7 +145,7 @@ class MulticastSocketReceive(MulticastSocketBase):
 
         @todo: use mcastAddr, instead of ""?
         """
-        self._sock.bind(("", self._localPort))
+        self.bind(("", self._localPort))
 
     def receive(self):
         """
@@ -167,7 +167,7 @@ class MulticastSocketTransmit(MulticastSocketBase):
     def _bind(self):
         """
         """
-        self._sock.bind((self._localAddr, self._localPort))
+        self.bind((self._localAddr, self._localPort))
 
     def transmit(self, data):
         """
