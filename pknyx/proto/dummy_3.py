@@ -85,12 +85,13 @@ ets.printGroat(dev2,by="go")
 print()
 print()
 
-dev1.start()
-dev2.start()
-while True:
-    try:
-        time.sleep(9999)
-    except KeyboardInterrupt:
-        dev1.stop()
-        dev2.stop()
-        break
+if __name__ == '__main__':
+    dev1.start()
+    dev2.start()
+    while True:
+        try:
+            time.sleep(9999)
+        except KeyboardInterrupt:
+            dev1.stop()
+            dev2.stop()
+            break

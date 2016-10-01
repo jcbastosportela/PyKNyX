@@ -57,10 +57,11 @@ ets.printGroat(lights,by="go")
 print()
 print()
 
-stack.start()
-while True:
-    try:
-        time.sleep(0.1)
-    except KeyboardInterrupt:
-        stack.stop()
-        break
+if __name__ == '__main__':
+    stack.start()
+    while True:
+        try:
+            time.sleep(0.1)
+        except KeyboardInterrupt:
+            stack.stop()
+            break
