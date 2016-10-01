@@ -92,7 +92,7 @@ class FunctionalBlock(object):
         self = super(FunctionalBlock, cls).__new__(cls)
 
         # Retreive all parents classes, to get all objects defined there
-        classes = cls.__bases__ + (cls,)
+        classes = cls.__mro__
 
         # class objects named B{DP_xxx} are treated as Datapoint and added to the B{_datapoints} dict
         datapoints = {}

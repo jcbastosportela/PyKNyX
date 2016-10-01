@@ -73,7 +73,7 @@ class Device(object):
         self = super(Device, cls).__new__(cls)
 
         # Retreive all parents classes, to get all objects defined there
-        classes = cls.__bases__ + (cls,)  # do we really want that?
+        classes = cls.__mro__ # do we really want that?
 
         # class objects named B{FB_xxx} are treated as FunctionalBlock and added to the B{_functionalBlocks} dict
         functionalBlocks = {}
