@@ -156,7 +156,7 @@ class Stack(object):
         self.start()
         try:
             while True:
-                time.sleep(0.1)
+                time.sleep(9999)
         except KeyboardInterrupt:
             self.stop()
 
