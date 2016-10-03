@@ -102,8 +102,8 @@ class L_DataService(threading.Thread, TransceiverLSAP):  # @todo: do not inheri
             individualAddress = IndividualAddress(individualAddress)
         self._individualAddress = individualAddress
 
-        self._inQueue  = PriorityQueue(4, priorityDistribution)
-        self._outQueue = PriorityQueue(4, priorityDistribution)
+        self._inQueue  = PriorityQueue(priorityDistribution)
+        self._outQueue = PriorityQueue(priorityDistribution)
 
         self._ldl = None
 
@@ -136,11 +136,7 @@ class L_DataService(threading.Thread, TransceiverLSAP):  # @todo: do not inheri
         priority = cEMI.priority
 
         # Add to inQueue and notify inQueue handler
-        self._inQueue.acquire()
-        try:
-            self._inQueue.add(cEMI, priority)
-        finally:
-            self._inQueue.release()
+        self._inQueue.add(cEMI, priority)
 
     def getOutFrame(self):
         """ Get output frame
@@ -150,12 +146,7 @@ class L_DataService(threading.Thread, TransceiverLSAP):  # @todo: do not inheri
         @return: pending transmission in outQueue
         @rtype: L{Transmission}
         """
-        self._outQueue.acquire()
-        try:
-            transmission = self._outQueue.remove()
-        finally:
-            self._outQueue.release()
-
+        transmission = self._outQueue.remove()
         return transmission
 
     def dataReq(self, cEMI):
@@ -171,11 +162,7 @@ class L_DataService(threading.Thread, TransceiverLSAP):  # @todo: do not inheri
         transmission = Transmission(cEMI.frame)
         transmission.acquire()
         try:
-            self._outQueue.acquire()
-            try:
-                self._outQueue.add(transmission, priority)
-            finally:
-                self._outQueue.release()
+            self._outQueue.add(transmission, priority)
 
             while transmission.waitConfirm:
                 transmission.wait()
@@ -194,26 +181,16 @@ class L_DataService(threading.Thread, TransceiverLSAP):  # @todo: do not inheri
             try:
 
                 # Get incoming frame from inQueue
-                self._inQueue.acquire()
-                try:
-                    cEMI = self._inQueue.remove()
-                finally:
-                    self._inQueue.release()
+                cEMI = self._inQueue.remove()
+                Logger().debug("L_DataService.run(): cEMI=%s" % cEMI)
 
-                # Handle cEMI message
-                if cEMI is not None:
-                    Logger().debug("L_DataService.run(): cEMI=%s" % cEMI)
-
-                    srcAddr = cEMI.sourceAddress
-                    if srcAddr != self._individualAddress:  # Avoid loop
-                        if cEMI.messageCode == CEMILData.MC_LDATA_IND:  #in (CEMILData.MC_LDATA_CON, CEMILData.MC_LDATA_IND):
-                            if self._ldl is None:
-                                Logger().warning("L_GroupDataService.run(): not listener defined")
-                            else:
-                                self._ldl.dataInd(cEMI)
-
-                else:
-                    time.sleep(0.001)
+                srcAddr = cEMI.sourceAddress
+                if srcAddr != self._individualAddress:  # Avoid loop
+                    if cEMI.messageCode == CEMILData.MC_LDATA_IND:  #in (CEMILData.MC_LDATA_CON, CEMILData.MC_LDATA_IND):
+                        if self._ldl is None:
+                            Logger().warning("L_GroupDataService.run(): not listener defined")
+                        else:
+                            self._ldl.dataInd(cEMI)
 
             except:
                 Logger().exception("L_DataService.run()")  #, debug=True)

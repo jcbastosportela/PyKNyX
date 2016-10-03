@@ -85,7 +85,7 @@ class Stack(object):
     @ivar _tc: transciever
     @type _tc: L{Transceiver<pknyx.stack.transceiver.transceiver>}
     """
-    PRIORITY_DISTRIBUTION = (-1, 3, 2)
+    PRIORITY_DISTRIBUTION = (-1, 3, 2, 1)
 
     def __init__(self, individualAddress=IndividualAddress("0.0.0"),
                  transCls=UDPTransceiver, transParams=dict(mcastAddr="224.0.23.12", mcastPort=3671)):

@@ -90,11 +90,8 @@ class PriorityQueue(object):
     @ivar _priorityDistribution: determines the handling of the different priorities
     @type _priorityDistribution: list/tuple of int
     """
-    def __init__(self, prioritySteps, priorityDistribution):
+    def __init__(self, priorityDistribution):
         """ Create a new PriorityQueue
-
-        @param prioritySteps: determines the number of priority steps the queue holds
-        @type prioritySteps: int
 
         @param priorityDistribution: determines the handling of the different priorities
         @type priorityDistribution: list/tuple of int
@@ -105,18 +102,19 @@ class PriorityQueue(object):
 
         self._priorityDistribution = priorityDistribution
 
-        if prioritySteps < 1:
+        if len(priorityDistribution) < 2:
             raise PriorityQueueValueError("there must be a least one priority step")
-
-        if len(priorityDistribution) + 1 != prioritySteps:
-            raise PriorityQueueValueError("size of array 'priorityDistribution' must be smaller by one than 'prioritySteps'")
 
         self._priorityDistribution = priorityDistribution
 
-        self._count = copy.copy(priorityDistribution)
-        self._queue = prioritySteps * [[]]
+        self._queue = len(priorityDistribution) * [[]]
 
         self._condition = threading.Condition()
+
+        # queue priority we found the last element at
+        self._pos = 0
+        # number of items we may (still) read before getting to lower prios
+        self._n = priorityDistribution[0]
 
     def add(self, obj, priority):
         """ Add an element to the queue
@@ -130,47 +128,50 @@ class PriorityQueue(object):
         @param priority: priority value of the object to add
         @type priority: int
         """
-        self._queue[priority.level].append(obj)
-
         #Logger().debug("PriorityQueue.add(): _queue=%s" % repr(self._queue))
+
+        with self._condition:
+            self._queue[priority.level].append(obj)
+            self._condition.notify()
+
 
     def remove(self):
         """ Removes and returns the next element from this queue
 
-        @return: the next element from this queue (None if queue is empty)
+        @return: the next element from this queue (blocks if queue is empty)
         """
-        for i in range(len(self._queue) - 1):
-            if self._count[i] == 0:
-                self._count[i] = self._priorityDistribution[i]
-            elif len(self._queue[i]):
-                if self._count[i] > 0:
-                    self._count[i] -= 1
-                return self._queue[i].pop(0)
-
-        while i >= 0:
-            if len(self._queue[i]):
-                return self._queue[i].pop(0)
-            i -= 1
-
         #Logger().debug("PriorityQueue.remove(): _queue=%s" % repr(self._queue))
 
-        return None
+        with self._condition:
+            while True: # Loop until we transmit something.
+                seen = True
+                while seen: # Loop until the array of queues is empty.
+                    seen = False
+                    for i,q in enumerate(self._queue):
+                        if self._pos > i: # Re-scan higher-priority queues.
+                            if q:
+                                if self._priorityDistribution[i] < 0:
+                                    return q.pop(0) # takes absolute precendece
+                                seen = True
+                            continue
+                        elif not q:
+                            continue
+                        seen = True
+                        if self._pos != i:
+                            # We newly arrived at this prio, thus remember
+                            # where we are and how much we may send
+                            self._pos = i
+                            self._n = self._priorityDistribution[i]
+                        elif self._n == 0:
+                            # No more allowed here. Clear the current prio.
+                            self._n = -1
+                            continue
+                        if self._n > 0:
+                            self._n -= 1
+                        return q.pop(0)
 
-    def acquire(self):
-        self._condition.acquire()
-
-    def release(self):
-        self._condition.release()
-
-    def wait(self):
-        self._condition.wait()
-
-    def notify(self):
-        self._condition.notify()
-
-    def notifyAll(self):
-        self._condition.notifyAll()
-
+                # no element found. Wait.
+                self._condition.wait()
 
 
 if __name__ == '__main__':
