@@ -100,11 +100,8 @@ class PriorityQueue(object):
         """
         super(PriorityQueue, self).__init__()
 
-        self._priorityDistribution = priorityDistribution
-
         if len(priorityDistribution) < 2:
             raise PriorityQueueValueError("there must be a least one priority step")
-
         self._priorityDistribution = priorityDistribution
 
         self._queue = len(priorityDistribution) * [[]]
@@ -147,28 +144,22 @@ class PriorityQueue(object):
                 seen = True
                 while seen: # Loop until the array of queues is empty.
                     seen = False
-                    for i,q in enumerate(self._queue):
-                        if self._pos > i: # Re-scan higher-priority queues.
-                            if q:
-                                if self._priorityDistribution[i] < 0:
-                                    return q.pop(0) # takes absolute precendece
-                                seen = True
-                            continue
-                        elif not q:
+                    for i,q in enumerate(zip(self._queue,self._n)):
+                        # scan all queues. Return the first element with
+                        # lowest-prio queue that's not exhausted its
+                        # quorum.
+                        q,n = q
+                        if not q:
                             continue
                         seen = True
-                        if self._pos != i:
-                            # We newly arrived at this prio, thus remember
-                            # where we are and how much we may send
-                            self._pos = i
-                            self._n = self._priorityDistribution[i]
-                        elif self._n == 0:
-                            # No more allowed here. Clear the current prio.
-                            self._n = -1
+                        if n == 0:
                             continue
-                        if self._n > 0:
-                            self._n -= 1
-                        return q.pop(0)
+                        if n >= 0:
+                            self._n[i] = n-1
+                        return q.pop(0) # takes absolute precendece
+
+                    if seen:
+                        self._n = self._priorityDistribution[:]
 
                 # no element found. Wait.
                 self._condition.wait()
