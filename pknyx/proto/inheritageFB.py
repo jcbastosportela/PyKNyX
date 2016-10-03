@@ -32,7 +32,7 @@ class FunctionalBlock(object):
 
         self._name = name
 
-        # Call for additionnal user init
+        # Call for additional user init
         self.init()
 
     def __repr__(self):
@@ -42,7 +42,7 @@ class FunctionalBlock(object):
         return "<%s('%s')>" % (reprStr(self.__class__), self._name)
 
     def init(self):
-        """ Additionnal user init
+        """ Additional user init
         """
         pass
 

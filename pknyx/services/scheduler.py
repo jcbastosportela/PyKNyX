@@ -55,7 +55,7 @@ Instead of directly using the APScheduler, the Scheduler class below provides th
 list of names of the decorated functions, in _pendingFuncs.
 
 Then, when a new instance of the FunctionalBlock sub-class is created, in ets.register(), we call the
-Scheduler.doRegisterJobs() method which tried to retreive the bounded method matching one of the decorated functions.
+Scheduler.doRegisterJobs() method which tried to retrieve the bounded method matching one of the decorated functions.
 If found, the method is registered in APScheduler.
 
 Scheduler also adds a listener to be notified when a decorated method call fails to be run, so we can log it.

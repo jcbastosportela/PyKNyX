@@ -178,7 +178,7 @@ __revision__ = "$Id$"
 #
 #    # Datapoints are created as class entities and automatically instancianted as real DP in constructor
 #    # Their name must start with 'DP_' ; they will be stored in self.dp dict-like object.
-#    # Ex: DP_1 = ("truc", "1.001", "cwtu", "low", 0) ... > self.dp["truc"]  <<<< special dict, with additionnal features
+#    # Ex: DP_1 = ("truc", "1.001", "cwtu", "low", 0) ... > self.dp["truc"]  <<<< special dict, with additional features
 #
 #    DP_01 = ("temp_entree", "9.001", "cwtu", "low", 0)
 #    DP_02 = {'name': "temp_sortie", dptId: "9.001", 'flags': "cwtu", 'priority': "low", 'initValue': 0}
@@ -251,7 +251,7 @@ __revision__ = "$Id$"
 #    @Device.schedule.every(minute=5)
 #    def checkWindSpeed(self):
 #
-#        # How we retreive the speed is out of the scope of this proposal
+#        # How we retrieve the speed is out of the scope of this proposal
 #        # speed = xxx
 #
 #        # Now, write the new speed value to the Datapoint
@@ -317,7 +317,7 @@ __revision__ = "$Id$"
 #    @Device.schedule.every(minute=5)
 #    def checkWindSpeed(self):
 #
-#        # How we retreive the speed is out of the scope of this proposal
+#        # How we retrieve the speed is out of the scope of this proposal
 #        # speed = xxx
 #
 #        # Now, write the new speed value to the Datapoint

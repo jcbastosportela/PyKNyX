@@ -14,7 +14,7 @@ x bug fix
     + added GAD map table management
     + added average and replay examples
     + FunctionBlock objects now support inheritance, and can be instanciated several times without Datapoint conflict
-    + FunctionnalBlock now takes an additionnal (and optionnal) 'params' argument, for user specific needs
+    + FunctionalBlock now takes an additional (and optional) 'params' argument, for user specific needs
     - new architecture arround ETS/Device
     x minor bugs fixes
 

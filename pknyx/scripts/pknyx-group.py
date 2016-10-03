@@ -77,7 +77,7 @@ mapper = GroupAddressTableMapper()
 class SimpleQueue(list):
     """ Simple condition locked queue
 
-    This queue is a list with additionnal condition locking features.
+    This queue is a list with additional condition locking features.
 
     @ivar _condition: condition for locking feature
     @type _condition: L{Condition<threading>}
@@ -400,7 +400,7 @@ def main():
     else:
         mapper.loadFrom(args.gadMapPath)
 
-    # If given GAD is a nick name, try to retreive real GAD from map table
+    # If given GAD is a nick name, try to retrieve real GAD from map table
     try:
         GroupAddress(args.gad)
     except GroupAddressValueError:

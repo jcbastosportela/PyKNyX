@@ -53,7 +53,7 @@ class WeatherWindBlock(FunctionalBlock):
     #@Device.schedule.every(minute=5)
     def refreshWindSpeed(self, event):
 
-        # How we retreive the speed is out of the scope of this proposal
+        # How we retrieve the speed is out of the scope of this proposal
         # speed = xxx
 
         # Now, write the new speed value to the Datapoint
@@ -93,7 +93,7 @@ class WeatherTemperatureBlock(FunctionalBlock):
     #@Device.schedule.every(minute=5)
     def refreshTemperature(self, event):
 
-        # How we retreive the temperature/humidity is out of the scope of this proposal
+        # How we retrieve the temperature/humidity is out of the scope of this proposal
         # temperature = xxx
         # humidity = xxx
         self.dp["temperature"] = temperature

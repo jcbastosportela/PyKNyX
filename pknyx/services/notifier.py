@@ -55,7 +55,7 @@ Instead of directly using the APScheduler, the Notifier class below provides the
 list of names of the decorated functions, in _pendingFuncs.
 
 Then, when a new instance of the FunctionalBlock sub-class is created, in ETS.register(), we call the
-Notifier.doRegisterJobs() method which tried to retreive the bounded method matching one of the decorated functions.
+Notifier.doRegisterJobs() method which tried to retrieve the bounded method matching one of the decorated functions.
 If found, the method is registered in APScheduler.
 
 Notifier also adds a listener to be notified when a decorated method call fails to be run, so we can log it.

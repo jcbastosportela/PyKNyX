@@ -71,7 +71,7 @@ class WeatherBlock(FunctionalBlock):
     #@Device.schedule.every(minute=5)
     def checkWindSpeed(self, event):
 
-        # How we retreive the speed is out of the scope of this proposal
+        # How we retrieve the speed is out of the scope of this proposal
         # speed = xxx
 
         # Now, write the new speed value to the Datapoint
