@@ -141,7 +141,7 @@ class PriorityQueue(object):
         """
         for i in range(len(self._queue) - 1):
             if self._count[i] == 0:
-                self._count[i] = distr[i]
+                self._count[i] = self._priorityDistribution[i]
             elif len(self._queue[i]):
                 if self._count[i] > 0:
                     self._count[i] -= 1
