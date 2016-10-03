@@ -47,7 +47,6 @@ Usage
 @license: GPL
 """
 
-__revision__ = "$Id$"
 
 import threading
 

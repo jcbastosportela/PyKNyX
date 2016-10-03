@@ -40,8 +40,6 @@ Implements
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 import sys
 import os.path
 import shutil

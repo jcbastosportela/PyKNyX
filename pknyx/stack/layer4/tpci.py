@@ -48,8 +48,6 @@ Usage
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 
 class TPCI(object):
 

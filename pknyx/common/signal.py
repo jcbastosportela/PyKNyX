@@ -64,8 +64,6 @@ test(): 'Hello World!'
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 import os
 import os.path
 import weakref

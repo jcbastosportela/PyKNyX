@@ -49,8 +49,6 @@ See pknyx-admin.py tools.
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 import os
 import os.path
 import sys

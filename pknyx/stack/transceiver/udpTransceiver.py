@@ -53,7 +53,6 @@ Usage
 @todo: run transmitter and receiver in a simple threaded method, instead of a complete class thread.
 """
 
-__revision__ = "$Id$"
 
 import time
 import threading

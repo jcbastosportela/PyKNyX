@@ -48,8 +48,6 @@ Usage
 @todo: rename to MailAlert (inheriting Alert)? Or use logging with email support?
 """
 
-__revision__ = "$Id$"
-
 import smtplib
 import email.mime.text
 

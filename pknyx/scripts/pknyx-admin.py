@@ -47,8 +47,6 @@ pknyx-admin.py --help
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 from pknyx.tools.adminUtility import AdminUtility
 
 

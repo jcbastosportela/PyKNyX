@@ -46,8 +46,6 @@ Usage
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
 from pknyx.services.logger import Logger

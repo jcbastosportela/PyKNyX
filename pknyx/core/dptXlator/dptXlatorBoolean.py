@@ -69,8 +69,6 @@ ValueError: value 3 not in ("Off", "On")
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 import struct
 
 from pknyx.services.logger import Logger

@@ -65,8 +65,6 @@ ValueError: invalid Datapoint Type ID ('1')
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 import re
 
 from pknyx.common.exception import PKNyXValueError

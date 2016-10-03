@@ -45,8 +45,6 @@ Usage
 @license: PSF License
 """
 
-__revision__ = "$Id$"
-
 from pknyx.common.exception import PKNyXAttributeError
 
 

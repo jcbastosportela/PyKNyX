@@ -52,7 +52,6 @@ Should be used from an executable script. See scripts/pknyx-admin.py.
 @license: GPL
 """
 
-__revision__ = "$Id$"
 
 import os
 import os.path

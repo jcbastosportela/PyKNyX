@@ -60,7 +60,6 @@ KnxAddressValueError: address -0x1 not in range(0, 0xffff)
 @license: GPL
 """
 
-__revision__ = "$Id$"
 
 import functools
 import struct

@@ -62,7 +62,6 @@ PriorityValueError: priority level 15 not in (0x00, 0x01, 0x02, 0x03)
 @license: GPL
 """
 
-__revision__ = "$Id$"
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.services.logger import Logger

@@ -52,8 +52,6 @@ Documentation
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 from pprint import PrettyPrinter
 
 from pknyx.common import config

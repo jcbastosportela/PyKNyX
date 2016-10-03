@@ -76,7 +76,6 @@ bytearray(b')\x00\xbc\xd0\x11\x0e\x19\x02\x01\x00\x80')
 @license: GPL
 """
 
-__revision__ = "$Id$"
 
 import struct
 

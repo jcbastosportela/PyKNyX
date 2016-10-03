@@ -62,8 +62,6 @@ The DPTXlatorDate class follows the python encoding.
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 import struct
 
 from pknyx.services.logger import Logger

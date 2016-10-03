@@ -53,7 +53,6 @@ Usage
 @license: GPL
 """
 
-__revision__ = "$Id$"
 
 import socket
 import struct

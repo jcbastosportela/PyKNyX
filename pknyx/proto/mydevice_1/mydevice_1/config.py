@@ -35,8 +35,6 @@ Device configuration
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 from pknyx.common import config
 
 # Device params

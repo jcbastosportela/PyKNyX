@@ -70,7 +70,6 @@ Usage
 @todo: use Queue.PriorityQueue?
 """
 
-__revision__ = "$Id$"
 
 import copy
 import threading

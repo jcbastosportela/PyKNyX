@@ -48,8 +48,6 @@ Usage
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 from pknyx.common import config
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.frozenDict import FrozenDict

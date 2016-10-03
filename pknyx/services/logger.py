@@ -41,8 +41,6 @@ Implements
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 import logging
 import logging.handlers
 try:

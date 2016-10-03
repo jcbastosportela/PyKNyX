@@ -43,8 +43,6 @@ Implements
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 import logging
 import time
 import sys

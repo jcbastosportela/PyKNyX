@@ -54,8 +54,6 @@ pknyx-group.py --help
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 import sys
 import time
 import os.path

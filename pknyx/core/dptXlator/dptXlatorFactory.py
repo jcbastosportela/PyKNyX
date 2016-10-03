@@ -47,8 +47,6 @@ Usage
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 import re
 
 from pknyx.services.logger import Logger

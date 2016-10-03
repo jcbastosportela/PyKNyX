@@ -43,8 +43,6 @@ Implements
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 
 class PKNyXError(Exception):
     """ Base class for pKNyX errors

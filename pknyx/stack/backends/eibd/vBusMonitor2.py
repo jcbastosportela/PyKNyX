@@ -39,7 +39,7 @@ Implements
 @copyright: (C) 2013-2015 Frédéric Mantegazza
 @license: GPL
 """
-__revision__ = "$Id$"
+
 
 import os
 import sys

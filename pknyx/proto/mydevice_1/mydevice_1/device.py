@@ -64,8 +64,6 @@ Usage
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 
 from pknyx.api import Device, FunctionalBlock
 from pknyx.api import logger, schedule, notify

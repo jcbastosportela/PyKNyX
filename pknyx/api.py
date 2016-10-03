@@ -44,8 +44,6 @@ Usage
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 from pknyx.core.device import Device
 from pknyx.core.functionalBlock import FunctionalBlock
 

@@ -68,8 +68,6 @@ Usage
 @license: GPL
 """
 
-__revision__ = "$Id$"
-
 import traceback
 
 from apscheduler.schedulers.background import BackgroundScheduler
