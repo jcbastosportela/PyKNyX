@@ -49,7 +49,7 @@ Usage
 """
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.groupListener import GroupListener
 from pknyx.stack.flags import Flags
 from pknyx.stack.priority import Priority
@@ -124,7 +124,7 @@ class GroupObject(GroupListener):
 
         @todo: transmit a more generic object, like SignalEvent? Or a dict?
         """
-        Logger().debug("GroupObject._slotChanged(): dp=%s, oldValue=%s, newValue=%s" % (self._datapoint.name, repr(oldValue), repr(newValue)))
+        logger.debug("GroupObject._slotChanged(): dp=%s, oldValue=%s, newValue=%s" % (self._datapoint.name, repr(oldValue), repr(newValue)))
 
         if self._group is not None and self._flags.communicate:
             if (oldValue != newValue and self._flags.transmit) or self._flags.stateless:
@@ -176,14 +176,14 @@ class GroupObject(GroupListener):
         return self._datapoint.name
 
     def onWrite(self, src, data):
-        Logger().debug("GroupObject.onWrite(): src=%s, data=%s" % (src, repr(data)))
+        logger.debug("GroupObject.onWrite(): src=%s, data=%s" % (src, repr(data)))
 
         # Check if datapoint should be updated
         if self._flags.write:  # and data != self.datapoint.data:
             self.datapoint.frame = data
 
     def onRead(self, src):
-        Logger().debug("GroupObject.onRead(): src=%s" % src)
+        logger.debug("GroupObject.onRead(): src=%s" % src)
 
         # Check if data should be send over the bus
         if self._flags.communicate:
@@ -192,7 +192,7 @@ class GroupObject(GroupListener):
                 self._group.response(self._priority, frame, size)
 
     def onResponse(self, src, data):
-        Logger().debug("GroupObject.onResponse(): src=%s, data=%s" % (src, repr(data)))
+        logger.debug("GroupObject.onResponse(): src=%s, data=%s" % (src, repr(data)))
 
         # Check if datapoint should be updated
         if self._flags.update:  # and data != self.datapoint.data:
@@ -203,7 +203,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class GroupObjectTestCase(unittest.TestCase):

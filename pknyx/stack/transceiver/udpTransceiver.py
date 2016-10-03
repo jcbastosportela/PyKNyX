@@ -59,7 +59,7 @@ import threading
 import socket
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.result import Result
 from pknyx.stack.knxAddress import KnxAddress
 from pknyx.stack.groupAddress import GroupAddress
@@ -142,72 +142,72 @@ class UDPTransceiver(Transceiver):
     def _receiverLoop(self):
         """
         """
-        Logger().trace("UDPTransceiver._receiverLoop()")
+        logger.trace("UDPTransceiver._receiverLoop()")
 
         while self._running:
             try:
                 inFrame, (fromAddr, fromPort) = self._receiverSock.receive()
-                Logger().debug("UDPTransceiver._receiverLoop(): inFrame=%s (%s, %d)" % (repr(inFrame), fromAddr, fromPort))
+                logger.debug("UDPTransceiver._receiverLoop(): inFrame=%s (%s, %d)" % (repr(inFrame), fromAddr, fromPort))
                 inFrame = bytearray(inFrame)
                 try:
                     header = KNXnetIPHeader(inFrame)
                 except KNXnetIPHeaderValueError:
-                    Logger().exception("UDPTransceiver._receiverLoop()", debug=True)
+                    logger.exception("UDPTransceiver._receiverLoop()")
                     continue
-                Logger().debug("UDPTransceiver._receiverLoop(): KNXnetIP header=%s" % repr(header))
+                logger.debug("UDPTransceiver._receiverLoop(): KNXnetIP header=%s" % repr(header))
 
                 frame = inFrame[KNXnetIPHeader.HEADER_SIZE:]
-                Logger().debug("UDPTransceiver._receiverLoop(): frame=%s" % repr(frame))
+                logger.debug("UDPTransceiver._receiverLoop(): frame=%s" % repr(frame))
                 try:
                     cEMI = CEMILData(frame)
                 except CEMIValueError:
-                    Logger().exception("UDPTransceiver._receiverLoop()")  #, debug=True)
+                    logger.exception("UDPTransceiver._receiverLoop()")
                     continue
-                Logger().debug("UDPTransceiver._receiverLoop(): cEMI=%s" % cEMI)
+                logger.debug("UDPTransceiver._receiverLoop(): cEMI=%s" % cEMI)
 
                 destAddr = cEMI.destinationAddress
                 if isinstance(cEMI.destinationAddress, GroupAddress):
                     self._tLSAP.putInFrame(cEMI)
 
                 elif isinstance(destAddr, IndividualAddress):
-                    Logger().warning("UDPTransceiver._receiverLoop(): unsupported destination address type (%s)" % repr(destAddr))
+                    logger.warning("UDPTransceiver._receiverLoop(): unsupported destination address type (%s)" % repr(destAddr))
                 else:
-                    Logger().warning("UDPTransceiver._receiverLoop(): unknown destination address type (%s)" % repr(destAddr))
+                    logger.warning("UDPTransceiver._receiverLoop(): unknown destination address type (%s)" % repr(destAddr))
 
             except socket.timeout:
                 pass
-                #Logger().exception("UDPTransceiver._receiverLoop()", debug=True)
+                #logger.exception("UDPTransceiver._receiverLoop()")
 
             except:
-                Logger().exception("UDPTransceiver._receiverLoop()")  #, debug=True)
+                logger.exception("UDPTransceiver._receiverLoop()")
 
         self._receiverSock.close()
 
-        Logger().trace("UDPTransceiver._receiverLoop(): ended")
+        logger.trace("UDPTransceiver._receiverLoop(): ended")
 
     def _transmitterLoop(self):
         """
         """
-        Logger().trace("UDPTransceiver._transmitterLoop()")
+        logger.trace("UDPTransceiver._transmitterLoop()")
 
         while self._running:
             try:
                 transmission = self._tLSAP.getOutFrame()
 
                 if transmission is not None:
-                    Logger().debug("UDPTransceiver._transmitterLoop(): transmission=%s" % repr(transmission))
+                    logger.debug("UDPTransceiver._transmitterLoop(): transmission=%s" % repr(transmission))
 
                     cEMIFrame = transmission.payload
                     cEMIRawFrame = cEMIFrame.raw
                     header = KNXnetIPHeader(service=KNXnetIPHeader.ROUTING_IND, serviceLength=len(cEMIRawFrame))
                     frame = header.frame + cEMIRawFrame
-                    Logger().debug("UDPTransceiver._transmitterLoop(): frame= %s" % repr(frame))
+                    logger.debug("UDPTransceiver._transmitterLoop(): frame= %s" % repr(frame))
 
                     try:
                         self._transmitterSock.transmit(frame)
                         transmission.result = Result.OK
                     except:
-                        Logger().exception("UDPTransceiver._transmitterLoop()")
+                        logger.exception("UDPTransceiver._transmitterLoop()")
                         transmission.result = Result.ERROR
 
                     if transmission.waitConfirm:
@@ -217,22 +217,22 @@ class UDPTransceiver(Transceiver):
                             transmission.notify()
                         finally:
                             transmission.release()
-                        Logger().debug("UDPTransceiver._transmitterLoop(): transmission=%s" % repr(transmission))
+                        logger.debug("UDPTransceiver._transmitterLoop(): transmission=%s" % repr(transmission))
 
                 else:
                     time.sleep(0.001)
 
             except:
-                Logger().exception("UDPTransceiver._transmitterLoop()")  #, debug=True)
+                logger.exception("UDPTransceiver._transmitterLoop()")
 
         self._transmitterSock.close()
 
-        Logger().trace("UDPTransceiver._transmitterLoop(): ended")
+        logger.trace("UDPTransceiver._transmitterLoop(): ended")
 
     def start(self):
         """
         """
-        Logger().trace("UDPTransceiver.start()")
+        logger.trace("UDPTransceiver.start()")
 
         self._running = True
         self._receiver.start()
@@ -241,14 +241,14 @@ class UDPTransceiver(Transceiver):
     def stop(self):
         """
         """
-        Logger().trace("UDPTransceiver.stop()")
+        logger.trace("UDPTransceiver.stop()")
 
         self._running = False
 
     def join(self):
         """
         """
-        Logger().trace("UDPTransceiver.join()")
+        logger.trace("UDPTransceiver.join()")
 
         self._transmitter.join()
         self._receiver.join()
@@ -258,7 +258,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class UDPTransceiverTestCase(unittest.TestCase):

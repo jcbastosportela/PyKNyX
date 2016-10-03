@@ -53,7 +53,7 @@ Usage
 
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.cemi.cemi import CEMI, CEMIValueError
 from pknyx.stack.cemi.cemiLDataFrame import CEMILDataFrame
 from pknyx.stack.individualAddress import IndividualAddress, IndividualAddressValueError
@@ -112,7 +112,7 @@ class CEMILData(CEMI):
             if self.messageCode not in CEMILData.MESSAGE_CODES:
                 raise CEMIValueError("invalid Message Code (%d)" % mc)
             elif self._frame.addIL:
-                Logger().warning("Additional Informations not supported and ignored")
+                logger.warning("Additional Informations not supported and ignored")
             elif self.frameType == CEMILData.FT_EXT_FRAME:
                 raise CEMIValueError("Extended Frame not supported")
         else:
@@ -322,7 +322,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class CEMILDataTestCase(unittest.TestCase):

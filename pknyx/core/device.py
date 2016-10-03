@@ -51,7 +51,7 @@ Usage
 from pknyx.common import config
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.frozenDict import FrozenDict
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.stack import Stack
 
 import time
@@ -78,7 +78,7 @@ class Device(object):
         for cls_ in classes:
             for key, value in cls_.__dict__.items():
                 if key.startswith("FB_"):
-                    Logger().debug("Device.__new__(): %s=(%s)" % (key, repr(value)))
+                    logger.debug("Device.__new__(): %s=(%s)" % (key, repr(value)))
                     name = value['name']
 
                     # Check if already registered
@@ -97,7 +97,7 @@ class Device(object):
         for cls_ in classes:
             for key, value in cls_.__dict__.items():
                 if key.startswith("LNK_"):
-                    Logger().debug("Device.__new__(): %s=(%s)" % (key, repr(value)))
+                    logger.debug("Device.__new__(): %s=(%s)" % (key, repr(value)))
 
                     link = (value['fb'], value['dp'], value['gad'])  # TODO: add flags
                     if link in links:
@@ -110,7 +110,7 @@ class Device(object):
         try:
             self._desc = cls.__dict__["DESC"]
         except KeyError:
-            Logger().exception("Device.__new__()", debug=True)
+            logger.exception("Device.__new__()")
             self._desc = "Device"
 
         return self
@@ -177,11 +177,11 @@ class Device(object):
     #def register(self):
         #"""
         #"""
-        #Logger().trace("Device._register()")
+        #logger.trace("Device._register()")
 
         #for key, value in self.__class__.__dict__.items():
             #if key.startswith("FB_"):
-                #Logger().debug("Device._register(): %s=(%s)" % (key, repr(value)))
+                #logger.debug("Device._register(): %s=(%s)" % (key, repr(value)))
                 #cls = value["cls"]
 
                 ## Remove 'cls' key from FB_xxx dict
@@ -193,11 +193,11 @@ class Device(object):
     #def weave(self):
         #"""
         #"""
-        #Logger().trace("Device._weave()")
+        #logger.trace("Device._weave()")
 
         #for key, value in self.__class__.__dict__.items():
             #if key.startswith("LNK_"):
-                #Logger().debug("Device._weave(): %s=(%s)" % (key, repr(value)))
+                #logger.debug("Device._weave(): %s=(%s)" % (key, repr(value)))
                 #ETS().weave(**value)
 
 
@@ -205,7 +205,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class DeviceTestCase(unittest.TestCase):

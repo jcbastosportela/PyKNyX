@@ -71,7 +71,7 @@ IndividualAddressValueError: individual address out of range
 
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.knxAddress import KnxAddress, KnxAddressValueError
 
 
@@ -93,14 +93,14 @@ class IndividualAddress(KnxAddress):
 
         @todo: add constructor with simple int
         """
-        #Logger().debug("IndividualAddress.__init__(): address=%s" % repr(address))
+        #logger.debug("IndividualAddress.__init__(): address=%s" % repr(address))
 
         if isinstance(address, str):
             address = address.strip().split('.')
             try:
                 address = [int(val) for val in address]
             except ValueError:
-                Logger().exception("IndividualAddress.__init__()", debug=True)
+                logger.exception("IndividualAddress.__init__()")
                 raise IndividualAddressValueError("invalid individual address")
         try:
             if len(address) == 3:
@@ -111,7 +111,7 @@ class IndividualAddress(KnxAddress):
                 raise IndividualAddressValueError("invalid individual address")
         except TypeError:
             if not isinstance(address, int):
-                Logger().exception("IndividualAddress.__init__()", debug=True)
+                logger.exception("IndividualAddress.__init__()")
                 raise IndividualAddressValueError("invalid individual address")
 
         super(IndividualAddress, self).__init__(address)
@@ -148,7 +148,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class IndividualAddressTestCase(unittest.TestCase):

@@ -7,7 +7,7 @@ import time
 
 from pknyx.common.utils import dd2dms, dms2dd
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.services.scheduler import Scheduler
 from pknyx.api import FunctionalBlock, Device
 from pknyx.core.ets import ETS
@@ -62,7 +62,7 @@ class WeatherTemperatureBlock(FunctionalBlock):
 
     @schedule.every(minutes=1)
     def updateTemperatureHumidity(self):  #, event):
-        Logger().trace("WeatherTemperatureBlock.updateTemperatureHumidity()")
+        logger.trace("WeatherTemperatureBlock.updateTemperatureHumidity()")
 
         # How we retreive the temperature/humidity is out of the scope of this proposal
         temperature = 20.
@@ -88,7 +88,7 @@ class WeatherWindBlock(FunctionalBlock):
 
     @schedule.every(seconds=30)
     def updateWindSpeed(self):  #, event):
-        Logger().trace("WeatherWindBlock.updateWindSpeed()")
+        logger.trace("WeatherWindBlock.updateWindSpeed()")
 
         # How we retreive the speed is out of the scope of this proposal
         speed = 12.
@@ -101,7 +101,7 @@ class WeatherWindBlock(FunctionalBlock):
     #notify.datapoint()  # All DP
     #notify.group(gad="1/1/1")  # Single group address
     def checkWindSpeed(self, event):
-        Logger().trace("WeatherWindBlock.checkWindSpeed()")
+        logger.trace("WeatherWindBlock.checkWindSpeed()")
 
         # Read inputs/params
         wind_speed = self.dp["wind_speed"]
@@ -210,7 +210,7 @@ class WeatherSunPositionBlock(FunctionalBlock):
 
     @schedule.every(minutes=1)
     def updatePosition(self):  #, event):
-        Logger().trace("WeatherSunPositionBlock.updatePosition()")
+        logger.trace("WeatherSunPositionBlock.updatePosition()")
 
         # Read inputs/params
         self._latitude = self.dp["latitude"].value

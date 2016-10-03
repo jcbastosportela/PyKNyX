@@ -79,7 +79,7 @@ bytearray(b')\x00\xbc\xd0\x11\x0e\x19\x02\x01\x00\x80')
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.cemi.cemi import CEMIValueError
 
 
@@ -247,7 +247,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class CEMILDataFrameTestCase(unittest.TestCase):

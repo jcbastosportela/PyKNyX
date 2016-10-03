@@ -51,7 +51,7 @@ see L{DPTXlatorBoolean}
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
@@ -107,8 +107,8 @@ class DPTXlator2ByteFloat(DPTXlatorBase):
         if sign != 0:
             mant = -(~(mant - 1) & 0x07ff)
         value = (1 << exp) * 0.01 * mant
-        #Logger().debug("DPT2ByteFloat.dataToValue(): sign=%d, exp=%d, mant=%r" % (sign, exp, mant))
-        #Logger().debug("DPT2ByteFloat.dataToValue(): value=%.2f" % value)
+        #logger.debug("DPT2ByteFloat.dataToValue(): sign=%d, exp=%d, mant=%r" % (sign, exp, mant))
+        #logger.debug("DPT2ByteFloat.dataToValue(): value=%.2f" % value)
         return value
 
     def valueToData(self, value):
@@ -120,9 +120,9 @@ class DPTXlator2ByteFloat(DPTXlatorBase):
         while not -2048 <= mant <= 2047:
             mant = mant >> 1
             exp += 1
-        #Logger().debug("DPT2ByteFloat.valueToData(): sign=%d, exp=%d, mant=%r" % (sign, exp, mant))
+        #logger.debug("DPT2ByteFloat.valueToData(): sign=%d, exp=%d, mant=%r" % (sign, exp, mant))
         data = (sign << 15) | (exp << 11) | (int(mant) & 0x07ff)
-        #Logger().debug("DPT2ByteFloat.valueToData(): data=%s" % hex(data))
+        #logger.debug("DPT2ByteFloat.valueToData(): data=%s" % hex(data))
         return data
 
     def dataToFrame(self, data):
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPTXlator2ByteFloatTestCase(unittest.TestCase):
 

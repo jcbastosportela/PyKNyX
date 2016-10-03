@@ -49,7 +49,7 @@ Usage
 
 import re
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 #from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
@@ -239,7 +239,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPTMainTypeMapperTestCase(unittest.TestCase):
 

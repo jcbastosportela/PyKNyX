@@ -44,7 +44,7 @@ Implements
 import os
 import sys
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.backends.eibd.eibConnection import EIBConnection, EIBBuffer, EIBAddr
 
 
@@ -67,10 +67,10 @@ class GroupSocketListen(object):
         self._connection = EIBConnection()
         err = self._connection.EIBSocketURL(url)
         if err:
-            Logger().critical("GroupsSocketListen.__init__(): %s" % os.strerror(self._connection.errno))
-            Logger().critical("GroupsSocketListen.__init__(): call to EIBConnection.EIBSocketURL() failed (err=%d)" % err)
+            logger.critical("GroupsSocketListen.__init__(): %s" % os.strerror(self._connection.errno))
+            logger.critical("GroupsSocketListen.__init__(): call to EIBConnection.EIBSocketURL() failed (err=%d)" % err)
             sys.exit(-1)
-        Logger().info("EIB socket successufully opened")
+        logger.info("EIB socket successufully opened")
         self._url = url
         self._callback = callback
 
@@ -82,23 +82,23 @@ class GroupSocketListen(object):
         """
         """
         err = self._connection.EIBOpen_GroupSocket(write_only=0)
-        Logger().info("EIB group socket successfully opened")
+        logger.info("EIB group socket successfully opened")
         if err:
-            Logger().critical("GroupsSocketListen.run(): %s" % os.strerror(self._connection.errno))
-            Logger().critical("GroupsSocketListen.run(): call to EIBConnection.EIBOpen_GroupSocket() failed (err=%d)" % err)
+            logger.critical("GroupsSocketListen.run(): %s" % os.strerror(self._connection.errno))
+            logger.critical("GroupsSocketListen.run(): call to EIBConnection.EIBOpen_GroupSocket() failed (err=%d)" % err)
             sys.exit(-1)
         while True:
             length = self._connection.EIBGetGroup_Src(self._buffer, self._src, self._dest)
             if length == -1:
-                Logger().critical("GroupsSocketListen.run(): %s" % os.strerror(self._connection.errno))
-                Logger().critical("GroupsSocketListen.run(): call to EIBConnection.EIBGetGroup_Src() failed")
+                logger.critical("GroupsSocketListen.run(): %s" % os.strerror(self._connection.errno))
+                logger.critical("GroupsSocketListen.run(): call to EIBConnection.EIBGetGroup_Src() failed")
                 sys.exit(-1)
             if length < 2:
-                Logger().error("GroupsSocketListen.run(): EIBConnection.EIBGetGroup_Src() returned invalid length (%d)" % length)
-            #Logger().debug("GroupsSocketListen.run(): src=%s, dest=%s, buf=%r" % (hex(self._src.data), hex(self._dest.data), self._buffer.buffer))
+                logger.error("GroupsSocketListen.run(): EIBConnection.EIBGetGroup_Src() returned invalid length (%d)" % length)
+            #logger.debug("GroupsSocketListen.run(): src=%s, dest=%s, buf=%r" % (hex(self._src.data), hex(self._dest.data), self._buffer.buffer))
 
             if self._buffer.buffer[0] & 0x03 or self._buffer.buffer[1] & 0xc0 == 0xc0:
-                Logger().error("GroupsSocketListen.run(): unknown ADPU from %s to %s (%s)" % (self._src.toIndividual(), self._dest.toGroup(), self._buffer.buffer))
+                logger.error("GroupsSocketListen.run(): unknown ADPU from %s to %s (%s)" % (self._src.toIndividual(), self._dest.toGroup(), self._buffer.buffer))
             else:
                 if self._buffer.buffer[1] & 0xc0 == 0x00:
                     s = "Read"
@@ -113,7 +113,7 @@ class GroupSocketListen(object):
                         s += "%02x" % (self._buffer.buffer[1] & 0x3f)
                     else:
                         s +="%s" % " ".join([hex(val) for val in self._buffer.buffer[2:]])
-                Logger().debug("GroupsSocketListen.run(): %s" % s)
+                logger.debug("GroupsSocketListen.run(): %s" % s)
                 self._callback(s)
 
 

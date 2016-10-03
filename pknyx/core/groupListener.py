@@ -48,7 +48,7 @@ Usage
 @license: GPL
 """
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 
 class GroupListener(object):
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class GroupListenerTestCase(unittest.TestCase):

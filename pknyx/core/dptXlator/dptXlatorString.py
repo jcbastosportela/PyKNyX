@@ -64,7 +64,7 @@ The DPTXlatorString class follows the python encoding.
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
@@ -97,14 +97,14 @@ class DPTXlatorString(DPTXlatorBase):
 
     def dataToValue(self, data):
         value = tuple([int((data >> shift) & 0xff) for shift in range(104, -1, -8)])
-        #Logger().debug("DPTXlatorString._toValue(): value=%d" % value)
+        #logger.debug("DPTXlatorString._toValue(): value=%d" % value)
         return value
 
     def valueToData(self, value):
         data = 0x00
         for shift in range(104, -1, -8):
             data |= value[13 - shift / 8] << shift
-        #Logger().debug("DPTXlatorString.valueToData(): data=%s" % hex(data))
+        #logger.debug("DPTXlatorString.valueToData(): data=%s" % hex(data))
         return data
 
     def dataToFrame(self, data):
@@ -132,7 +132,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPTStringTestCase(unittest.TestCase):
 

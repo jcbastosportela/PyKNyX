@@ -49,7 +49,7 @@ see L{DPTXlatorBoolean}
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
@@ -86,17 +86,17 @@ class DPTXlator8BitEncAbsValue(DPTXlatorBase):
             value = data
         else:
             value = self._dpt.limits[data]
-        #Logger().debug("DPTXlator8BitEncAbsValue.dataToValue(): value=%d" % value)
+        #logger.debug("DPTXlator8BitEncAbsValue.dataToValue(): value=%d" % value)
         return value
 
     def valueToData(self, value):
-        #Logger().debug("DPTXlator8BitEncAbsValue.valueToData(): value=%d" % value)
+        #logger.debug("DPTXlator8BitEncAbsValue.valueToData(): value=%d" % value)
         self.checkValue(value)
         if self.dpt is self.DPT_Generic:
             data = value
         else:
             data = self._dpt.limits.index(value)
-        #Logger().debug("DPTXlator8BitEncAbsValue.valueToData(): data=%s" % hex(data))
+        #logger.debug("DPTXlator8BitEncAbsValue.valueToData(): data=%s" % hex(data))
         return data
 
     def dataToFrame(self, data):
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPT8BitUnsignedTestCase(unittest.TestCase):
 

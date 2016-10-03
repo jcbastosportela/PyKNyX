@@ -87,7 +87,7 @@ Idem for scheduler.
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.utils import reprStr
 from pknyx.common.singleton import Singleton
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 scheduler = None
 
@@ -129,7 +129,7 @@ class Notifier(object):
         try:
             method(event)
         except:
-            Logger().exception("Notifier._execute()")
+            logger.exception("Notifier._execute()")
 
     def addDatapointJob(self, func, dp, condition="change", thread=False):
         """ Add a job for a datapoint change
@@ -146,7 +146,7 @@ class Notifier(object):
         @param thread: flag to execute job in a thread
         @type thread: bool
         """
-        Logger().debug("Notifier.addDatapointJob(): func=%s, dp=%s" % (repr(func), repr(dp)))
+        logger.debug("Notifier.addDatapointJob(): func=%s, dp=%s" % (repr(func), repr(dp)))
 
         if condition not in ("change", "always"):
             raise NotifierValueError("invalid condition (%s)" % repr(condition))
@@ -156,7 +156,7 @@ class Notifier(object):
     def datapoint(self, dp, *args, **kwargs):
         """ Decorator for addDatapointJob()
         """
-        Logger().debug("Notifier.datapoint(): dp=%s, args=%s, kwargs=%s" % (repr(dp), repr(args), repr(kwargs)))
+        logger.debug("Notifier.datapoint(): dp=%s, args=%s, kwargs=%s" % (repr(dp), repr(args), repr(kwargs)))
 
         def decorated(func):
             """ We don't wrap the decorated function!
@@ -176,14 +176,14 @@ class Notifier(object):
         #@param gad: group address
         #@type gad: str or L{GroupAddress}
         #"""
-        #Logger().debug("Notifier.addGroupJob(): func=%s" % repr(func))
+        #logger.debug("Notifier.addGroupJob(): func=%s" % repr(func))
 
         #self._pendingFuncs.append(("group", func, gad))
 
     #def group(self, **kwargs):
         #""" Decorator for addGroupJob()
         #"""
-        #Logger().debug("Notifier.datapoint(): kwargs=%s" % repr(kwargs))
+        #logger.debug("Notifier.datapoint(): kwargs=%s" % repr(kwargs))
 
         #def decorated(func):
             #""" We don't wrap the decorated function!
@@ -200,14 +200,14 @@ class Notifier(object):
         @param obj: instance for which a method may have been pre-registered
         @type obj: object
         """
-        Logger().debug("Notifier.doRegisterJobs(): obj=%s" % repr(obj))
+        logger.debug("Notifier.doRegisterJobs(): obj=%s" % repr(obj))
 
         for type_, func, args in self._pendingFuncs:
-            Logger().debug("Notifier.doRegisterJobs(): type_=\"%s\", func=%s, args=%s" % (type_, func.func_name, repr(args)))
+            logger.debug("Notifier.doRegisterJobs(): type_=\"%s\", func=%s, args=%s" % (type_, func.func_name, repr(args)))
 
             method = getattr(obj, func.func_name, None)
             if method is not None:
-                Logger().debug("Notifier.doRegisterJobs(): add method %s() of %s" % (method.im_func.func_name, method.im_self))
+                logger.debug("Notifier.doRegisterJobs(): add method %s() of %s" % (method.im_func.func_name, method.im_self))
 
                 if method.im_func is func:  # avoid name clash between FB methods
 
@@ -245,14 +245,14 @@ class Notifier(object):
         @param newValue: new value of the datapoint
         @type newValue: depends on datapoint type
         """
-        Logger().debug("Notifier.datapointNotify(): obj=%s, dp=%s, oldValue=%s, newValue=%s" % (obj.name, dp, repr(oldValue), repr(newValue)))
+        logger.debug("Notifier.datapointNotify(): obj=%s, dp=%s, oldValue=%s, newValue=%s" % (obj.name, dp, repr(oldValue), repr(newValue)))
 
         if obj in self._datapointJobs.keys():
             if dp in self._datapointJobs[obj].keys():
                 for method, condition, thread_ in self._datapointJobs[obj][dp]:
                     if oldValue != newValue and condition == "change" or condition == "always":
                         try:
-                            Logger().debug("Notifier.datapointNotify(): trigger method %s() of %s" % (method.im_func.func_name, method.im_self))
+                            logger.debug("Notifier.datapointNotify(): trigger method %s() of %s" % (method.im_func.func_name, method.im_self))
                             event = dict(name="datapoint", dp=dp, oldValue=oldValue, newValue=newValue, condition=condition, thread=thread_)
 
                             if thread_:
@@ -261,7 +261,7 @@ class Notifier(object):
                             else:
                                 self._execute(method, event)
                         except:
-                            Logger().exception("Notifier.datapointNotify()")
+                            logger.exception("Notifier.datapointNotify()")
 
     def printJobs(self):
         """ Print registered jobs
@@ -272,7 +272,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class NotifierTestCase(unittest.TestCase):

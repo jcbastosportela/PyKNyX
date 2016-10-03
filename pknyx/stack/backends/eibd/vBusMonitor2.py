@@ -45,7 +45,7 @@ import os
 import sys
 import subprocess
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.backends.eibd.eibConnection import EIBConnection, EIBBuffer, EIBAddr
 
 
@@ -68,8 +68,8 @@ class VBusMonitor2(object):
         self._connection = EIBConnection()
         err = self._connection.EIBSocketURL(url)
         if err:
-            Logger().critical("VBusMonitor2.__init__(): %s" % os.strerror(self._connection.errno))
-            Logger().critical("VBusMonitor2.__init__(): call to EIBConnection.EIBSocketURL() failed (err=%d)" % err)
+            logger.critical("VBusMonitor2.__init__(): %s" % os.strerror(self._connection.errno))
+            logger.critical("VBusMonitor2.__init__(): call to EIBConnection.EIBSocketURL() failed (err=%d)" % err)
             sys.exit(-1)
 
     def run(self):
@@ -77,15 +77,15 @@ class VBusMonitor2(object):
         """
         err = self._connection.EIBOpenVBusmonitor()
         if err:
-            Logger().critical("VBusMonitor2.run(): %s" % os.strerror(self._connection.errno))
-            Logger().critical("VBusMonitor2.run(): call to EIBConnection.EIBOpenVBusmonitor() failed (err=%d)" % err)
+            logger.critical("VBusMonitor2.run(): %s" % os.strerror(self._connection.errno))
+            logger.critical("VBusMonitor2.run(): call to EIBConnection.EIBOpenVBusmonitor() failed (err=%d)" % err)
             sys.exit(-1)
         while True:
             buffer_ = EIBBuffer()
             length = self._connection.EIBGetBusmonitorPacket(buffer_)
             if length == -1:
-                Logger().critical("VBusMonitor2.run(): %s" % os.strerror(self._connection.errno))
-                Logger().critical("VBusMonitor2.run(): call to EIBConnection.EIBGetBusmonitorPacket() failed")
+                logger.critical("VBusMonitor2.run(): %s" % os.strerror(self._connection.errno))
+                logger.critical("VBusMonitor2.run(): call to EIBConnection.EIBGetBusmonitorPacket() failed")
                 sys.exit(-1)
             print(buffer_)
 

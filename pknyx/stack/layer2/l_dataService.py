@@ -52,7 +52,7 @@ import time
 import threading
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.individualAddress import IndividualAddress
 from pknyx.stack.priorityQueue import PriorityQueue
 from pknyx.stack.layer3.n_groupDataListener import N_GroupDataListener
@@ -129,7 +129,7 @@ class L_DataService(threading.Thread, TransceiverLSAP):  # @todo: do not inheri
         @param cEMI:
         @type cEMI:
         """
-        Logger().debug("L_DataService.putInFrame(): cEMI=%s" % cEMI)
+        logger.debug("L_DataService.putInFrame(): cEMI=%s" % cEMI)
 
         # Get priority from cEMI
         priority = cEMI.priority
@@ -151,7 +151,7 @@ class L_DataService(threading.Thread, TransceiverLSAP):  # @todo: do not inheri
     def dataReq(self, cEMI):
         """
         """
-        Logger().debug("L_DataService.dataReq(): cEMI=%s" % cEMI)
+        logger.debug("L_DataService.dataReq(): cEMI=%s" % cEMI)
 
         # Add source address to cEMI
         cEMI.sourceAddress = self._individualAddress
@@ -173,7 +173,7 @@ class L_DataService(threading.Thread, TransceiverLSAP):  # @todo: do not inheri
     def run(self):
         """ inQueue handler main loop
         """
-        Logger().trace("L_DataService.run()")
+        logger.trace("L_DataService.run()")
 
         self._running = True
         while self._running:
@@ -181,25 +181,25 @@ class L_DataService(threading.Thread, TransceiverLSAP):  # @todo: do not inheri
 
                 # Get incoming frame from inQueue
                 cEMI = self._inQueue.remove()
-                Logger().debug("L_DataService.run(): cEMI=%s" % cEMI)
+                logger.debug("L_DataService.run(): cEMI=%s" % cEMI)
 
                 srcAddr = cEMI.sourceAddress
                 if srcAddr != self._individualAddress:  # Avoid loop
                     if cEMI.messageCode == CEMILData.MC_LDATA_IND:  #in (CEMILData.MC_LDATA_CON, CEMILData.MC_LDATA_IND):
                         if self._ldl is None:
-                            Logger().warning("L_GroupDataService.run(): not listener defined")
+                            logger.warning("L_GroupDataService.run(): not listener defined")
                         else:
                             self._ldl.dataInd(cEMI)
 
             except:
-                Logger().exception("L_DataService.run()")  #, debug=True)
+                logger.exception("L_DataService.run()")
 
-        Logger().trace("L_DataService.run(): ended")
+        logger.trace("L_DataService.run(): ended")
 
     def stop(self):
         """ stop thread
         """
-        Logger().trace("L_DataService.stop()")
+        logger.trace("L_DataService.stop()")
 
         self._running = False
 
@@ -208,7 +208,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class L_DataServiceCase(unittest.TestCase):

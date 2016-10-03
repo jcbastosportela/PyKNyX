@@ -48,7 +48,7 @@ Usage
 
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.layer4.tpci import TPCI
 from pknyx.stack.layer3.n_groupDataListener import N_GroupDataListener
 
@@ -116,11 +116,11 @@ class T_GroupDataService(N_GroupDataListener):
         #return packetType
 
     def groupDataInd(self, src, gad, priority, tPDU):
-        Logger().debug("T_GroupDataService.groupDataInd(): src=%s, gad=%s, priority=%s, tPDU=%s" % \
+        logger.debug("T_GroupDataService.groupDataInd(): src=%s, gad=%s, priority=%s, tPDU=%s" % \
                        (src, gad, priority, repr(tPDU)))
 
         if self._tgdl is None:
-            Logger().warning("T_GroupDataService.groupDataInd(): not listener defined")
+            logger.warning("T_GroupDataService.groupDataInd(): not listener defined")
             return
 
         #if self._getPacketType(tPDU) == TPCI.UNNUMBERED_DATA:
@@ -141,7 +141,7 @@ class T_GroupDataService(N_GroupDataListener):
     def groupDataReq(self, gad, priority, tSDU):
         """
         """
-        Logger().debug("T_GroupDataService.groupDataReq(): gad=%s, priority=%s, tSDU=%s" % \
+        logger.debug("T_GroupDataService.groupDataReq(): gad=%s, priority=%s, tSDU=%s" % \
                        (gad, priority, repr(tSDU)))
 
         #self._setTPCI(tSDU, TPCI.UNNUMBERED_DATA, 0)
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class T_GDSTestCase(unittest.TestCase):

@@ -49,7 +49,7 @@ class ReplayFB(FunctionalBlock):
         try:
             self._sequence.put_nowait({'dp': dpName, 'value': newValue, 'time': time_})
         except Queue.Full:
-            logger.exception("%s: storage sequence is full; skipping..." % self.name, debug=True)
+            logger.exception("%s: storage sequence is full; skipping...", self.name)
 
         #logger.debug("%s: self._sequence=%s" % (self.name, self._sequence))
 
@@ -65,7 +65,7 @@ class ReplayFB(FunctionalBlock):
             item = self._sequence.get_nowait()
             #logger.debug("%s: item=%s" % (self.name, item))
         except Queue.Empty:
-            logger.exception("%s: storage sequence is empty; skipping..." % self.name, debug=True)
+            logger.exception("%s: storage sequence is empty; skipping...", self.name)
 
         # Check if item needs to be replayed
         delta = (time.time() - item['time']) / 60.

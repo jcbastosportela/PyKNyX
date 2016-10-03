@@ -59,7 +59,7 @@ import struct
 import six
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 
 class McastSockValueError(PKNyXValueError):
@@ -101,7 +101,7 @@ class MulticastSocketBase(socket.socket):
         try:
             self.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         except:
-            Logger().exception("MulticastSocketBase.__init__(): system doesn't support SO_REUSEPORT", debug=True)
+            logger.exception("MulticastSocketBase.__init__(): system doesn't support SO_REUSEPORT")
         self.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_TTL, ttl)
         self.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_LOOP, loop)
 
@@ -183,7 +183,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class MulticastSocketTestCase(unittest.TestCase):

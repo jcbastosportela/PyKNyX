@@ -128,7 +128,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class TemplateGeneratorTestCase(unittest.TestCase):

@@ -98,7 +98,7 @@ Usage
 """
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 
 
@@ -143,7 +143,7 @@ class DPT(object):
         """
         super(DPT, self).__init__()
 
-        #Logger().debug("DPT.__init__(): id=%s, desc=%s, limits=%r, unit=%s" % (dptId, desc, limits, unit))
+        #logger.debug("DPT.__init__(): id=%s, desc=%s, limits=%r, unit=%s" % (dptId, desc, limits, unit))
 
         if not isinstance(dptId, DPTID):
             dptId = DPTID(dptId)
@@ -152,7 +152,7 @@ class DPT(object):
         try:
             self._limits = tuple(limits)
         except:
-            Logger().exception("DPT.__init__()", debug=True)
+            logger.exception("DPT.__init__()")
             raise DPTValueError("invalid limits (%s)" % repr(limits))
         self._unit = unit
 
@@ -194,7 +194,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class DPT_TestCase(unittest.TestCase):

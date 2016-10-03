@@ -53,7 +53,7 @@ Usage
 """
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.layer7.a_groupDataListener import A_GroupDataListener
 from pknyx.stack.groupAddress import GroupAddress
 
@@ -103,28 +103,28 @@ class Group(A_GroupDataListener):
         return "<Group('%s')>" % self._gad
 
     def groupValueWriteInd(self, src, priority, data):
-        Logger().debug("Group.groupValueWriteInd(): src=%s, priority=%s, data=%s" % (src, priority, repr(data)))
+        logger.debug("Group.groupValueWriteInd(): src=%s, priority=%s, data=%s" % (src, priority, repr(data)))
         for listener in self._listeners:
             try:
                 listener.onWrite(src, data)
             except PKNyXValueError:
-                Logger().exception("Group.groupValueWriteInd()")
+                logger.exception("Group.groupValueWriteInd()")
 
     def groupValueReadInd(self, src, priority):
-        Logger().debug("Group.groupValueReadInd(): src=%s, priority=%s" % (src, priority))
+        logger.debug("Group.groupValueReadInd(): src=%s, priority=%s" % (src, priority))
         for listener in self._listeners:
             try:
                 listener.onRead(src)
             except PKNyXValueError:
-                Logger().exception("Group.groupValueReadInd()")
+                logger.exception("Group.groupValueReadInd()")
 
     def groupValueReadCon(self, src, priority, data):
-        Logger().debug("Group.groupValueReadCon(): src=%s, priority=%s, data=%s" % (src, priority, repr(data)))
+        logger.debug("Group.groupValueReadCon(): src=%s, priority=%s, data=%s" % (src, priority, repr(data)))
         for listener in self._listeners:
             try:
                 listener.onResponse(src, data)
             except PKNyXValueError:
-                Logger().exception("Group.groupValueReadCon()")
+                logger.exception("Group.groupValueReadCon()")
 
     @property
     def gad(self):
@@ -166,7 +166,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class GroupTestCase(unittest.TestCase):

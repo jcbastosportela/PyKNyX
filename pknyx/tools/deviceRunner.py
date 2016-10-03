@@ -61,7 +61,7 @@ import time
 
 from pknyx.common import config
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.services.scheduler import Scheduler
 from pknyx.services.groupAddressTableMapper import GroupAddressTableMapper
 from pknyx.core.ets import ETS
@@ -103,18 +103,18 @@ class DeviceRunner(object):
 
         # DO NOT USE LOGGER BEFORE THIS POINT!
         Logger("%s-%s" % (DEVICE_NAME, DEVICE_IND_ADDR))
-        Logger().info("Logger level is '%s'" % config.LOGGER_LEVEL)
+        logger.info("Logger level is '%s'" % config.LOGGER_LEVEL)
 
-        Logger().info("Device path is '%s'" % devicePath)
-        Logger().info("Device name is '%s'" % DEVICE_NAME)
+        logger.info("Device path is '%s'" % devicePath)
+        logger.info("Device name is '%s'" % DEVICE_NAME)
 
         self._deviceIndAddr = DEVICE_IND_ADDR
         if not isinstance(self._deviceIndAddr, IndividualAddress):
             self._deviceIndAddr = IndividualAddress(self._deviceIndAddr)
         if self._deviceIndAddr.isNull:
-            Logger().warning("Device Individual Address is null")
+            logger.warning("Device Individual Address is null")
         else:
-            Logger().info("Device Individual Address is '%s'" % self._deviceIndAddr)
+            logger.info("Device Individual Address is '%s'" % self._deviceIndAddr)
 
         # Load GAD map table
         mapper = GroupAddressTableMapper()
@@ -158,18 +158,18 @@ class DeviceRunner(object):
         ETS().weave(self._device)
 
         if printGroat:
-            Logger().info(ETS().getGrOAT(self._device, "gad"))
-            Logger().info(ETS().getGrOAT(self._device, "go"))
+            logger.info(ETS().getGrOAT(self._device, "gad"))
+            logger.info(ETS().getGrOAT(self._device, "go"))
 
     def run(self, dameon=False):
         """
         """
-        Logger().trace("Device.run()")
+        logger.trace("Device.run()")
 
         self.check()
 
         if dameon:
-            Logger().info("Run process as daemon...")
+            logger.info("Run process as daemon...")
             self._doubleFork()
 
         self._device.start()
@@ -179,10 +179,10 @@ class DeviceRunner(object):
             self._device.mainLoop()
 
         except KeyboardInterrupt:
-            Logger().warning("Device execution canceled (SIGTERM)")
+            logger.warning("Device execution canceled (SIGTERM)")
 
         except:
-            Logger().exception("deviceRunner.run()")
+            logger.exception("deviceRunner.run()")
 
         finally:
             Scheduler().stop()
@@ -194,7 +194,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class DeviceRunnerTestCase(unittest.TestCase):

@@ -91,7 +91,7 @@ import xml.etree.ElementTree as etree
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
 from pknyx.core.dptXlator.dptXlatorFactory import DPTXlatorFactory
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.groupAddress import GroupAddress, GroupAddressValueError
 
 
@@ -137,7 +137,7 @@ class GroupAddressTableMapper(object):
         nicknames = {}
         for key, value in table.items():
             if value['name'] in nicknames:
-                Logger().warning("Duplicated nickname '%s' in GAD map table" % value['name'])
+                logger.warning("Duplicated nickname '%s' in GAD map table" % value['name'])
                 return False
             else:
                 nicknames[value['name']] = dict(gad=key, desc=value['desc'])
@@ -152,12 +152,12 @@ class GroupAddressTableMapper(object):
         """
         gadMapTable = {}
         if os.path.exists(path):
-            Logger().debug("GroupAddressTableMapper.loadTable(): GAD map path is '%s'" % path)
+            logger.debug("GroupAddressTableMapper.loadTable(): GAD map path is '%s'" % path)
 
             try:
                 fp, pathname, description = imp.find_module(self._gadMapModule, [os.path.curdir, path])
             except ImportError:
-                Logger().warning("Can't find '%s' module in '%s'" % (self._gadMapModule, path))
+                logger.warning("Can't find '%s' module in '%s'" % (self._gadMapModule, path))
             else:
                 try:
                     gadMapModule = imp.load_module(self._gadMapModule, fp, pathname, description)
@@ -167,14 +167,14 @@ class GroupAddressTableMapper(object):
                 gadMapTable.update(gadMapModule.GAD_MAP_TABLE)
 
         elif path != "$PKNYX_GAD_MAP_PATH":
-            Logger().warning("GAD map path '%s' does not exists" % path)
+            logger.warning("GAD map path '%s' does not exists" % path)
 
         return gadMapTable
 
     def _loadXMLTable(self, file):
         gadMapTable = {}
         if os.path.exists(file):
-            Logger().debug("GroupAddressTableMapper.loadXMLTable(): loading from '%s'" % file)
+            logger.debug("GroupAddressTableMapper.loadXMLTable(): loading from '%s'" % file)
 
             tree = etree.parse(file)
             root = tree.getroot()
@@ -199,7 +199,7 @@ class GroupAddressTableMapper(object):
                 gadMapTable["%i/%i/%i" % (hg,mg,ga)] = {'name': name, 'desc': None, 'dptId': dptId}
 
         else:
-            Logger().warning("GAD map XML '%s' does not exist" % file)
+            logger.warning("GAD map XML '%s' does not exist" % file)
 
         return gadMapTable
 
@@ -330,7 +330,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     GAD_MAP_TABLE = {"1/-/-": dict(name="light", desc="Lights (1/-/-)"),
                      "1/1/-": dict(name="light_cmd", desc="Commands (1/1/-)"),

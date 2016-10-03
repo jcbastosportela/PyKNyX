@@ -49,7 +49,7 @@ see L{DPTXlatorBoolean}
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
@@ -85,14 +85,14 @@ class DPTXlatorScene(DPTXlatorBase):
         ctrl = (data >> 7) & 0x01
         scene = data & 0x3f
         value = (ctrl, scene)
-        #Logger().debug("DPTXlatorScene._toValue(): value=%d" % value)
+        #logger.debug("DPTXlatorScene._toValue(): value=%d" % value)
         return value
 
     def valueToData(self, value):
         ctrl = value[0]
         scene = value[1]
         data = ctrl << 7 | scene
-        #Logger().debug("DPTXlatorScene.valueToData(): data=%s" % hex(data))
+        #logger.debug("DPTXlatorScene.valueToData(): data=%s" % hex(data))
         return data
 
     def dataToFrame(self, data):
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPTSceneTestCase(unittest.TestCase):
 

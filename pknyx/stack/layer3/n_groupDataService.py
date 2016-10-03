@@ -48,7 +48,7 @@ Usage
 
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.groupAddress import GroupAddress
 from pknyx.stack.individualAddress import IndividualAddress
 from pknyx.stack.layer2.l_dataListener import L_DataListener
@@ -89,10 +89,10 @@ class N_GroupDataService(L_DataListener):
         lds.setListener(self)
 
     def dataInd(self, cEMI):
-        Logger().debug("N_GroupDataService.dataInd(): cEMI=%s" % repr(cEMI))
+        logger.debug("N_GroupDataService.dataInd(): cEMI=%s" % repr(cEMI))
 
         if self._ngdl is None:
-            Logger().warning("N_GroupDataService.dataInd(): not listener defined")
+            logger.warning("N_GroupDataService.dataInd(): not listener defined")
             return
 
         hopCount = cEMI.hopCount
@@ -111,9 +111,9 @@ class N_GroupDataService(L_DataListener):
         #elif isinstance(dest, IndividualAddress):
             #self._ngdl.dataInd(src, priority, hopCount, nSDU)
         #else:
-            #Logger().warning("N_GroupDataService.dataInd(): unknown destination address type (%s)" % repr(dest))
+            #logger.warning("N_GroupDataService.dataInd(): unknown destination address type (%s)" % repr(dest))
         else:
-            Logger().warning("N_GroupDataService.dataInd(): unsupported destination address type (%s)" % repr(dest))
+            logger.warning("N_GroupDataService.dataInd(): unsupported destination address type (%s)" % repr(dest))
 
     def setListener(self, ngdl):
         """
@@ -126,7 +126,7 @@ class N_GroupDataService(L_DataListener):
     def groupDataReq(self, gad, priority, nSDU):
         """
         """
-        Logger().debug("N_GroupDataService.groupDataReq(): gad=%s, priority=%s, nSDU=%s" % \
+        logger.debug("N_GroupDataService.groupDataReq(): gad=%s, priority=%s, nSDU=%s" % \
                        (gad, priority, repr(nSDU)))
 
         if gad.isNull:
@@ -150,7 +150,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class N_GDSTestCase(unittest.TestCase):

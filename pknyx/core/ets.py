@@ -48,7 +48,7 @@ Usage
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.flags import Flags
 from pknyx.stack.groupAddress import GroupAddress
 from pknyx.services.scheduler import Scheduler
@@ -250,7 +250,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class ETSTestCase(unittest.TestCase):

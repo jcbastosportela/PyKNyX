@@ -61,7 +61,7 @@ import argparse
 import threading
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.services.groupAddressTableMapper import GroupAddressTableMapper, GroupAddressTableMapperValueError
 from pknyx.core.dptXlator.dptXlatorFactory import DPTXlatorFactory
 from pknyx.core.groupListener import GroupListener
@@ -124,13 +124,13 @@ class SimpleGroupObject(GroupListener):
         self._queue = SimpleQueue()
 
     def onWrite(self, src, data):
-        Logger().debug("SimpleGroupObject.onWrite(): src=%s, data=%s" % (src, repr(data)))
+        logger.debug("SimpleGroupObject.onWrite(): src=%s, data=%s" % (src, repr(data)))
 
     def onRead(self, src):
-        Logger().debug("SimpleGroupObject.onRead(): src=%s" % src)
+        logger.debug("SimpleGroupObject.onRead(): src=%s" % src)
 
     def onResponse(self, src, data):
-        Logger().debug("SimpleGroupObject.onResponse(): src=%s, data=%s" % (src, repr(data)))
+        logger.debug("SimpleGroupObject.onResponse(): src=%s, data=%s" % (src, repr(data)))
 
         self._queue.acquire()
         try:
@@ -165,18 +165,18 @@ class SimpleGroupMonitorObject(GroupMonitorListener):
             self._queue.release()
 
     def onWrite(self, src, gad, priority, data):
-        Logger().debug("SimpleGroupMonitorObject.onWrite(): src=%s, gad=%s, priority=%s, data=%s" % \
+        logger.debug("SimpleGroupMonitorObject.onWrite(): src=%s, gad=%s, priority=%s, data=%s" % \
                        (src, gad, priority, repr(data)))
 
         self._enqueue("GROUPVALUE_WRITE", src, gad, priority, data)
 
     def onRead(self, src, gad, priority):
-        Logger().debug("SimpleGroupMonitorObject.onRead(): src=%s, gad=%s, priority=%s" % (src, gad, priority))
+        logger.debug("SimpleGroupMonitorObject.onRead(): src=%s, gad=%s, priority=%s" % (src, gad, priority))
 
         self._enqueue("GROUPVALUE_READ", src, gad, priority, None)
 
     def onResponse(self, src, gad, priority, data):
-        Logger().debug("SimpleGroupMonitorObject.onResponse(): src=%s, gad=%s, priority=%s, data=%s" % \
+        logger.debug("SimpleGroupMonitorObject.onResponse(): src=%s, gad=%s, priority=%s, data=%s" % \
                        (src, gad, priority, repr(data)))
 
         self._enqueue("GROUPVALUE_RESP", src, gad, priority, data)
@@ -233,14 +233,14 @@ def read(gad, timeout=1, wait=True, dptId="1.xxx", src="0.0.0", priority="low", 
                 try:
                     data = groupObject.queue.pop()
                 except IndexError:
-                    Logger().warning("No answer from %s" % gad)
+                    logger.warning("No answer from %s" % gad)
                     sys.exit(1)
             finally:
                 groupObject.queue.release()
 
             dptXlator = DPTXlatorFactory().create(dptId)
             value = dptXlator.dataToValue(dptXlator.frameToData(data))
-            Logger().info(repr(value))
+            logger.info(repr(value))
 
     finally:
         stack.stop()
@@ -274,7 +274,7 @@ def response(gad, value, dptId="1.xxx", src="0.0.0",  priority="low", hopCount=6
 def monitor(src="0.0.1"):
     """
     """
-    Logger().debug("monitor(): src=%s" % src)
+    logger.debug("monitor(): src=%s" % src)
 
     stack = Stack(individualAddress=src)
 
@@ -305,7 +305,7 @@ def monitor(src="0.0.1"):
                             value = dptxlator.dataToValue(dptxlator.frameToData(data))
                             info += " (%s)" % (str(value))
 
-                        Logger().info(info)
+                        logger.info(info)
 
                     except IndexError:
                         pass
@@ -388,7 +388,7 @@ def main():
     # Parse
     args = parser.parse_args()
 
-    Logger().setLevel(args.loggerLevel)
+    logger.setLevel(args.loggerLevel)
 
     # If XML map file name is given, try to load it
     if args.xmlMapFile:

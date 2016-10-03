@@ -45,7 +45,7 @@ Usage
 """
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 
 class XxxValueError(PKNyXValueError):
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class XxxTestCase(unittest.TestCase):

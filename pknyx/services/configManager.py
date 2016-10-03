@@ -46,7 +46,7 @@ import shutil
 
 from pknyx.common import config
 from pknyx.common.utils import isOdd
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 if hasattr(sys, "frozen"):
     path = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), config.APP_NAME.lower(), "common")
@@ -84,7 +84,7 @@ class ConfigManagerObject(object):
             self.__install = True
         else:
             userConfigVersion = unicode(userConfig.value('CONFIG_VERSION').toString()).split('.')
-            Logger().debug("ConfigManager.__init__(): versions: dist=%s, user=%s" % (distConfigVersion, userConfigVersion))
+            logger.debug("ConfigManager.__init__(): versions: dist=%s, user=%s" % (distConfigVersion, userConfigVersion))
 
             # Old versioning system
             if len(userConfigVersion) < 2:
@@ -95,7 +95,7 @@ class ConfigManagerObject(object):
                 self.__install = True
 
         if self.__install:
-            Logger().debug("ConfigManager.__init__(): install user config.")
+            logger.debug("ConfigManager.__init__(): install user config.")
             shutil.copy(distConfigFile, config.USER_CONFIG_FILE)
 
             # Set config. version
@@ -105,7 +105,7 @@ class ConfigManagerObject(object):
             userConfig.sync()
 
         else:
-            Logger().debug("ConfigManager.__init__(): user config. is up-to-date")
+            logger.debug("ConfigManager.__init__(): user config. is up-to-date")
 
         self.__config = userConfig
 
@@ -117,7 +117,7 @@ class ConfigManagerObject(object):
         """
         self.__config.sync()
         self.__saved = True
-        Logger().debug("Configuration saved")
+        logger.debug("Configuration saved")
 
     def isConfigured(self):
         """ Check if configuration has been set by user.

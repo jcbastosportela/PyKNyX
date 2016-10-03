@@ -84,7 +84,7 @@ GroupAddressValueError: outFormatLevel 4 must be 2 or 3
 
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.knxAddress import KnxAddress, KnxAddressValueError
 
 
@@ -114,14 +114,14 @@ class GroupAddress(KnxAddress):
 
         @todo: add constructor with simple int
         """
-        #Logger().debug("GroupAddress.__init__(): address=%s" % repr(address))
+        #logger.debug("GroupAddress.__init__(): address=%s" % repr(address))
 
         if isinstance(address, str):
             address = address.strip().split('/')
             try:
                 address = [int(val) for val in address]
             except ValueError:
-                Logger().exception("GroupAddress.__init__()", debug=True)
+                logger.exception("GroupAddress.__init__()")
                 raise GroupAddressValueError("invalid group address")
         try:
             if len(address) == 2:
@@ -136,7 +136,7 @@ class GroupAddress(KnxAddress):
                 raise GroupAddressValueError("invalid group address")
         except TypeError:
             if not isinstance(address, int):
-                Logger().exception("GroupAddress.__init__()", debug=True)
+                logger.exception("GroupAddress.__init__()")
                 raise GroupAddressValueError("invalid group address",address)
 
         if outFormatLevel not in (2, 3):
@@ -194,7 +194,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class GroupAddressTestCase(unittest.TestCase):

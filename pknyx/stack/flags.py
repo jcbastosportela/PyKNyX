@@ -68,7 +68,7 @@ Usage
 import re
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 
 class FlagsValueError(PKNyXValueError):
@@ -98,7 +98,7 @@ class Flags(object):
             if not re.match("^C?R?W?T?U?I?S?$", raw):
                 raise FlagsValueError("invalid flags set (%r)" % repr(raw))
         except:
-            Logger().exception("Flags.__init__()", debug=True)
+            logger.exception("Flags.__init__()")
             raise FlagsValueError("invalid flags set (%r)" % repr(raw))
         self._raw = raw
 
@@ -163,7 +163,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class DFlagsTestCase(unittest.TestCase):

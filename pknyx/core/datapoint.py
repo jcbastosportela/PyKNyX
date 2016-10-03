@@ -61,7 +61,7 @@ Usage
 """
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.common.signal import Signal
 from pknyx.core.dptXlator.dptXlatorFactory import DPTXlatorFactory
 from pknyx.core.dptXlator.dpt import DPTID
@@ -135,7 +135,7 @@ class Datapoint(object):
         """
         super(Datapoint, self).__init__()
 
-        #Logger().debug("Datapoint.__init__(): name=%s, access=%s, dptId=%s, default=%s" % \
+        #logger.debug("Datapoint.__init__(): name=%s, access=%s, dptId=%s, default=%s" % \
                        #repr(name), repr(access), repr(dptId), repr(default)))
 
         # Check input
@@ -259,7 +259,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class DPTestCase(unittest.TestCase):

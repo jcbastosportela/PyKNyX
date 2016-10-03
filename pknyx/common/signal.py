@@ -69,7 +69,7 @@ import os.path
 import weakref
 import inspect
 
-#from pknyx.services.logger import Logger
+#from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 from blinker import Signal as BlinkerSignal
 

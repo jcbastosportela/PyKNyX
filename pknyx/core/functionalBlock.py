@@ -52,7 +52,7 @@ Usage
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.utils import reprStr
 from pknyx.common.frozenDict import FrozenDict
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.services.notifier import Notifier
 from pknyx.core.datapoint import Datapoint
 from pknyx.core.groupObject import GroupObject
@@ -99,7 +99,7 @@ class FunctionalBlock(object):
         for cls_ in classes:
             for key, value in cls_.__dict__.items():
                 if key.startswith("DP_"):
-                    Logger().debug("FunctionalBlock.__new__(): %s=(%s)" % (key, repr(value)))
+                    logger.debug("FunctionalBlock.__new__(): %s=(%s)" % (key, repr(value)))
                     name = value['name']
                     if name in datapoints:
                         raise FunctionalBlockValueError("duplicated Datapoint (%s)" % name)
@@ -111,7 +111,7 @@ class FunctionalBlock(object):
         for cls_ in classes:
             for key, value in cls_.__dict__.items():
                 if key.startswith("GO_"):
-                    Logger().debug("FunctionalBlock.__new__(): %s=(%s)" % (key, repr(value)))
+                    logger.debug("FunctionalBlock.__new__(): %s=(%s)" % (key, repr(value)))
                     try:
                         datapoint = self._datapoints[value['dp']]
                     except KeyError:
@@ -130,7 +130,7 @@ class FunctionalBlock(object):
         try:
             self._desc = cls.__dict__["DESC"]
         except KeyError:
-            Logger().exception("FunctionalBlock.__new__()", debug=True)
+            logger.exception("FunctionalBlock.__new__()")
             self._desc = "FB"
 
         return self
@@ -208,7 +208,7 @@ class FunctionalBlock(object):
 
         @todo: use an Event as param
         """
-        Logger().debug("FunctionalBlock.notify(): dp=%s, oldValue=%s, newValue=%s" % (dp, oldValue, newValue))
+        logger.debug("FunctionalBlock.notify(): dp=%s, oldValue=%s, newValue=%s" % (dp, oldValue, newValue))
 
         Notifier().datapointNotify(self, dp, oldValue, newValue)
 
@@ -217,7 +217,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class FunctionalBlockTestCase(unittest.TestCase):

@@ -59,7 +59,7 @@ import argparse
 
 from pknyx.common import config
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.tools.deviceRunner import DeviceRunner
 from pknyx.tools.templateGenerator import TemplateGenerator
 from pknyx.tools.templates.deviceTemplate import ADMIN, INIT, SETTINGS, DEVICE, FB
@@ -207,7 +207,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class AdminUtilityTestCase(unittest.TestCase):

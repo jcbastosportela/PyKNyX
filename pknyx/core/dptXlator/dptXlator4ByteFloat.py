@@ -51,7 +51,7 @@ see L{DPTXlatorBoolean}
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
@@ -164,12 +164,12 @@ class DPTXlator4ByteFloat(DPTXlatorBase):
 
     def dataToValue(self, data):
         value = struct.unpack(">f", struct.pack(">L", data))[0]  # struct.unpack(">f", self.toFrame())[0]
-        #Logger().debug("DPTXlator4ByteFloat.dataToValue(): value=%f" % value)
+        #logger.debug("DPTXlator4ByteFloat.dataToValue(): value=%f" % value)
         return value
 
     def valueToData(self, value):
         data = struct.unpack(">L", struct.pack(">f", value))[0]  # self.frameToData(struct.pack(">f", value))
-        #Logger().debug("DPTXlator4ByteFloat.valueToData(): data=%s" % hex(data))
+        #logger.debug("DPTXlator4ByteFloat.valueToData(): data=%s" % hex(data))
         return data
 
     def dataToFrame(self, data):
@@ -184,7 +184,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPT4ByteFloatTestCase(unittest.TestCase):
 

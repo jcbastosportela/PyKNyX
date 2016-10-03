@@ -51,7 +51,7 @@ Usage
 """
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.layer7.a_groupDataListener import A_GroupDataListener
 
 
@@ -92,30 +92,30 @@ class GroupMonitor(A_GroupDataListener):
         return "<GroupMonitor()>" % self._gad
 
     def groupValueWriteInd(self, src, gad, priority, data):
-        Logger().debug("GroupMonitor.groupValueWriteInd(): src=%s, gad=%s, priority=%s, data=%s" % \
+        logger.debug("GroupMonitor.groupValueWriteInd(): src=%s, gad=%s, priority=%s, data=%s" % \
                        (src, gad, priority, repr(data)))
         for listener in self._listeners:
             try:
                 listener.onWrite(src, gad, priority, data)
             except PKNyXValueError:
-                Logger().exception("GroupMonitor.groupValueWriteInd()")
+                logger.exception("GroupMonitor.groupValueWriteInd()")
 
     def groupValueReadInd(self, src, gad, priority):
-        Logger().debug("GroupMonitor.groupValueReadInd(): src=%s, gad=%s, priority=%s" % (src, gad, priority))
+        logger.debug("GroupMonitor.groupValueReadInd(): src=%s, gad=%s, priority=%s" % (src, gad, priority))
         for listener in self._listeners:
             try:
                 listener.onRead(src, gad, priority)
             except PKNyXValueError:
-                Logger().exception("GroupMonitor.groupValueReadInd()")
+                logger.exception("GroupMonitor.groupValueReadInd()")
 
     def groupValueReadCon(self, src, gad, priority, data):
-        Logger().debug("GroupMonitor.groupValueReadCon(): src=%s, gad=%s, priority=%s, data=%s" % \
+        logger.debug("GroupMonitor.groupValueReadCon(): src=%s, gad=%s, priority=%s, data=%s" % \
                        (src, gad, priority, repr(data)))
         for listener in self._listeners:
             try:
                 listener.onResponse(src, gad, priority, data)
             except PKNyXValueError:
-                Logger().exception("GroupMonitor.groupValueReadCon()")
+                logger.exception("GroupMonitor.groupValueReadCon()")
 
     @property
     def listeners(self):
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class GroupMonitorTestCase(unittest.TestCase):

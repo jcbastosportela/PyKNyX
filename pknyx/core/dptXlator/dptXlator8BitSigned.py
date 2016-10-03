@@ -49,7 +49,7 @@ see L{DPTXlatorBoolean}
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
@@ -92,14 +92,14 @@ class DPTXlator8BitSigned(DPTXlatorBase):
             value = -((data - 1) ^ 0xff)  # invert twos complement
         else:
             value = data
-        #Logger().debug("DPTXlator8BitSigned._toValue(): value=%d" % value)
+        #logger.debug("DPTXlator8BitSigned._toValue(): value=%d" % value)
         return value
 
     def valueToData(self, value):
         if value < 0:
             value = (abs(value) ^ 0xff) + 1  # twos complement
         data = value
-        #Logger().debug("DPTXlator8BitSigned.valueToData(): data=%s" % hex(data))
+        #logger.debug("DPTXlator8BitSigned.valueToData(): data=%s" % hex(data))
         return data
 
     def dataToFrame(self, data):
@@ -114,7 +114,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPT8BitSignedTestCase(unittest.TestCase):
 

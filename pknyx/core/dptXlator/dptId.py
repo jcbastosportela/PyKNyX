@@ -68,7 +68,7 @@ ValueError: invalid Datapoint Type ID ('1')
 import re
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 
 class DPTIDValueError(PKNyXValueError):
@@ -96,7 +96,7 @@ class DPTID(object):
             if not re.match("^\d{1,3}\.\d{1,3}$", dptId) and not re.match("^\d{1,3}\.xxx$", dptId):
                 raise DPTIDValueError("invalid Datapoint Type ID (%r)" % repr(dptId))
         except:
-            Logger().exception("Flags.__init__()", debug=True)
+            logger.exception("Flags.__init__()")
             raise DPTIDValueError("invalid Datapoint Type ID (%r)" % repr(dptId))
 
         self._id = dptId
@@ -186,7 +186,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class DPTIDTestCase(unittest.TestCase):

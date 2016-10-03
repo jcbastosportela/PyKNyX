@@ -49,7 +49,7 @@ see L{DPTXlatorBoolean}
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
@@ -91,7 +91,7 @@ class DPTXlator8BitUnsigned(DPTXlatorBase):
             value = value * 360. / 255.
         elif self._dpt is self.DPT_DecimalFactor:
             value = value / 255.
-        #Logger().debug("DPTXlator8BitUnsigned.dataToValue(): value=%d" % value)
+        #logger.debug("DPTXlator8BitUnsigned.dataToValue(): value=%d" % value)
         return value
 
     def valueToData(self, value):
@@ -103,7 +103,7 @@ class DPTXlator8BitUnsigned(DPTXlatorBase):
             data = int(round(value * 255))
         else:
             data = value
-        #Logger().debug("DPTXlator8BitUnsigned.valueToData(): data=%s" % hex(data))
+        #logger.debug("DPTXlator8BitUnsigned.valueToData(): data=%s" % hex(data))
         return data
 
     def dataToFrame(self, data):
@@ -118,7 +118,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPT8BitUnsignedTestCase(unittest.TestCase):
 

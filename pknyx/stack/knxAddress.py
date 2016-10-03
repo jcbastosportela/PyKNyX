@@ -65,7 +65,7 @@ import functools
 import struct
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 
 class KnxAddressValueError(PKNyXValueError):
@@ -91,7 +91,7 @@ class KnxAddress(object):
         """
         super(KnxAddress, self).__init__()
 
-        #Logger().debug("KnxAddress.__init__(): raw=%r" % raw)
+        #logger.debug("KnxAddress.__init__(): raw=%r" % raw)
 
         if isinstance(raw, str) and len(raw) == 2:
             raw = struct.unpack(">H", raw)[0]
@@ -145,7 +145,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class KnxAddressTestCase(unittest.TestCase):

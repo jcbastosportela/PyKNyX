@@ -51,7 +51,7 @@ Usage
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.utils import reprStr
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 
 
@@ -115,7 +115,7 @@ class DPTXlatorBase(object):
         try:
             self._dpt = self._handledDPT[dptId]
         except KeyError:
-            Logger().exception("DPTXlatorBase.__init__()", debug=True)
+            logger.exception("DPTXlatorBase.__init__()")
             raise DPTXlatorValueError("unhandled DPT ID (%s)" % dptId)
         self._typeSize = typeSize
 
@@ -148,7 +148,7 @@ class DPTXlatorBase(object):
         try:
             self._dpt = self._handledDPT[dptId]
         except KeyError:
-            Logger().exception("DPTXlatorBase.dpt", debug=True)
+            logger.exception("DPTXlatorBase.dpt")
             raise DPTXlatorValueError("unhandled DPT ID (%s)" % dptId)
 
     @property
@@ -167,7 +167,7 @@ class DPTXlatorBase(object):
 
         @raise DPTXlatorValueError: data can't be handled
         """
-        Logger().warning("DPTXlatorBase.checkData() not implemented is sub-class")
+        logger.warning("DPTXlatorBase.checkData() not implemented is sub-class")
 
     def checkValue(self, value):
         """ Check if the value can be handled by the Datapoint Type
@@ -177,7 +177,7 @@ class DPTXlatorBase(object):
 
         @raise DPTXlatorValueError: value can't be handled
         """
-        Logger().warning("DPTXlatorBase.checkValue() not implemented is sub-class")
+        logger.warning("DPTXlatorBase.checkValue() not implemented is sub-class")
 
     def checkFrame(self, frame):
         """ Check if KNX frame can be handled by the Datapoint Type
@@ -187,7 +187,7 @@ class DPTXlatorBase(object):
 
         @raise DPTXlatorValueError: frame can't be handled
         """
-        Logger().warning("DPTXlatorBase._checkFrame() not implemented is sub-class")
+        logger.warning("DPTXlatorBase._checkFrame() not implemented is sub-class")
 
     def dataToValue(self, data):
         """ Conversion from KNX encoded data to python value
@@ -235,7 +235,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class DPTXlatorBaseTestCase(unittest.TestCase):

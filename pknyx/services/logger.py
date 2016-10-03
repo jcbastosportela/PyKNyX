@@ -43,6 +43,9 @@ Implements
 
 import logging
 import logging.handlers
+
+getLogger = logging.getLogger
+
 try:
     from io import StringIO
 except ImportError:
@@ -56,180 +59,47 @@ from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
 from pknyx.services.loggerFormatter import DefaultFormatter, ColorFormatter, \
                                            SpaceFormatter, SpaceColorFormatter
+logging.raiseExceptions = 0
+logging.TRACE = logging.DEBUG
+logging.EXCEPTION = logging.ERROR + 5
+logging.addLevelName(logging.TRACE, "TRACE")
+logging.addLevelName(logging.EXCEPTION, "EXCEPTION")
 
-LEVELS = {'trace': logging.DEBUG - 5,
-          'debug': logging.DEBUG,
-          'info': logging.INFO,
-          'warning': logging.WARNING,
-          'error': logging.ERROR,
-          'exception': logging.ERROR + 5,
-          'critical': logging.CRITICAL}
+def _setup():
+    # Logger
+    _logger = logging.getLogger('pknyx')
+    _logger.propagate = False
 
+    # Handlers
+    _stdoutStreamHandler = logging.StreamHandler()
+    streamFormatter = SpaceColorFormatter(config.LOGGER_STREAM_FORMAT)
+    _stdoutStreamHandler.setFormatter(streamFormatter)
+    _logger.addHandler(_stdoutStreamHandler)
 
-class LoggerValueError(PKNyXValueError):
-    """
-    """
+    if config.LOGGER_BACKUP_COUNT:
+        loggerFilename = os.path.join(config.LOGGER_DIR, "%s_%s.log" % (config.APP_NAME, deviceName))
+        fileHandler = logging.handlers.RotatingFileHandler(loggerFilename, 'w',
+                                                            config.LOGGER_MAX_BYTES,
+                                                            config.LOGGER_BACKUP_COUNT)
+        fileFormatter = SpaceFormatter(config.LOGGER_FILE_FORMAT)
+        fileHandler.setFormatter(fileFormatter)
+        _logger.addHandler(fileHandler)
 
+    _logger.setLevel(logging._NameToLevel(config.LOGGER_LEVEL))
 
-class Logger(object):
-    """ Logger object.
-    """
-    __metaclass__ = Singleton
-
-    def __init__(self, deviceName=None):
-        """ Init object.
-
-        @param deviceName: name of the file used by the file handler
-        @type deviceName: str
+    def _trace(self, msg, *args, **kwargs):
         """
-        super(Logger, self).__init__()
-
-        logging.TRACE = LEVELS['trace']
-        logging.EXCEPTION = LEVELS['exception']
-        logging.raiseExceptions = 0
-        logging.addLevelName(logging.TRACE, "TRACE")
-        logging.addLevelName(logging.EXCEPTION, "EXCEPTION")
-
-        # Logger
-        self._logger = logging.getLogger(config.APP_NAME)
-        self._logger.propagate = False
-
-        # Handlers
-        self._stdoutStreamHandler = logging.StreamHandler()
-        streamFormatter = SpaceColorFormatter(config.LOGGER_STREAM_FORMAT)
-        self._stdoutStreamHandler.setFormatter(streamFormatter)
-        self._logger.addHandler(self._stdoutStreamHandler)
-
-        if config.LOGGER_BACKUP_COUNT:
-            loggerFilename = os.path.join(config.LOGGER_DIR, "%s_%s.log" % (config.APP_NAME, deviceName))
-            fileHandler = logging.handlers.RotatingFileHandler(loggerFilename, 'w',
-                                                               config.LOGGER_MAX_BYTES,
-                                                               config.LOGGER_BACKUP_COUNT)
-            fileFormatter = SpaceFormatter(config.LOGGER_FILE_FORMAT)
-            fileHandler.setFormatter(fileFormatter)
-            self._logger.addHandler(fileHandler)
-
-        self.setLevel(config.LOGGER_LEVEL)
-
-    def addStreamHandler(self, stream, formatter=DefaultFormatter):
-        """ Add a new stream handler.
-
-        Can be used to register a new GUI handler.
-
-        @param stream: open stream where to write logs
-        @type stream: file
-
-        @param formatter: associated formatter
-        @type formatter: L{DefaultFormatter<pknyx.services.loggingFormatter>}
+        Log 'msg % args' with severity 'TRACE'.
         """
-        handler = logging.StreamHandler(stream)
-        handler.setFormatter(formatter(config.LOGGER_FORMAT))
-        self._logger.addHandler(handler)
+        if self.isEnabledFor(logging.TRACE):
+            self._log(logging.TRACE, msg, args, **kwargs)
+    logging.Logger.trace = _trace
 
-    def setLevel(self, level):
-        """ Change logging level.
-
-        @param level: new level, in ('trace', 'debug', 'info', 'warning', 'error', 'exception', 'critical')
-        @type level: str
+    def _exception(self, msg, *args, debug=None, **kwargs):
         """
-        if level not in LEVELS.keys():
-            raise LoggerValueError("Logger level must be in %s" % LEVELS.keys())
-        self._logger.setLevel(LEVELS[level])
-
-        if self._logger.level >= logging.INFO:
-            streamFormatter = SpaceColorFormatter("")
-        else:
-            streamFormatter = SpaceColorFormatter(config.LOGGER_STREAM_FORMAT)
-        self._stdoutStreamHandler.setFormatter(streamFormatter)
-
-    def trace(self, message, *args, **kwargs):
-        """ Logs a message with level TRACE.
-
-        @param message: message to log
-        @type message: string
+        Log 'msg % args' with severity 'TRACE'.
         """
-        self._logger.log(logging.TRACE, message, *args, **kwargs)
+        if self.isEnabledFor(logging.TRACE):
+            self._log(logging.TRACE, msg, args, **kwargs)
+    logging.Logger.exception = _exception
 
-    def debug(self, message, *args, **kwargs):
-        """ Logs a message with level DEBUG.
-
-        @param message: message to log
-        @type message: string
-        """
-        self._logger.debug(message, *args, **kwargs)
-
-    def info(self, message, *args, **kwargs):
-        """ Logs a message with level INFO.
-
-        @param message: message to log
-        @type message: string
-        """
-        self._logger.info(message, *args, **kwargs)
-
-    def warning(self, message, *args, **kwargs):
-        """ Logs a message with level WARNING.
-
-        @param message: message to log
-        @type message: string
-        """
-        self._logger.warning(message, *args, **kwargs)
-
-    def error(self, message, *args, **kwargs):
-        """ Logs a message with level ERROR.
-
-        @param message: message to log
-        @type message: string
-        """
-        self._logger.error(message, *args, **kwargs)
-
-    def critical(self, message, *args, **kwargs):
-        """ Logs a message with level CRITICAL.
-
-        @param message: message to log
-        @type message: string
-        """
-        self._logger.critical(message, *args, **kwargs)
-
-    def exception(self, message, debug=False, *args, **kwargs):
-        """ Logs a message within an exception.
-
-        @param message: message to log
-        @type message: string
-
-        @param debug: flag to log exception on DEBUG level instead of EXCEPTION one
-        @type debug: bool
-        """
-        kwargs['exc_info'] = True
-        if debug:
-            self.debug(message, *args, **kwargs)
-        else:
-            self.log(logging.EXCEPTION, message, *args, **kwargs)
-
-    def log(self, level, message, *args, **kwargs):
-        """ Logs a message with given level.
-
-        @param level: log level to use
-        @type level: int or str
-
-        @param message: message to log
-        @type message: string
-        """
-        if isinstance(level, str):
-            level = LEVELS[level]
-        self._logger.log(level, message, *args, **kwargs)
-
-    def getTraceback(self):
-        """ Return the complete traceback.
-
-        Should be called in an except statement.
-        """
-        tracebackString = StringIO.StringIO()
-        traceback.print_exc(file=tracebackString)
-        message = tracebackString.getvalue().strip()
-        tracebackString.close()
-        return message
-
-    def shutdown(self):
-        """ Shutdown the logging service.
-        """
-        logging.shutdown()

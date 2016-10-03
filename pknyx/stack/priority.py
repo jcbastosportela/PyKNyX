@@ -64,7 +64,7 @@ PriorityValueError: priority level 15 not in (0x00, 0x01, 0x02, 0x03)
 
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 
 class PriorityValueError(PKNyXValueError):
@@ -93,7 +93,7 @@ class Priority(object):
             try:
                 level = Priority.CONV_TABLE[level]
             except KeyError:
-                Logger().exception("Priority.__init__()", debug=True)
+                logger.exception("Priority.__init__()")
                 raise PriorityValueError("level %r not in ('system', 'normal', 'urgent', 'low')" % repr(level))
         elif isinstance(level, int):
             if not 0x00 <= level <= 0x03:
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class PriorityTestCase(unittest.TestCase):

@@ -48,7 +48,7 @@ Usage
 
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.group import Group
 from pknyx.core.groupMonitor import GroupMonitor
 from pknyx.stack.groupAddress import GroupAddress
@@ -88,7 +88,7 @@ class A_GroupDataService(T_GroupDataListener):
         tgds.setListener(self)
 
     def groupDataInd(self, src, gad, priority, aPDU):  # aPDU -> tSDU
-        Logger().debug("A_GroupDataService.groupDataInd(): src=%s, gad=%s, priority=%s, aPDU=%s" % \
+        logger.debug("A_GroupDataService.groupDataInd(): src=%s, gad=%s, priority=%s, aPDU=%s" % \
                        (src, gad, priority, repr(aPDU)))
 
         length = len(aPDU) - 2
@@ -98,7 +98,7 @@ class A_GroupDataService(T_GroupDataListener):
             if gad.address in self._groups.keys():
                 group = self._groups[gad.address]
             else:
-                Logger().debug("A_GroupDataService.groupDataInd(): no registered group for that GAD (%s)" % repr(gad))
+                logger.debug("A_GroupDataService.groupDataInd(): no registered group for that GAD (%s)" % repr(gad))
                 group = None
 
             if "0/0/0" in self._groups.keys():
@@ -120,7 +120,7 @@ class A_GroupDataService(T_GroupDataListener):
                     if groupMonitor is not None:
                         groupMonitor.groupValueReadInd(src, gad, priority)
                 else:
-                    Logger().warning("A_GroupDataService.groupDataInd(): invalid aPDU length")
+                    logger.warning("A_GroupDataService.groupDataInd(): invalid aPDU length")
 
             elif (apci & APCI._4) == APCI.GROUPVALUE_RES:
                 data = APDU.getGroupValue(aPDU)
@@ -130,7 +130,7 @@ class A_GroupDataService(T_GroupDataListener):
                     groupMonitor.groupValueReadCon(src, gad, priority, data)
 
         else:
-            Logger().warning("A_GroupDataService.groupDataInd(): invalid aPDU length")
+            logger.warning("A_GroupDataService.groupDataInd(): invalid aPDU length")
 
     @property
     def groups(self):
@@ -153,7 +153,7 @@ class A_GroupDataService(T_GroupDataListener):
         @return: group handling the group address
         @rtype: L{Group}
         """
-        Logger().debug("A_GroupDataService.subscribe(): gad=%s, listener=%s" % (gad, repr(listener)))
+        logger.debug("A_GroupDataService.subscribe(): gad=%s, listener=%s" % (gad, repr(listener)))
         if not isinstance(gad, GroupAddress):
             gad = GroupAddress(gad)
 
@@ -172,7 +172,7 @@ class A_GroupDataService(T_GroupDataListener):
     def groupValueWriteReq(self, gad, priority, data, size):
         """
         """
-        Logger().debug("A_GroupDataService.groupValueWriteReq(): gad=%s, priority=%s, data=%s, size=%d" % \
+        logger.debug("A_GroupDataService.groupValueWriteReq(): gad=%s, priority=%s, data=%s, size=%d" % \
                        (gad, priority, repr(data), size))
 
         aPDU = APDU.makeGroupValue(APCI.GROUPVALUE_WRITE, data, size)
@@ -181,7 +181,7 @@ class A_GroupDataService(T_GroupDataListener):
     def groupValueReadReq(self, gad, priority):
         """
         """
-        Logger().debug("A_GroupDataService.groupValueReadReq(): gad=%s, priority=%s" % \
+        logger.debug("A_GroupDataService.groupValueReadReq(): gad=%s, priority=%s" % \
                        (gad, priority))
 
         aPDU = APDU.makeGroupValue(APCI.GROUPVALUE_READ)
@@ -190,7 +190,7 @@ class A_GroupDataService(T_GroupDataListener):
     def groupValueReadRes(self, gad, priority, data, size):
         """
         """
-        Logger().debug("A_GroupDataService.groupValueReadRes(): gad=%s, priority=%s, data=%s, size=%d" % \
+        logger.debug("A_GroupDataService.groupValueReadRes(): gad=%s, priority=%s, data=%s, size=%d" % \
                        (gad, priority, repr(data), size))
 
         aPDU = APDU.makeGroupValue(APCI.GROUPVALUE_RES, data, size)
@@ -201,7 +201,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class A_GDSTestCase(unittest.TestCase):

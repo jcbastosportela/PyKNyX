@@ -75,7 +75,7 @@ import copy
 import threading
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 
 class PriorityQueueValueError(PKNyXValueError):
@@ -124,7 +124,7 @@ class PriorityQueue(object):
         @param priority: priority value of the object to add
         @type priority: int
         """
-        #Logger().debug("PriorityQueue.add(): _queue=%s" % repr(self._queue))
+        #logger.debug("PriorityQueue.add(): _queue=%s" % repr(self._queue))
 
         with self._condition:
             self._queue[priority.level].append(obj)
@@ -136,7 +136,7 @@ class PriorityQueue(object):
 
         @return: the next element from this queue (blocks if queue is empty)
         """
-        #Logger().debug("PriorityQueue.remove(): _queue=%s" % repr(self._queue))
+        #logger.debug("PriorityQueue.remove(): _queue=%s" % repr(self._queue))
 
         with self._condition:
             while True: # Loop until we transmit something.
@@ -168,7 +168,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class PriorityQueueTestCase(unittest.TestCase):

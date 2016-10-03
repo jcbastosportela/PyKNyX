@@ -47,7 +47,6 @@ Usage
 from pknyx.core.device import Device
 from pknyx.core.functionalBlock import FunctionalBlock
 
-from pknyx.services.logger import Logger
 from pknyx.services.scheduler import Scheduler
 from pknyx.services.notifier import Notifier
 
@@ -55,11 +54,9 @@ from pknyx.plugins.mail import MUA
 
 
 # Instanciate some global objects
-logger = Logger()
 schedule = Scheduler()
 notify = Notifier()
 
 # Del unused imported classes
-del Logger
 del Scheduler
 del Notifier

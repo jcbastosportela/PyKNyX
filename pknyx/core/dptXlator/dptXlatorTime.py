@@ -49,7 +49,7 @@ see L{DPTXlatorBoolean}
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
@@ -89,7 +89,7 @@ class DPTXlatorTime(DPTXlatorBase):
         min_ = (data >> 8) & 0x3f
         sec = data & 0x3f
         value = (wDay, hour, min_, sec)
-        #Logger().debug("DPTXlatorTime._toValue(): value=%d" % value)
+        #logger.debug("DPTXlatorTime._toValue(): value=%d" % value)
         return value
 
     def valueToData(self, value):
@@ -99,7 +99,7 @@ class DPTXlatorTime(DPTXlatorBase):
         min_ = value[2]
         sec = value[3]
         data = wDay << 21 | hour << 16 | min_ << 8 | sec
-        #Logger().debug("DPTXlatorTime.valueToData(): data=%s" % hex(data))
+        #logger.debug("DPTXlatorTime.valueToData(): data=%s" % hex(data))
         return data
 
     def dataToFrame(self, data):
@@ -141,7 +141,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPTTimeTestCase(unittest.TestCase):
 

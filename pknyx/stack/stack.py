@@ -51,7 +51,7 @@ Usage
 import time
 
 from pknyx.common.exception import PKNyXValueError
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.individualAddress import IndividualAddress
 from pknyx.stack.layer7.a_groupDataService import A_GroupDataService
 from pknyx.stack.layer4.t_groupDataService import T_GroupDataService
@@ -113,7 +113,7 @@ class Stack(object):
     def start(self):
         """ Start the stack threads
         """
-        Logger().trace("Stack.start()")
+        logger.trace("Stack.start()")
 
         self._lds.start()
         self._tc.start()
@@ -122,7 +122,7 @@ class Stack(object):
 
         # Iterate over Group to find those which need to send a initial read request
         # (depending on GroupObject init flag)
-        Logger().debug("Stack.start(): initiate a read request for Group having at least one GroupObject with 'init' flag on")
+        logger.debug("Stack.start(): initiate a read request for Group having at least one GroupObject with 'init' flag on")
         for group in self._agds.groups.values():
             for listener in group.listeners:
                 try:
@@ -131,21 +131,21 @@ class Stack(object):
                         time.sleep(0.1)  # avoid bus saturation
                         break
                 except AttributeError:
-                    Logger().exception("Stack.start(): listener does not seem to be a GroupObject", debug=True)
+                    logger.exception("Stack.start(): listener does not seem to be a GroupObject")
 
-        Logger().debug("Stack.start(): running")
+        logger.debug("Stack.start(): running")
 
     def stop(self):
         """ Stop the stack threads
         """
-        Logger().trace("Stack.stop()")
+        logger.trace("Stack.stop()")
 
         self._tc.stop()
         self._lds.stop()
         self._tc.join()
         self._lds.join()
 
-        Logger().debug("Stack.stop(): stopped")
+        logger.debug("Stack.stop(): stopped")
 
     def mainLoop(self):
         """ Start the main loop
@@ -164,7 +164,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class StackTestCase(unittest.TestCase):

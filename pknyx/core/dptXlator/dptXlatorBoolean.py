@@ -71,7 +71,7 @@ ValueError: value 3 not in ("Off", "On")
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
 
@@ -125,17 +125,17 @@ class DPTXlatorBoolean(DPTXlatorBase):
 
     def dataToValue(self, data):
         value = self._dpt.limits[data]
-        #Logger().debug("DPTXlatorBoolean.dataToValue(): value=%d" % value)
+        #logger.debug("DPTXlatorBoolean.dataToValue(): value=%d" % value)
         return value
 
     def valueToData(self, value):
-        #Logger().debug("DPTXlatorBoolean.valueToData(): value=%d" % value)
+        #logger.debug("DPTXlatorBoolean.valueToData(): value=%d" % value)
         self.checkValue(value)
         try:
             data = self._dpt.limits.index(value)
         except ValueError:
             raise ValueError("Index not in tuple", self._dpt.limits,value)
-        #Logger().debug("DPTXlatorBoolean.valueToData(): data=%s" % hex(data))
+        #logger.debug("DPTXlatorBoolean.valueToData(): data=%s" % hex(data))
         return data
 
     def dataToFrame(self, data):
@@ -150,7 +150,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPTBooleanTestCase(unittest.TestCase):
 

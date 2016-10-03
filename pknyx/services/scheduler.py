@@ -75,7 +75,7 @@ from apscheduler.events import EVENT_JOB_ERROR,EVENT_JOB_MISSED
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
-from pknyx.services.logger import Logger, LEVELS
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 scheduler = None
 
@@ -125,11 +125,11 @@ class Scheduler(object):
 
         It can be setup so only errors are triggered.
         """
-        Logger().debug("Scheduler._listener(): event=%s" % repr(event))
+        logger.debug("Scheduler._listener(): event=%s" % repr(event))
 
         if event.exception:
             message = "Scheduler._listener()\n" + "".join(traceback.format_tb(event.traceback)) + str(event.exception)
-            Logger().log(LEVELS['exception'], message)
+            logger.exception(message)
 
     @property
     def apscheduler(self):
@@ -138,7 +138,7 @@ class Scheduler(object):
     def every(self, **kwargs):
         """ Decorator for addEveryJob()
         """
-        Logger().debug("Scheduler.every(): kwargs=%s" % repr(kwargs))
+        logger.debug("Scheduler.every(): kwargs=%s" % repr(kwargs))
 
         def decorated(func):
             """ We don't wrap the decorated function!
@@ -158,13 +158,13 @@ class Scheduler(object):
         @param kwargs: additional arguments for APScheduler
         @type kwargs: dict
         """
-        Logger().debug("Scheduler.addEveryJob(): func=%s" % repr(func))
+        logger.debug("Scheduler.addEveryJob(): func=%s" % repr(func))
         self._apscheduler.add_interval_job(func, **kwargs)
 
     def at(self, **kwargs):
         """ Decorator for addAtJob()
         """
-        Logger().debug("Scheduler.at(): kwargs=%s" % repr(kwargs))
+        logger.debug("Scheduler.at(): kwargs=%s" % repr(kwargs))
 
         def decorated(func):
             """ We don't wrap the decorated function!
@@ -181,13 +181,13 @@ class Scheduler(object):
         @param func: job to register
         @type func: callable
         """
-        Logger().debug("Scheduler.addAtJob(): func=%s" % repr(func))
+        logger.debug("Scheduler.addAtJob(): func=%s" % repr(func))
         self._apscheduler.add_date_job(func, **kwargs)
 
     def cron(self, **kwargs):
         """ Decorator for addCronJob()
         """
-        Logger().debug("Scheduler.cron(): kwargs=%s" % repr(kwargs))
+        logger.debug("Scheduler.cron(): kwargs=%s" % repr(kwargs))
 
         def decorated(func):
             """ We don't wrap the decorated function!
@@ -204,7 +204,7 @@ class Scheduler(object):
         @param func: job to register
         @type func: callable
         """
-        Logger().debug("Scheduler.addCronJob(): func=%s" % repr(func))
+        logger.debug("Scheduler.addCronJob(): func=%s" % repr(func))
         self._apscheduler.add_cron_job(func, **kwargs)
 
     def doRegisterJobs(self, obj):
@@ -213,13 +213,13 @@ class Scheduler(object):
         @param obj: instance for which a method may have been pre-registered
         @type obj: object
         """
-        Logger().debug("Scheduler.doRegisterJobs(): obj=%s" % repr(obj))
+        logger.debug("Scheduler.doRegisterJobs(): obj=%s" % repr(obj))
 
         for type_, func, kwargs in self._pendingFuncs:
-            Logger().debug("Scheduler.doRegisterJobs(): type_=\"%s\", func=%s, kwargs=%s" % (type_, func.func_name, repr(kwargs)))
+            logger.debug("Scheduler.doRegisterJobs(): type_=\"%s\", func=%s, kwargs=%s" % (type_, func.func_name, repr(kwargs)))
             method = getattr(obj, func.func_name, None)
             if method is not None:
-                Logger().debug("Scheduler.doRegisterJobs(): add method %s() of %s" % (method.im_func.func_name, method.im_self))
+                logger.debug("Scheduler.doRegisterJobs(): add method %s() of %s" % (method.im_func.func_name, method.im_self))
                 if method.im_func is func:
                     if type_ == Scheduler.TYPE_EVERY:
                         self._apscheduler.add_job(method, trigger="interval", **kwargs)
@@ -240,31 +240,31 @@ class Scheduler(object):
 
         Simple proxy to APScheduler.start() method.
         """
-        Logger().trace("Scheduler.start()")
+        logger.trace("Scheduler.start()")
 
         if not self._apscheduler.running:
             self._apscheduler.start()
 
-        Logger().debug("Scheduler.start(): running")
+        logger.debug("Scheduler.start(): running")
 
     def stop(self):
         """ Shutdown the scheduler
 
         Simple proxy to APScheduler.stop() method.
         """
-        Logger().trace("Scheduler.stop()")
+        logger.trace("Scheduler.stop()")
 
         if self._apscheduler.running:
             self._apscheduler.shutdown()
 
-        Logger().debug("Scheduler.stop(): stopped")
+        logger.debug("Scheduler.stop(): stopped")
 
 
 if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
 
     class SchedulerTestCase(unittest.TestCase):

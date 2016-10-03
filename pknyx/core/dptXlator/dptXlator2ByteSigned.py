@@ -49,7 +49,7 @@ see L{DPTXlatorBoolean}
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
@@ -99,7 +99,7 @@ class DPTXlator2ByteSigned(DPTXlatorBase):
             value = data / 100.
         else:
             value = data
-        #Logger().debug("DPTXlator2ByteSigned._toValue(): value=%d" % value)
+        #logger.debug("DPTXlator2ByteSigned._toValue(): value=%d" % value)
         return value
 
     def valueToData(self, value):
@@ -113,7 +113,7 @@ class DPTXlator2ByteSigned(DPTXlatorBase):
             data = int(round(value * 100.))
         else:
             data = value
-        #Logger().debug("DPTXlator2ByteSigned.valueToData(): data=%s" % hex(data))
+        #logger.debug("DPTXlator2ByteSigned.valueToData(): data=%s" % hex(data))
         return data
 
     def dataToFrame(self, data):
@@ -128,7 +128,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPT2ByteSignedTestCase(unittest.TestCase):
 

@@ -64,7 +64,7 @@ The DPTXlatorDate class follows the python encoding.
 
 import struct
 
-from pknyx.services.logger import Logger
+from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.core.dptXlator.dptId import DPTID
 from pknyx.core.dptXlator.dpt import DPT
 from pknyx.core.dptXlator.dptXlatorBase import DPTXlatorBase, DPTXlatorValueError
@@ -106,7 +106,7 @@ class DPTXlatorDate(DPTXlatorBase):
         else:
             year += 2000
         value = (day, month, year)
-        #Logger().debug("DPTXlatorDate._toValue(): value=%d" % value)
+        #logger.debug("DPTXlatorDate._toValue(): value=%d" % value)
         return value
 
     def valueToData(self, value):
@@ -118,7 +118,7 @@ class DPTXlatorDate(DPTXlatorBase):
         else:
             year -= 1900
         data = day << 16 | month << 8 | year
-        #Logger().debug("DPTXlatorDate.valueToData(): data=%s" % hex(data))
+        #logger.debug("DPTXlatorDate.valueToData(): data=%s" % hex(data))
         return data
 
     def dataToFrame(self, data):
@@ -147,7 +147,7 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    Logger().setLevel('error')
+    logger.root.setLevel(logging.ERROR)
 
     class DPTDateTestCase(unittest.TestCase):
 

@@ -73,8 +73,8 @@ if __name__ == '__main__':
     import unittest
 
     # Mute logger
-    from pknyx.services.logger import Logger
-    Logger().setLevel('error')
+    from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
+    logger.root.setLevel(logging.ERROR)
 
 
     class SingletonTest(object):

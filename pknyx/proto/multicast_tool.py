@@ -116,28 +116,28 @@ class Multicast(object):
         while True:
             try:
                 inFrame, (fromAddr, fromPort) = self._receiverSock.receive()
-                Logger().debug("Multicast.read(): inFrame=%s (%s, %d)" % (repr(inFrame), fromAddr, fromPort))
+                logger.debug("Multicast.read(): inFrame=%s (%s, %d)" % (repr(inFrame), fromAddr, fromPort))
                 inFrame = bytearray(inFrame)
 
                 header = KNXnetIPHeader(inFrame)
-                Logger().debug("Multicast.read(): KNXnetIP header=%s" % repr(header))
+                logger.debug("Multicast.read(): KNXnetIP header=%s" % repr(header))
 
                 frame = inFrame[KNXnetIPHeader.HEADER_SIZE:]
-                Logger().debug("Multicast.read(): frame=%s" % repr(frame))
+                logger.debug("Multicast.read(): frame=%s" % repr(frame))
                 cEMI = CEMILData(frame)
-                Logger().debug("Multicast.read(): cEMI=%s" % cEMI)
+                logger.debug("Multicast.read(): cEMI=%s" % cEMI)
 
                 destAddr = cEMI.destinationAddress
                 if isinstance(cEMI.destinationAddress, GroupAddress):
                     receivedData = cEMI
                     receivedStatus = 0
                 elif isinstance(destAddr, IndividualAddress):
-                    Logger().warning("Multicast.read(): unsupported destination address type (%s)" % repr(destAddr))
+                    logger.warning("Multicast.read(): unsupported destination address type (%s)" % repr(destAddr))
                 else:
-                    Logger().warning("Multicast.read(): unknown destination address type (%s)" % repr(destAddr))
+                    logger.warning("Multicast.read(): unknown destination address type (%s)" % repr(destAddr))
 
             except:
-                Logger().exception("Multicast.read()")
+                logger.exception("Multicast.read()")
                 raise
 
             # Network layer (layer 3)
@@ -165,11 +165,11 @@ class Multicast(object):
                                 if length >= 0:
                                     aPCI = aPDU[0] << 8 | aPDU[1]
                                     if (aPCI & APCI._4) == APCI.GROUPVALUE_WRITE:
-                                        Logger().debug("Multicast.read(): GROUPVALUE_WRITE ignored")
+                                        logger.debug("Multicast.read(): GROUPVALUE_WRITE ignored")
                                         continue
 
                                     elif (aPCI & APCI._4) == APCI.GROUPVALUE_READ:
-                                        Logger().debug("Multicast.read(): GROUPVALUE_READ ignored")
+                                        logger.debug("Multicast.read(): GROUPVALUE_READ ignored")
                                         continue
 
                                     elif (aPCI & APCI._4) == APCI.GROUPVALUE_RES:
