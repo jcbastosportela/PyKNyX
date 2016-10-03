@@ -51,10 +51,10 @@ class PKNyXError(Exception):
     """
 
 
-class PKNyXValueError(PKNyXError):
+class PKNyXValueError(PKNyXError,ValueError):
     """ Base class for pKNyX value errors
     """
 
-class PKNyXAttributeError(PKNyXError):
+class PKNyXAttributeError(PKNyXError,AttributeError):
     """ Base class for pKNyX attribute errors
     """
