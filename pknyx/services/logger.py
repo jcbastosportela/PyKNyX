@@ -41,7 +41,6 @@ Implements
 @license: GPL
 """
 
-import six
 import logging
 import logging.handlers
 
@@ -96,11 +95,11 @@ def _setup():
             self._log(logging.TRACE, msg, args, **kwargs)
     logging.Logger.trace = _trace
 
-    def _exception(self, msg, *args, debug=None, **kwargs):
+    def _exception(self, msg, *args, exc_info=True, **kwargs):
         """
         Log 'msg % args' with severity 'TRACE'.
         """
         if self.isEnabledFor(logging.TRACE):
-            self._log(logging.TRACE, msg, args, **kwargs)
+            self._log(logging.EXCEPTION, msg, args, exc_info=exc_info, **kwargs)
     logging.Logger.exception = _exception
 
