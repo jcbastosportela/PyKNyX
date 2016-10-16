@@ -93,7 +93,7 @@ class KnxAddress(object):
 
         #logger.debug("KnxAddress.__init__(): raw=%r" % raw)
 
-        if isinstance(raw, str) and len(raw) == 2:
+        if isinstance(raw, bytes) and len(raw) == 2:
             raw = struct.unpack(">H", raw)[0]
         if isinstance(raw, int):
             if not 0 <= raw <= 0xffff:
@@ -113,6 +113,11 @@ class KnxAddress(object):
 
     def __lt__(self, other):
         return self.raw < other.raw
+
+    def __add__(self, incr):
+        obj = KnxAddress.__new__(type(self))
+        KnxAddress.__init__(obj, self._raw + incr)
+        return obj
 
     @property
     def raw(self):
@@ -152,7 +157,7 @@ if __name__ == '__main__':
 
         def setUp(self):
             self.ad1 = KnxAddress(123)
-            self.ad2 = KnxAddress("\x22\x31")
+            self.ad2 = KnxAddress(b"\x22\x31")
             self.ad3 = KnxAddress(123)
 
         def tearDown(self):
@@ -168,7 +173,10 @@ if __name__ == '__main__':
             with self.assertRaises(KnxAddressValueError):
                 KnxAddress(0x10000)
             with self.assertRaises(KnxAddressValueError):
-                KnxAddress("\x00\x00\x00")
+                KnxAddress(b"\x00\x00\x00")
+
+        def test_add(self):
+            self.assertEqual((self.ad2+2).raw, 8755)
 
         def test_raw(self):
             self.assertEqual(self.ad2.raw, 8753)
@@ -182,7 +190,7 @@ if __name__ == '__main__':
             self.assertEqual(self.ad1, self.ad3)
 
         def test_frame(self):
-            self.assertEqual(self.ad1.frame, "\x00\x7b")
+            self.assertEqual(self.ad1.frame, b"\x00\x7b")
 
 
     unittest.main()
