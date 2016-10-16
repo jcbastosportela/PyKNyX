@@ -116,12 +116,6 @@ class ETS(object):
             except KeyError:
                 raise ETSValueError("no Group Object associated with this datapoint (%s)" % dp)
 
-            # Override GroupObject flags
-            if flags is not None:
-                if not isinstance(flags, Flags):
-                    flags = Flags(flags)
-                groupObject.flags = flags
-
             # Get GroupAddress
             if not isinstance(gad, GroupAddress):
                 gad = GroupAddress(gad)
