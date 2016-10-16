@@ -97,9 +97,9 @@ class Scheduler(object):
     @type _apscheduler: APScheduler
     """
 
-    TYPE_EVERY = 1
-    TYPE_AT = 2
-    TYPE_CRON = 3
+    TYPE_EVERY = "interval"
+    TYPE_AT = "date"
+    TYPE_CRON = "cron"
 
     def __init__(self, autoStart=False, type_=BackgroundScheduler):
         """ Init the Scheduler object
@@ -110,8 +110,6 @@ class Scheduler(object):
         raise SchedulerValueError:
         """
         super(Scheduler, self).__init__()
-
-        self._pendingFuncs = []
 
         self._apscheduler = type_()
         self._apscheduler.add_listener(self._listener, mask=(EVENT_JOB_ERROR|EVENT_JOB_MISSED))
@@ -136,6 +134,13 @@ class Scheduler(object):
     def apscheduler(self):
         return self._apscheduler
 
+    def _register(self, typ,func,kwargs):
+        jobs = getattr(func,'_Sched', None)
+        if jobs is None:
+            jobs = []
+            setattr(func,'_Sched', jobs)
+        jobs.append((typ,kwargs))
+
     def every(self, **kwargs):
         """ Decorator for addEveryJob()
         """
@@ -144,7 +149,7 @@ class Scheduler(object):
         def decorated(func):
             """ We don't wrap the decorated function!
             """
-            self._pendingFuncs.append((Scheduler.TYPE_EVERY, func, kwargs))
+            self._register(Scheduler.TYPE_EVERY, func, kwargs)
 
             return func
 
@@ -170,7 +175,7 @@ class Scheduler(object):
         def decorated(func):
             """ We don't wrap the decorated function!
             """
-            self._pendingFuncs.append((Scheduler.TYPE_AT, func, kwargs))
+            self._register(Scheduler.TYPE_AT, func, kwargs)
 
             return func
 
@@ -193,7 +198,7 @@ class Scheduler(object):
         def decorated(func):
             """ We don't wrap the decorated function!
             """
-            self._pendingFuncs.append((Scheduler.TYPE_CRON, func, kwargs))
+            self._register(Scheduler.TYPE_CRON, func, kwargs)
 
             return func
 
@@ -216,18 +221,13 @@ class Scheduler(object):
         """
         logger.debug("Scheduler.doRegisterJobs(): obj=%s" % repr(obj))
 
-        for type_, func, kwargs in self._pendingFuncs:
-            logger.debug("Scheduler.doRegisterJobs(): type_=\"%s\", func=%s, kwargs=%s" % (type_, func_name(func), repr(kwargs)))
-            method = getattr(obj, func_name(func), None)
-            if method is not None:
-                logger.debug("Scheduler.doRegisterJobs(): add method %s() of %s" % (meth_name(method), meth_self(method)))
-                if meth_func(method) is func:
-                    if type_ == Scheduler.TYPE_EVERY:
-                        self._apscheduler.add_job(method, trigger="interval", **kwargs)
-                    elif type_ == Scheduler.TYPE_AT:
-                        self._apscheduler.add_job(method, trigger="date", **kwargs)
-                    elif type_ == Scheduler.TYPE_CRON:
-                        self._apscheduler.add_job(method, trigger="cron", **kwargs)
+        for name,func in vars(type(obj)).items():
+            method = None
+            for trigger,kwargs in getattr(func,'_Sched',()):
+                if method is None:
+                    method = getattr(obj,name)
+                    logger.debug("Scheduler.doRegisterJobs(): %s: func=%s, kwargs=%s" % (trigger, func_name(func), repr(kwargs)))
+                    self._apscheduler.add_job(method, trigger=trigger, **kwargs)
 
     def printJobs(self):
         """ Print pending jobs
@@ -262,22 +262,35 @@ class Scheduler(object):
 
 
 if __name__ == '__main__':
+    import time
     import unittest
+    from pknyx.services.logger import _setup; _setup()
+
+    scheduler = Scheduler()
 
     # Mute logger
     logger.root.setLevel(logging.ERROR)
 
+    class SomeClass(object):
+        runs = 0
+        @scheduler.every(seconds=0.3)
+        def again(self):
+            self.runs += 1
 
     class SchedulerTestCase(unittest.TestCase):
 
         def setUp(self):
-            pass
+            self.sched = Scheduler()
+            self.sched.start()
 
         def tearDown(self):
-            pass
+            self.sched.stop()
 
-        def test_constructor(self):
-            pass
+        def test_register(self):
+            some_obj = SomeClass()
+            self.sched.doRegisterJobs(some_obj)
+            time.sleep(1)
+            assert some_obj.runs
 
 
     unittest.main()
