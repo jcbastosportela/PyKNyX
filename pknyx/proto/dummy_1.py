@@ -23,6 +23,8 @@ class WeatherStationFB(FunctionalBlock):
     GO_05 = dict(dp="wind_speed_limit", flags="CWTU", priority="low")
     GO_06 = dict(dp="wind_alarm_enable", flags="CWTU", priority="low")
 
+    DESC = "WeatherStation"
+
 # Creation of the weather station device object
 class WeatherStation(Device):
     FB_01 = dict(cls=WeatherStationFB, name="weather_fb", desc="weather fb")
