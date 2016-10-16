@@ -77,7 +77,7 @@ def _setup():
     _logger.addHandler(_stdoutStreamHandler)
 
     if config.LOGGER_BACKUP_COUNT:
-        loggerFilename = os.path.join(config.LOGGER_DIR, "%s_%s.log" % (config.APP_NAME, deviceName))
+        loggerFilename = os.path.join(config.LOGGER_DIR, "%s.log" % (config.APP_NAME,))
         fileHandler = logging.handlers.RotatingFileHandler(loggerFilename, 'w',
                                                             config.LOGGER_MAX_BYTES,
                                                             config.LOGGER_BACKUP_COUNT)
@@ -85,7 +85,11 @@ def _setup():
         fileHandler.setFormatter(fileFormatter)
         _logger.addHandler(fileHandler)
 
-    _logger.setLevel(logging._NameToLevel(config.LOGGER_LEVEL))
+    try:
+        names = logging._levelNames
+    except AttributeError:
+        names = logging._nameToLevel
+    _logger.setLevel(names[config.LOGGER_LEVEL])
 
     def _trace(self, msg, *args, **kwargs):
         """
@@ -95,10 +99,12 @@ def _setup():
             self._log(logging.TRACE, msg, args, **kwargs)
     logging.Logger.trace = _trace
 
-    def _exception(self, msg, *args, exc_info=True, **kwargs):
+    def _exception(self, msg, *args, **kwargs):
         """
         Log 'msg % args' with severity 'TRACE'.
         """
+        exc_info = kwargs.pop('exc_info',True)
+
         if self.isEnabledFor(logging.TRACE):
             self._log(logging.EXCEPTION, msg, args, exc_info=exc_info, **kwargs)
     logging.Logger.exception = _exception
