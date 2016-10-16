@@ -174,33 +174,6 @@ class Device(object):
         """
         pass
 
-    #def register(self):
-        #"""
-        #"""
-        #logger.trace("Device._register()")
-
-        #for key, value in self.__class__.__dict__.items():
-            #if key.startswith("FB_"):
-                #logger.debug("Device._register(): %s=(%s)" % (key, repr(value)))
-                #cls = value["cls"]
-
-                ## Remove 'cls' key from FB_xxx dict
-                ## Use a copy to let original untouched
-                #value_ = dict(value)
-                #value_.pop('cls')
-                #ETS().register(cls, **value_)
-
-    #def weave(self):
-        #"""
-        #"""
-        #logger.trace("Device._weave()")
-
-        #for key, value in self.__class__.__dict__.items():
-            #if key.startswith("LNK_"):
-                #logger.debug("Device._weave(): %s=(%s)" % (key, repr(value)))
-                #ETS().weave(**value)
-
-
 if __name__ == '__main__':
     import unittest
 
