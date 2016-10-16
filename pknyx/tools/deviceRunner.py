@@ -69,16 +69,6 @@ from pknyx.stack.individualAddress import IndividualAddress
 from pknyx.stack.groupAddress import GroupAddress, GroupAddressValueError
 
 
-class _NullDevice(object):
-    """ A substitute for stdout/stderr that writes to nowhere.
-    """
-    def write(self, s):
-        pass
-
-    def flush(self):
-        pass
-
-
 class DeviceRunnerValueError(PKNyXValueError):
     """
     """
@@ -135,11 +125,12 @@ class DeviceRunner(object):
 
         # Close stdxxx
         sys.stdin.close()
-        sys.__stdin__ = sys.stdin
+        sys.__stdin__ = sys.stdin = open('/dev/null','r')
+
         sys.stdout.close()
-        sys.stdout = sys.__stdout__ = _NullDevice()
+        sys.stdout = sys.__stdout__ = open('/dev/null','w')
         sys.stderr.close()
-        sys.stderr = sys.__stderr__ = _NullDevice()
+        sys.stderr = sys.__stderr__ = open('/dev/null','w')
 
         # ??? does not work if enable
         #for fd in xrange(4, 1024):
