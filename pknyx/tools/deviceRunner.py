@@ -132,13 +132,6 @@ class DeviceRunner(object):
         sys.stderr.close()
         sys.stderr = sys.__stderr__ = open('/dev/null','w')
 
-        # ??? does not work if enable
-        #for fd in xrange(4, 1024):
-            #try:
-                #os.close(fd)
-            #except OSError:
-                #pass
-
     def check(self, printGroat=False):
         """
         """
@@ -148,7 +141,6 @@ class DeviceRunner(object):
         self._device = DEVICE(self._deviceIndAddr)
 
         ets.register(self._device)
-        ets.weave(self._device)
 
         if printGroat:
             logger.info(ets.getGrOAT(self._device, "gad"))

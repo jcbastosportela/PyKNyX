@@ -48,10 +48,6 @@ dev2 = Dev2("1.1.2")
 ets.register(dev1)
 ets.register(dev2)
 
-ets.link(dev1)
-ets.link(dev2)
-#ets.link(dev=dev2, dp="dp_4", gad="1/1/4")
-
 # TODO?
 ets._gadMap = {1: {'name': "heating",
                     1: {'name': "setpoint",

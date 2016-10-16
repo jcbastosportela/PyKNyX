@@ -38,7 +38,7 @@ class WeatherStation(Device):
 station = WeatherStation("1.2.3")
 
 # Linking weather station Datapoints to Group Addresses
-ets.link(station)
+ets.register(station)
 
 ets.printGroat(station, by="gad")
 ets.printGroat(station, by="go")

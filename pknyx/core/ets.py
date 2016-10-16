@@ -100,13 +100,6 @@ class ETS(object):
             Scheduler().doRegisterJobs(fb)
             Notifier().doRegisterJobs(fb)
 
-    def weave(self, device):
-        """ Weave (link, bind...) device datapoints
-
-        @param device: device to weave
-        @type device: L{Device<pknyx.core.device>}
-        """
-        flags = None
         for fb_, dp, gad in device.lnk:
 
             # Retrieve FunctionalBlock from device
@@ -142,9 +135,6 @@ class ETS(object):
             # @todo: find a better way
             if groupObject.group is None:
                 groupObject.group = group
-
-    bind = weave
-    link = weave  # nice names too!
 
     def getGrOAT(self, device, by="gad", outFormatLevel=3):
         """ Build the Group Object Association Table

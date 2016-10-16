@@ -74,8 +74,6 @@ ets._gadMap = GAD_MAP
 
 ets.register(dev1)
 ets.register(dev2)
-ets.weave(dev1)
-ets.weave(dev2)
 
 ets.printGroat(dev1,by="gad")
 ets.printGroat(dev2,by="gad")

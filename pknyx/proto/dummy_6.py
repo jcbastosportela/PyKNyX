@@ -143,7 +143,6 @@ class WeatherStation(Device):
 station = WeatherStation("1.2.3")
 
 ets.register(station)
-ets.link(station)
 
 # Linking weather station Datapoints to Group Address
 

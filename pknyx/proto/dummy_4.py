@@ -55,8 +55,6 @@ lights = Lights("1.1.1")
 
 ets.register(lights)
 
-ets.link(lights)
-
 ets.printGroat(lights,by="gad")
 print()
 print()

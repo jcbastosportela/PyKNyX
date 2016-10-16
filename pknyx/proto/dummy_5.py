@@ -120,10 +120,6 @@ station = WeatherStation("1.2.3")
 
 ets.register(station)
 
-# Linking weather station Datapoints to Group Address
-ets.link(station)
-
-print()
 print()
 ets.printGroat(station,"gad")
 print()

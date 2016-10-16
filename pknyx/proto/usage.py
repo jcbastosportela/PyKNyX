@@ -225,8 +225,7 @@ Documentation
 #
 #
 #vmc = VMC("1.2.3")
-#ETS.link(vmc, "temp_entree", "1/1/1")
-#ETS.link(vmc, "temp_entree", ("1/1/1", "1/1/2"))
+#ets.register(vmc)
 
 ################################################################################
 
