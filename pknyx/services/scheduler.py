@@ -101,7 +101,7 @@ class Scheduler(object):
     TYPE_AT = 2
     TYPE_CRON = 3
 
-    def __init__(self, autoStart=False):
+    def __init__(self, autoStart=False, type_=BackgroundScheduler):
         """ Init the Scheduler object
 
         @param autoStart: if True, automatically starts the scheduler
@@ -113,7 +113,7 @@ class Scheduler(object):
 
         self._pendingFuncs = []
 
-        self._apscheduler = BackgroundScheduler()
+        self._apscheduler = type_()
         self._apscheduler.add_listener(self._listener, mask=(EVENT_JOB_ERROR|EVENT_JOB_MISSED))
 
         if autoStart:
