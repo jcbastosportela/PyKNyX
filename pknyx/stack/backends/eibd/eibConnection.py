@@ -28,27 +28,27 @@
 import errno;
 import socket;
 
-class EIBBuffer:
+class EIBBuffer(object):
   def __init__(self, buf = []):
     self.buffer = buf
 
-class EIBAddr:
+class EIBAddr(object):
   def __init__(self, value = 0):
     self.data = value
 
-class EIBInt8:
+class EIBInt8(object):
   def __init__(self, value = 0):
     self.data = value
 
-class EIBInt16:
+class EIBInt16(object):
   def __init__(self, value = 0):
     self.data = value
 
-class EIBInt32:
+class EIBInt32(object):
   def __init__(self, value = 0):
     self.data = value
 
-class EIBConnection:
+class EIBConnection(object):
   def __init__(self):
     self.data = []
     self.readlen = 0

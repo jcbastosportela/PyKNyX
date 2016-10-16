@@ -250,7 +250,7 @@ if __name__ == '__main__':
             pass
 
         def test_constructor(self):
-            class DummyClass:
+            class DummyClass(object):
                 pass
 
             with self.assertRaises(DPTXlatorValueError):

@@ -69,7 +69,7 @@ from pknyx.stack.individualAddress import IndividualAddress
 from pknyx.stack.groupAddress import GroupAddress, GroupAddressValueError
 
 
-class _NullDevice:
+class _NullDevice(object):
     """ A substitute for stdout/stderr that writes to nowhere.
     """
     def write(self, s):
