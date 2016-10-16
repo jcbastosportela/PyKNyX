@@ -1,0 +1,14 @@
+Metadata-Version: 1.1
+Name: pKNyX-MoaT
+Version: 2.0.0.dev1
+Summary: Python KNX framework (MoaT version)
+Home-page: http://www.pknyx.org
+Author: Matthias Urlichs
+Author-email: matthias@urlichs.de
+License: GPL
+Download-URL: https://gitgub.com/knxd/pKNyX
+Description: This is the "knxd version"
+        
+        The original documentation can be found at http://www.pknyx.org
+        
+Platform: UNKNOWN

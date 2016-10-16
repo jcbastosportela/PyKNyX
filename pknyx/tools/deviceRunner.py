@@ -120,6 +120,8 @@ class DeviceRunner(object):
         mapper = GroupAddressTableMapper()
         mapper.loadFrom(gadMapPath)
 
+        self.ets = ETS()
+
     def _doubleFork(self):
         """ Double fork.
         """
@@ -154,12 +156,12 @@ class DeviceRunner(object):
         from device import DEVICE
         self._device = DEVICE(self._deviceIndAddr)
 
-        ETS().register(self._device)
-        ETS().weave(self._device)
+        ets.register(self._device)
+        ets.weave(self._device)
 
         if printGroat:
-            logger.info(ETS().getGrOAT(self._device, "gad"))
-            logger.info(ETS().getGrOAT(self._device, "go"))
+            logger.info(ets.getGrOAT(self._device, "gad"))
+            logger.info(ets.getGrOAT(self._device, "go"))
 
     def run(self, daemon=False):
         """

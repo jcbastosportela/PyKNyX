@@ -62,7 +62,6 @@ class ETSValueError(PKNyXValueError):
     """
     """
 
-@six.add_metaclass(Singleton)
 class ETS(object):
     """ ETS class
 
