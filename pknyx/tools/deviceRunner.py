@@ -161,14 +161,14 @@ class DeviceRunner(object):
             logger.info(ETS().getGrOAT(self._device, "gad"))
             logger.info(ETS().getGrOAT(self._device, "go"))
 
-    def run(self, dameon=False):
+    def run(self, daemon=False):
         """
         """
         logger.trace("Device.run()")
 
         self.check()
 
-        if dameon:
+        if daemon:
             logger.info("Run process as daemon...")
             self._doubleFork()
 
