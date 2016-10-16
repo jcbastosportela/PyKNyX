@@ -41,14 +41,14 @@ Documentation
 
 L{Flags} class handles L{GroupObject<pknyx.core.groupObject>} bus behaviour.
 
-Meaning of each flag, when set:
- - C - comm.:     the GroupObject interacts with the real KNX bus (even if not set, pKNyX communication remains)
- - R - read:      the GroupObject sends its associated Datapoint value on the bus when he receives a Read request on one of its bound GAD
- - W - write:     the GroupObject updates its associated Datapoint value if he receives a Write request on one of its bound GAD
- - T - tansmit:   the GroupObject sends its associated Datapoint value on the first bounded GAD when this value changes
- - U - update:    the GroupObject updates its associated Datapoint value if he receives a Response request on one of its bound GAD
- - I - init:      the GroupObject sends a Read request at startup
- - S - stateless: like T, but transmits its associated Datapoint value even if the value didn't changed (usefull for scenes)
+Meaning of each flag for the GroupObject, when set:
+ - C - comm.:     may transmit to the KNX bus
+ - R - read:      send a response with its Datapoint value to the bus when it receives a Read request
+ - W - write:     update its Datapoint value when it receives a Write request
+ - T - transmit:  send its Datapoint value to the first bounded GAD when it changes
+ - U - update:    update its Datapoint value if it receives a Response request
+ - I - init:      sends a Read request at startup
+ - S - stateless: like T, but transmits its Datapoint value even if it didn't change (useful for scenes)
 
 Note: only one Datapoint per GAD should have its R flag set.
 
@@ -58,6 +58,23 @@ Flags in ETS:
 
 Usage
 =====
+
+An actor will have a single data point with one group object CW (receiving
+a command for setting the output) and another group object CRT (the
+output's state).
+
+An input will have one data point with a group object CT (send a command)
+and another data point with its group object CWUI (receive the actor's state).
+A "toggle" command reads the second DP's state, inverts it, and writes it
+to the first DP.
+
+The master-off switch will have one data point CS.
+
+A shadow actor, i.e. an actor that monitors another actor's state, will
+have one data point CWUI (receive state). It may have another (W) that
+monitors the actual command. Such an actor is able to issue an alert if
+there is no state-has-changed Write after a (command, state-changing)
+Write.
 
 @author: Frédéric Mantegazza
 @copyright: (C) 2013-2015 Frédéric Mantegazza
