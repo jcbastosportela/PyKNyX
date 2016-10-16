@@ -66,7 +66,7 @@ if __name__ == '__main__':
     lights.start()
     while True:
         try:
-            time.sleep(99999)
+            time.sleep(9999)
         except KeyboardInterrupt:
             lights.stop()
             break

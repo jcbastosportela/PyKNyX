@@ -220,7 +220,9 @@ class UDPTransceiver(Transceiver):
                         logger.debug("UDPTransceiver._transmitterLoop(): transmission=%s" % repr(transmission))
 
                 else:
-                    time.sleep(0.001)
+                    # this should not happen
+                    #time.sleep(0.001)
+                    raise NotImplementedError("getOutFrame returned None instead of waiting")
 
             except:
                 logger.exception("UDPTransceiver._transmitterLoop()")

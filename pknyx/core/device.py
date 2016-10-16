@@ -162,7 +162,7 @@ class Device(object):
         Can be overriden to launch servers or so.
         """
         while True:
-            time.sleep(0.001)
+            time.sleep(9999)
 
     def stop(self):
         """ Stop device execution
