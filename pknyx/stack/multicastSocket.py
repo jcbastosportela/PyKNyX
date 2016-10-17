@@ -173,10 +173,9 @@ class MulticastSocketTransmit(MulticastSocketBase):
     def transmit(self, data):
         """
         """
-        length = 0
-        while length < len(data):
-            l = self.sendto(data, (self._mcastAddr, self._mcastPort))
-            length += l
+        l = self.sendto(data, (self._mcastAddr, self._mcastPort))
+        if l > 0 and l < len(data):
+            raise IOError("partial transmit: %d of %d to %s", l, len(data), self) 
 
 
 if __name__ == '__main__':
