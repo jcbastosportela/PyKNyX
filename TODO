@@ -1,0 +1,16 @@
+refactor ETS and devices
+
+testing: move to tests/FOO
+
+Setup: deprecate magic dict()s and their magic names
+
+do group dispatch earlier
+
+document classes inline instead of relying on some VPP design file
+
+? support asyncio
+
+! add more interfaces (knxd, TCP-to-gateway)
+
+? replace knxd
+
