@@ -1,5 +1,5 @@
 =========================
-The MoaT Version of pknyx
+The knxd Version of pknyx
 =========================
 
 Author: Matthias Urlichs <matthias@urlichs.de>
@@ -7,8 +7,16 @@ Author: Matthias Urlichs <matthias@urlichs.de>
 Rationale
 =========
 
-When I started looking at pknyx, some issues were apparent that motivated
-me to radically rewrite some aspects of pknyx.
+Some aspects of pKNyX really don't work for me and shouted "Rewrite me!".
+I couldn't ignore that temptation.
+
+The KNX router I maintain (`knxd`_) is written in somewhat-dated C++ which
+requires a non-standard library. pKNyX has the potential to entirely
+replace `knxd`_. So I decided to get started.
+
+_knxd: https://github.com/knxd/knxd
+
+The following sub-chapters describe the changes I implemented.
 
 Using more than one device
 --------------------------
@@ -60,6 +68,18 @@ devices than that, an error is triggered.
 The default is to share the ETS object's address with the first device gets
 registered. This obviously only works when you only have one device.
 
+Split off tests
+---------------
+
+Originally, tests were based on unittest and included in the main code.
+You tested a module by simply running it.
+
+I decided to move all tests into a "tests" directory.
+
+* Use `pytest` instead of unittest (much nicer)
+* Ability to test installed or other versions of pKNyX
+* More easily runnable by ``setup.py``
+
 Hop count
 +++++++++
 
@@ -67,7 +87,7 @@ Experience shows that the KNX protocol's strange idea to have a hop count
 of 7 that's never decremented is a bad idea. pnkyx always decrements the
 hop counter.
 
-API Changes in the MoaT version 
+API Changes in the knxd version 
 ===============================
 
 ETS
