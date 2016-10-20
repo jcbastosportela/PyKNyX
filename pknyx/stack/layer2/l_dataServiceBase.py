@@ -122,7 +122,7 @@ class L_DataServiceBase(object):
     def cleanup(self):
         raise NotImplementedError
 
-def L_DataServiceBroadcast(L_DataServiceBase):
+class L_DataServiceBroadcast(L_DataServiceBase):
     """
     A data service which is attached to a broadcast medium.
     """
@@ -132,7 +132,7 @@ def L_DataServiceBroadcast(L_DataServiceBase):
         super(L_DataServiceBroadcast, self).__init__(*args, **kwargs)
 
         self._physAddrs = set()
-        self._physAddrs.add(IndividualAddress(7,15,15) ## programming
+        self._physAddrs.add(IndividualAddress(7,15,15)) ## programming
 
     def wantsIndividualFrame(self, cEMI, force=False):
         if not force and cEMI.destinationAddress not in self._physAddrs:
@@ -142,7 +142,7 @@ def L_DataServiceBroadcast(L_DataServiceBase):
     def addAddr(self, addr):
         self._physAddrs.add(self)
 
-def L_DataServiceUnicast(L_DataServiceBase):
+class L_DataServiceUnicast(L_DataServiceBase):
     """
     A data service attached to a single device (usually via pknyx.stack.stack.Stack)
     """

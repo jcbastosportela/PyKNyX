@@ -57,7 +57,6 @@ from pknyx.stack.layer7.a_groupDataService import A_GroupDataService
 from pknyx.stack.layer4.t_groupDataService import T_GroupDataService
 from pknyx.stack.layer3.n_groupDataService import N_GroupDataService
 from pknyx.stack.layer2.l_dataService import L_DataService
-from pknyx.stack.transceiver.udpTransceiver import UDPTransceiver
 from pknyx.stack.priority import Priority
 
 

@@ -63,7 +63,7 @@ from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.result import Result
 from pknyx.stack.priorityQueue import PriorityQueue
 from pknyx.stack.multicastSocket import MulticastSocketReceive, MulticastSocketTransmit
-from pknyx.stack.layers.l_dataServiceBase import L_DataServiceBroadcast
+from pknyx.stack.layer2.l_dataServiceBase import L_DataServiceBroadcast
 from pknyx.stack.knxnetip.knxNetIPHeader import KNXnetIPHeader, KNXnetIPHeaderValueError
 from pknyx.stack.cemi.cemiLData import CEMILData, CEMIValueError
 

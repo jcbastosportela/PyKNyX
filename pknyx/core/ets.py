@@ -60,6 +60,7 @@ from pknyx.services.notifier import Notifier
 from pknyx.services.groupAddressTableMapper import GroupAddressTableMapper
 from pknyx.stack.priorityQueue import PriorityQueue
 from pknyx.stack.layer2.l_dataService import PRIORITY_DISTRIBUTION
+from pknyx.stack.transceiver.udpTransceiver import UDPTransceiver
 
 
 class ETSValueError(PKNyXValueError):

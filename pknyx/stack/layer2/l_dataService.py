@@ -58,7 +58,6 @@ from pknyx.stack.priorityQueue import PriorityQueue
 from pknyx.stack.layer3.n_groupDataListener import N_GroupDataListener
 from pknyx.stack.layer2.l_dataServiceBase import L_DataServiceUnicast
 from pknyx.stack.cemi.cemiLData import CEMILData
-from pknyx/stack/transceiver/transceiver import UnicastTransceiver
 
 PRIORITY_DISTRIBUTION = (-1, 3, 2, 1)
 
@@ -125,7 +124,5 @@ class L_DataService(L_DataServiceUnicast):
                 else:
                     self._ldl.dataInd(cEMI)
                     return True
-            except:
-                logger.exception("L_DataService.run()")
         return False
 

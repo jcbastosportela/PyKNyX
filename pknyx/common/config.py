@@ -40,7 +40,7 @@ import os.path
 
 
 # Name
-APP_NAME = "pKNyX MoaT"
+APP_NAME = "pKNyX knxd"
 APP_VERSION = "2.0.0.dev.1"
 
 # Logger
