@@ -40,8 +40,8 @@ import os.path
 
 
 # Name
-APP_NAME = "pKNyX"
-APP_VERSION = "1.0.1"
+APP_NAME = "pKNyX MoaT"
+APP_VERSION = "2.0.0.dev.1"
 
 # Logger
 LOGGER_STREAM_FORMAT = "%(threadName)s::%(message)s"

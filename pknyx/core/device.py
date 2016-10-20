@@ -53,6 +53,7 @@ from pknyx.common.exception import PKNyXValueError
 from pknyx.common.frozenDict import FrozenDict
 from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.stack import Stack
+from pknyx.stack.transceiver.transceiver import UnicastTransceiver
 
 import time
 
@@ -115,24 +116,18 @@ class Device(object):
 
         return self
 
-    def __init__(self, individualAddress):
+    def __init__(self, ets, individualAddress=None):
         """ Init Device object.
         """
-        super(Device, self).__init__()
+        super(Device, self).__init__(ets)
 
-        self._individualAddress = individualAddress
-
-        self._stack = Stack(self._individualAddress)
+        self._stack = Stack(individualAddress)
 
         self.init()
 
     @property
     def desc(self):
         return self._desc
-
-    @property
-    def indAddr(self):
-        return self._individualAddress
 
     @property
     def stack(self):
@@ -156,23 +151,10 @@ class Device(object):
         """
         self._stack.start()
 
-    def mainLoop(self):
-        """ Main loop of the device
-
-        Can be overriden to launch servers or so.
-        """
-        while True:
-            time.sleep(9999)
-
     def stop(self):
         """ Stop device execution
         """
         self._stack.stop()
-
-    def shutdown(self):
-        """ Additional user shutdown
-        """
-        pass
 
 if __name__ == '__main__':
     import unittest

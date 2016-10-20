@@ -84,7 +84,7 @@ class TimerFB(FunctionalBlock):
 
     DESC = "Timer FB"
 
-    def _init(self):
+    def init(self):
         """ Additional init of the timer functional block
         """
         self._timer = 0
@@ -141,12 +141,8 @@ class Timer(Device):
 
     DESC = "Timer device"
 
-    #def _init(self):
+    #def init(self):
         #""" Additional init of the timer device
-        #"""
-
-    #def _shutdown(self):
-        #""" Additional shutdown of the timer device
         #"""
 
 

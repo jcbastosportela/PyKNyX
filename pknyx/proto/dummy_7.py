@@ -266,10 +266,10 @@ def main():
 
     #print()
     #print()
-    #ets.printGroat(dev,"gad")
+    #ets.printGroat("gad")
     #print()
     #print()
-    #ets.printGroat(dev,"go")
+    #ets.printGroat("go")
 
     # Start the scheduler
     # @todo: move to a better place
@@ -279,7 +279,7 @@ def main():
     print()
 
     # Run the stack main loop (blocking call)
-    station.stack.mainLoop()
+    ets.mainLoop()
 
     schedule.stop()
 

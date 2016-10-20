@@ -110,7 +110,7 @@ class DeviceRunner(object):
         mapper = GroupAddressTableMapper()
         mapper.loadFrom(gadMapPath)
 
-        self.ets = ETS()
+        self.ets = ETS(self._deviceIndAddr)
 
     def _doubleFork(self):
         """ Double fork.
@@ -140,7 +140,7 @@ class DeviceRunner(object):
         from device import DEVICE
         self._device = DEVICE(self._deviceIndAddr)
 
-        ets.register(self._device)
+        self.ets.register(self._device)
 
         if printGroat:
             logger.info(ets.getGrOAT(self._device, "gad"))
@@ -157,22 +157,7 @@ class DeviceRunner(object):
             logger.info("Run process as daemon...")
             self._doubleFork()
 
-        self._device.start()
-        Scheduler().start()
-        time.sleep(1)  # wait for things to start
-        try:
-            self._device.mainLoop()
-
-        except KeyboardInterrupt:
-            logger.warning("Device execution canceled (SIGTERM)")
-
-        except:
-            logger.exception("deviceRunner.run()")
-
-        finally:
-            Scheduler().stop()
-            self._device.stop()
-            self._device.shutdown()
+        ets.mainLoop()
 
 
 if __name__ == '__main__':

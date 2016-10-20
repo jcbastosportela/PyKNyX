@@ -28,7 +28,7 @@ or see:
 Module purpose
 ==============
 
-Transceiver management
+Runs a Layer2 driver for multicasting
 
 Implements
 ==========
@@ -61,11 +61,9 @@ import socket
 from pknyx.common.exception import PKNyXValueError
 from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.result import Result
-from pknyx.stack.knxAddress import KnxAddress
-from pknyx.stack.groupAddress import GroupAddress
-from pknyx.stack.individualAddress import IndividualAddress
+from pknyx.stack.priorityQueue import PriorityQueue
 from pknyx.stack.multicastSocket import MulticastSocketReceive, MulticastSocketTransmit
-from pknyx.stack.transceiver.transceiver import Transceiver
+from pknyx.stack.layers.l_dataServiceBase import L_DataServiceBroadcast
 from pknyx.stack.knxnetip.knxNetIPHeader import KNXnetIPHeader, KNXnetIPHeaderValueError
 from pknyx.stack.cemi.cemiLData import CEMILData, CEMIValueError
 
@@ -75,7 +73,7 @@ class UDPTransceiverValueError(PKNyXValueError):
     """
 
 
-class UDPTransceiver(Transceiver):
+class UDPTransceiver(L_DataServiceBroadcast):
     """ UDPTransceiver class
 
     @ivar _mcastAddr:
@@ -90,11 +88,8 @@ class UDPTransceiver(Transceiver):
     @ivar _transmitter: multicast transmitter loop
     @type _transmitter: L{Thread<threading>}
     """
-    def __init__(self, tLSAP, mcastAddr="224.0.23.12", mcastPort=3671):
+    def __init__(self, ets, mcastAddr="224.0.23.12", mcastPort=3671):
         """
-
-        @param tLSAP:
-        @type tLSAP: L{TransceiverLSAP}
 
         @param mcastAddr: multicast address to bind to
         @type mcastAddr: str
@@ -104,7 +99,9 @@ class UDPTransceiver(Transceiver):
 
         raise UDPTransceiverValueError:
         """
-        super(UDPTransceiver, self).__init__(tLSAP)
+        super(UDPTransceiver, self).__init__()
+
+        self._ets = ets
 
         self._mcastAddr = mcastAddr
         self._mcastPort = mcastPort
@@ -112,16 +109,14 @@ class UDPTransceiver(Transceiver):
         localAddr = socket.gethostbyname(socket.gethostname())
         self._receiverSock = MulticastSocketReceive(localAddr, mcastAddr, mcastPort)
         self._transmitterSock = MulticastSocketTransmit(localAddr, mcastPort, mcastAddr, mcastPort)
+        self._queue = PriorityQueue(PRIORITY_DISTRIBUTION)
+
 
         # Create transmitter and receiver threads
         self._receiver = threading.Thread(target=self._receiverLoop, name="UDP receiver")
-        #self._receiver.setDaemon(True)
+        self._receiver.setDaemon(True)
         self._transmitter = threading.Thread(target=self._transmitterLoop, name="UDP transmitter")
-        #self._transmitter.setDaemon(True)
-
-    @property
-    def tLSAP(self):
-        return self._tLSAP
+        self._transmitter.setDaemon(True)
 
     @property
     def mcastAddr(self):
@@ -139,6 +134,10 @@ class UDPTransceiver(Transceiver):
     def localPort(self):
         return self._receiverSock.localPort
 
+    @property
+    def ets(self):
+        return self._ets
+
     def _receiverLoop(self):
         """
         """
@@ -148,6 +147,8 @@ class UDPTransceiver(Transceiver):
             try:
                 inFrame, (fromAddr, fromPort) = self._receiverSock.receive()
                 logger.debug("UDPTransceiver._receiverLoop(): inFrame=%s (%s, %d)" % (repr(inFrame), fromAddr, fromPort))
+                if fromAddr == self._transmitterSock.localAddress and fromPort == self._transmitterSock.localPort:
+                    continue # we got our own packet
                 inFrame = bytearray(inFrame)
                 try:
                     header = KNXnetIPHeader(inFrame)
@@ -165,25 +166,18 @@ class UDPTransceiver(Transceiver):
                     continue
                 logger.debug("UDPTransceiver._receiverLoop(): cEMI=%s" % cEMI)
 
-                destAddr = cEMI.destinationAddress
-                if isinstance(cEMI.destinationAddress, GroupAddress):
-                    self._tLSAP.putInFrame(cEMI)
-
-                elif isinstance(destAddr, IndividualAddress):
-                    logger.warning("UDPTransceiver._receiverLoop(): unsupported destination address type (%s)" % repr(destAddr))
-                else:
-                    logger.warning("UDPTransceiver._receiverLoop(): unknown destination address type (%s)" % repr(destAddr))
+                self.dataReq(cEMI)
 
             except socket.timeout:
                 pass
-                #logger.exception("UDPTransceiver._receiverLoop()")
 
             except:
                 logger.exception("UDPTransceiver._receiverLoop()")
 
-        self._receiverSock.close()
-
         logger.trace("UDPTransceiver._receiverLoop(): ended")
+
+    def dataInd(self, cEMI):
+        self._queue.add(cEMI, cEMI.priority)
 
     def _transmitterLoop(self):
         """
@@ -192,42 +186,22 @@ class UDPTransceiver(Transceiver):
 
         while self._running:
             try:
-                transmission = self._tLSAP.getOutFrame()
+                cEMI = self._queue.remove()
+                if cEMI is None:
+                    return
 
-                if transmission is not None:
-                    logger.debug("UDPTransceiver._transmitterLoop(): transmission=%s" % repr(transmission))
+                logger.debug("UDPTransceiver._transmitterLoop(): frame=%s" % repr(cEMI))
 
-                    cEMIFrame = transmission.payload
-                    cEMIRawFrame = cEMIFrame.raw
-                    header = KNXnetIPHeader(service=KNXnetIPHeader.ROUTING_IND, serviceLength=len(cEMIRawFrame))
-                    frame = header.frame + cEMIRawFrame
-                    logger.debug("UDPTransceiver._transmitterLoop(): frame= %s" % repr(frame))
+                cEMIFrame = cEMI.frame
+                cEMIRawFrame = cEMIFrame.raw
+                header = KNXnetIPHeader(service=KNXnetIPHeader.ROUTING_IND, serviceLength=len(cEMIRawFrame))
+                frame = header.frame + cEMIRawFrame
+                logger.debug("UDPTransceiver._transmitterLoop(): frame= %s" % repr(frame))
 
-                    try:
-                        self._transmitterSock.transmit(frame)
-                        transmission.result = Result.OK
-                    except:
-                        logger.exception("UDPTransceiver._transmitterLoop()")
-                        transmission.result = Result.ERROR
+                self._transmitterSock.transmit(frame)
 
-                    if transmission.waitConfirm:
-                        transmission.acquire()
-                        try:
-                            transmission.waitConfirm = False
-                            transmission.notify()
-                        finally:
-                            transmission.release()
-                        logger.debug("UDPTransceiver._transmitterLoop(): transmission=%s" % repr(transmission))
-
-                else:
-                    # this should not happen
-                    #time.sleep(0.001)
-                    raise NotImplementedError("getOutFrame returned None instead of waiting")
-
-            except:
+            except Exception:
                 logger.exception("UDPTransceiver._transmitterLoop()")
-
-        self._transmitterSock.close()
 
         logger.trace("UDPTransceiver._transmitterLoop(): ended")
 
@@ -246,14 +220,9 @@ class UDPTransceiver(Transceiver):
         logger.trace("UDPTransceiver.stop()")
 
         self._running = False
-
-    def join(self):
-        """
-        """
-        logger.trace("UDPTransceiver.join()")
-
-        self._transmitter.join()
-        self._receiver.join()
+        self._queue.add(None,0)
+        self._transmitterSock.close()
+        self._receiverSock.close()
 
 
 if __name__ == '__main__':

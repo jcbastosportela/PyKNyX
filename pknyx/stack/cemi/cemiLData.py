@@ -118,6 +118,9 @@ class CEMILData(CEMI):
         else:
             self.frameType = CEMILData.FT_STD_FRAME
 
+    def copy(self):
+        return type(self)(self._frame.copy())
+
     def __repr__(self):
         s= "<CEMILData(mc=%s, priority=%s, src=%s, dest=%s, npdu=%s)>" % \
             (hex(self.messageCode), repr(self.priority), repr(self.sourceAddress), repr(self.destinationAddress), repr(self.npdu))

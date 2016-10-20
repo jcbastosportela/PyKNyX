@@ -81,13 +81,8 @@ class Stack(object):
     @ivar _lds: Transport layer Data Service object
     @type _lds: L{L_DataService}
 
-    @ivar _tc: transciever
-    @type _tc: L{Transceiver<pknyx.stack.transceiver.transceiver>}
     """
-    PRIORITY_DISTRIBUTION = (-1, 3, 2, 1)
-
-    def __init__(self, individualAddress=IndividualAddress("0.0.0"),
-                 transCls=UDPTransceiver, transParams=dict(mcastAddr="224.0.23.12", mcastPort=3671)):
+    def __init__(self, ets, individualAddress=None):
         """
 
         raise StackValueError:
@@ -96,8 +91,7 @@ class Stack(object):
         if not isinstance(individualAddress, IndividualAddress):
             individualAddress = IndividualAddress(individualAddress)
 
-        self._lds = L_DataService(Stack.PRIORITY_DISTRIBUTION, individualAddress)
-        self._tc = transCls(self._lds, **transParams)
+        self._lds = L_DataService(ets, individualAddress=individualAddress)
         self._ngds = N_GroupDataService(self._lds)
         self._tgds = T_GroupDataService(self._ngds)
         self._agds = A_GroupDataService(self._tgds)
@@ -108,15 +102,13 @@ class Stack(object):
 
     @property
     def individualAddress(self):
-        return self._lds.individualAddress
+        return self._lds.physAddr
 
     def start(self):
-        """ Start the stack threads
+        """
+        Start the stack. All we need to do is to read initial state from the bus.
         """
         logger.trace("Stack.start()")
-
-        self._lds.start()
-        self._tc.start()
 
         time.sleep(0.25)
 
@@ -136,28 +128,11 @@ class Stack(object):
         logger.debug("Stack.start(): running")
 
     def stop(self):
-        """ Stop the stack threads
         """
-        logger.trace("Stack.stop()")
-
-        self._tc.stop()
-        self._lds.stop()
-        self._tc.join()
-        self._lds.join()
-
+        Stop the stack. Nothing to do here; all done by device.stop and ets.stop
+        """
+        #logger.trace("Stack.stop()")
         logger.debug("Stack.stop(): stopped")
-
-    def mainLoop(self):
-        """ Start the main loop
-
-        Blocking.
-        """
-        self.start()
-        try:
-            while True:
-                time.sleep(9999)
-        except KeyboardInterrupt:
-            self.stop()
 
 
 if __name__ == '__main__':

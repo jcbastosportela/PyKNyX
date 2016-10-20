@@ -40,5 +40,5 @@ station = WeatherStation("1.2.3")
 # Linking weather station Datapoints to Group Addresses
 ets.register(station)
 
-ets.printGroat(station, by="gad")
-ets.printGroat(station, by="go")
+ets.printGroat(by="gad")
+ets.printGroat(by="go")

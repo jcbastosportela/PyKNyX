@@ -56,17 +56,18 @@ from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.individualAddress import IndividualAddress
 from pknyx.stack.priorityQueue import PriorityQueue
 from pknyx.stack.layer3.n_groupDataListener import N_GroupDataListener
-from pknyx.stack.transceiver.transceiverLSAP import TransceiverLSAP
-from pknyx.stack.transceiver.transmission import Transmission
+from pknyx.stack.layer2.l_dataServiceBase import L_DataServiceUnicast
 from pknyx.stack.cemi.cemiLData import CEMILData
+from pknyx/stack/transceiver/transceiver import UnicastTransceiver
 
+PRIORITY_DISTRIBUTION = (-1, 3, 2, 1)
 
 class L_DSValueError(PKNyXValueError):
     """
     """
 
 
-class L_DataService(threading.Thread, TransceiverLSAP):  # @todo: do not inherits Thread
+class L_DataService(L_DataServiceUnicast):
     """ L_DataService class
 
     @ivar _individualAddress: own Individual Address
@@ -81,128 +82,52 @@ class L_DataService(threading.Thread, TransceiverLSAP):  # @todo: do not inheri
     @ivar _ldl: link data listener
     @type _ldl: L{L_DataListener<pknyx.core.layer2.l_dataListener>}
 
-    @ivar _running: True if thread is running
-    @type _running: bool
     """
-    def __init__(self, priorityDistribution, individualAddress=IndividualAddress("0.0.0")):
-        """
 
-        @param individualAddress: own Individual Address
-        @type individualAddress: str or L{IndividualAddress}
-
-        @param priorityDistribution:
-        @type priorityDistribution:
-
-        raise L_DSValueError:
-        """
-        super(L_DataService, self).__init__(name="LinkLayer")
-
-        if not isinstance(individualAddress, IndividualAddress):
-            individualAddress = IndividualAddress(individualAddress)
-        self._individualAddress = individualAddress
-
-        self._inQueue  = PriorityQueue(priorityDistribution)
-        self._outQueue = PriorityQueue(priorityDistribution)
-
-        self._ldl = None
-
-        self._running = False
-
-        self.setDaemon(True)
-        #self.start()
-
-    @property
-    def individualAddress(self):
-        return self._individualAddress
+    _ldl = None
 
     def setListener(self, ldl):
         """
 
-        @param ldl: listener to use to transmit data
+        @param ldl: listener to use to receive data
         @type ldl: L{L_GroupDataListener<pknyx.core.layer2.l_groupDataListener>}
         """
         self._ldl = ldl
 
-    def putInFrame(self, cEMI):
-        """ Set input frame
-
-        @param cEMI:
-        @type cEMI:
-        """
-        logger.debug("L_DataService.putInFrame(): cEMI=%s" % cEMI)
-
-        # Get priority from cEMI
-        priority = cEMI.priority
-
-        # Add to inQueue and notify inQueue handler
-        self._inQueue.add(cEMI, priority)
-
-    def getOutFrame(self):
-        """ Get output frame
-
-        Blocks until there is a transmission pending in outQueue, then returns this transmission
-
-        @return: pending transmission in outQueue
-        @rtype: L{Transmission}
-        """
-        transmission = self._outQueue.remove()
-        return transmission
-
     def dataReq(self, cEMI):
         """
+        Transmit a frame, i.e. forward to ETS.
         """
         logger.debug("L_DataService.dataReq(): cEMI=%s" % cEMI)
 
         # Add source address to cEMI
-        cEMI.sourceAddress = self._individualAddress
+        if self.physAddr is NOT_REQUIRED:
+            cEMI.sourceAddress = self.emi.addr
+        else:
+            cEMI.sourceAddress = self.physAddr
 
-        priority = cEMI.priority
+        # Let EMI distribute the packet
+        super(L_DataService, self).dataReq(cEMI)
 
-        transmission = Transmission(cEMI.frame)
-        transmission.acquire()
-        try:
-            self._outQueue.add(transmission, priority)
-
-            while transmission.waitConfirm:
-                transmission.wait()
-        finally:
-            transmission.release()
-
-        return transmission.result
-
-    def run(self):
-        """ inQueue handler main loop
+    def dataInd(self, cEMI):
         """
-        logger.trace("L_DataService.run()")
+        Receive a frame from ETS.
 
-        self._running = True
-        while self._running:
-            try:
-
-                # Get incoming frame from inQueue
-                cEMI = self._inQueue.remove()
-                logger.debug("L_DataService.run(): cEMI=%s" % cEMI)
-
-                srcAddr = cEMI.sourceAddress
-                if srcAddr != self._individualAddress:  # Avoid loop
-                    if cEMI.messageCode == CEMILData.MC_LDATA_IND:  #in (CEMILData.MC_LDATA_CON, CEMILData.MC_LDATA_IND):
-                        if self._ldl is None:
-                            logger.warning("L_GroupDataService.run(): not listener defined")
-                        else:
-                            self._ldl.dataInd(cEMI)
-
+        Common code for individually- and group-addressed frames.
+        Distinguishing between individual and group receivers is done at
+        higher levels.
+        """
+        srcAddr = cEMI.sourceAddress
+        if self.physAddr != NOT_REQUIRED and srcAddr != self.physAddr:  # Avoid loop
+            if cEMI.messageCode == CEMILData.MC_LDATA_IND:  #in (CEMILData.MC_LDATA_CON, CEMILData.MC_LDATA_IND):
+                if self._ldl is None:
+                    logger.warning("L_GroupDataService.run(): not listener defined")
+                else:
+                    self._ldl.dataInd(cEMI)
+                    return True
             except:
                 logger.exception("L_DataService.run()")
-
-        logger.trace("L_DataService.run(): ended")
-
-    def stop(self):
-        """ stop thread
-        """
-        logger.trace("L_DataService.stop()")
-
-        self._running = False
-
+        return False
 
 if __name__ == '__main__':
     import unittest

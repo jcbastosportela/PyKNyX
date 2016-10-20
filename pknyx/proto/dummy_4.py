@@ -55,10 +55,10 @@ lights = Lights("1.1.1")
 
 ets.register(lights)
 
-ets.printGroat(lights,by="gad")
+ets.printGroat(by="gad")
 print()
 print()
-ets.printGroat(lights,by="go")
+ets.printGroat(by="go")
 print()
 print()
 

@@ -47,36 +47,73 @@ Usage
 """
 
 import six
+import threading
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
 from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.flags import Flags
+from pknyx.stack.individualAddress import IndividualAddress
 from pknyx.stack.groupAddress import GroupAddress
 from pknyx.services.scheduler import Scheduler
 from pknyx.services.notifier import Notifier
 from pknyx.services.groupAddressTableMapper import GroupAddressTableMapper
+from pknyx.stack.priorityQueue import PriorityQueue
+from pknyx.stack.layer2.l_dataService import PRIORITY_DISTRIBUTION
 
 
 class ETSValueError(PKNyXValueError):
     """
     """
 
-class ETS(object):
+class ETS(threading.Thread):
     """ ETS class
 
-    @ivar _stack: KNX stack object
-    @type _stack: L{Stack<pknyx.stack.stack>}
-
-    @ivar _functionalBlocks: registered functional blocks
-    @type _functionalBlocks: set of L{FunctionalBlocks<pknyx.core.functionalBlocks>}
+    @ivar _devices: registered devices
+    @type _devices: list of L{Devices<pknyx.core.device>}
 
     raise ETSValueError:
     """
-    def __init__(self):
+    def __init__(self, addr, addrRange=-1,
+                 transCls=UDPTransceiver,
+                 transParams=dict(mcastAddr="224.0.23.12", mcastPort=3671)):
         """
+        Set up the ETS stack.
+
+        @param addr: the physical address of this stack (and possibly its sole device)
         """
         super(ETS, self).__init__()
+        self._devices = set()
+        self._layer2 = set()
+        self._tc = transCls(**transParams)
+        self._addr = addr
+        self._addrNum = addrRange
+        self._addrAlloc = addr
+        self._queue = PriorityQueue(PRIORITY_DISTRIBUTION)
+
+        self._scheduler = Scheduler()
+        self.setDaemon(True)
+        self.addLayer2(self._tc)
+
+
+    def allocAddress(self):
+        """
+        Return a new physical address for a device.
+        """
+        if self._addrNum == -1:
+            logger.info("Allocate ETS addr %s to device", self._addr)
+            self._addrNum = 0
+            return self._addr
+        if self._addrNum == 0:
+            raise ETSValueError("No free addresses")
+        self._addrNum -= 1
+        self._addrAlloc += 1
+        logger.info("Allocate new ETS addr %s to device", self._addrAlloc)
+        return self._addrAlloc
+
+    @property
+    def addr(self):
+        return self._addr
 
     @property
     def gadMap(self):
@@ -86,14 +123,22 @@ class ETS(object):
     def buildingMap(self):
         return self._buildingMap
 
+    def addLayer2(self, layer2):
+        self._layer2.add(layer2)
+        if self._running:
+            layer2.start()
+
     def register(self, device, buildingMap='root'):
-        """ Register a device
+        """
+        Register a device
 
         This method registers pending scheduler/notifier jobs of all FunctionalBlock of the Device.
 
         @param device: device to register
         @type device: L{Device<pknyx.core.device>}
         """
+        self._devices.append(device)
+
         for fb in device.fb.values():
 
             # Register pending scheduler/notifier jobs
@@ -130,14 +175,132 @@ class ETS(object):
             if groupObject.group is None:
                 groupObject.group = group
 
-    def getGrOAT(self, device, by="gad", outFormatLevel=3):
+        if self._running:
+            device.start()
+
+    def putFrame(self, l2, cEMI):
+        """
+        Add a frame to be processed.
+
+        @param cEMI:
+        @type cEMI:
+        """
+        logger.debug("L_DataService.putInFrame(): cEMI=%s" % cEMI)
+
+        # Get priority from cEMI
+        priority = cEMI.priority
+
+        # Add to inQueue and notify inQueue handler
+        self._queue.add((cEMI,l2), priority)
+
+    def start(self):
+        if self._running:
+            return
+        self._queue = PriorityQueue(PRIORITY_DISTRIBUTION) # clean start
+        super(ETS,self).start()
+
+    def run(self):
+        self._running = True
+        try:
+            for dev in self._l2:
+                dev.start()
+            for dev in self._devices:
+                dev.start()
+            while self._running:
+                msg = self._queue.remove()
+                if msg is None:
+                    return
+                l2,cEMI = msg
+                self.processFrame(l2,cEMI)
+            self._scheduler.start()
+        except Exception:
+            logger.exception("ETS main loop")
+        finally:
+            self._running = False
+
+    def stop(self):
+        self._running = False
+        self._scheduler.stop()
+        self._queue.add(None,0)
+        for dev in self._devices:
+            dev.stop()
+        for dev in self._l2:
+            dev.stop()
+
+    def processFrame(self, l2, cEMI):
+        """
+        Forward the frame @cEMI, received from layer2 device @l2, to all
+        other eligible interfaces.
+        """
+
+        logger.trace("recv: get %s from %s", cEMI, l2)
+        destAddr = cEMI.destinationAddress
+
+        hopCount = cEMI.hopCount
+        if hopCount == 7:
+            # Refuse to transmit any packet with hopcount=7.
+            # They may cause endlessly-looping packets. A multicast storm is
+            # bad enough when something is misconfigured.
+            cEMI.hopCount = hopCount = 6
+            cEMI_b = cEMI
+        elif l2.hop:
+            # Decrement the hopcount if the packet arrives at one broadcast 
+            # Layer2 and then gets re-broadcast. If zero, discard.
+            if hopCount:
+                cEMI_b = cEMI.copy()
+                cEMI.b.hopCount = hopCount-1
+            else:
+                cEMI_b = None
+        else:
+            cEMI_b = cEMI
+        if isinstance(destAddr, GroupAddress):
+            r = 'wantsGroupFrame'
+            may_force = False
+        elif isinstance(destAddr, IndividualAddress):
+            r = 'wantsIndividualFrame'
+            may_force = True
+        else:
+            logger.warning("recv %s: unsupported destination address type (%s)", l2, repr(destAddr))
+            return
+        done = skipped = False
+        for dev in self._l2:
+            if l2 == dev:
+                continue
+            cEMI_x = cEMI_b if dev.hop else cEMI
+            if not cEMI_x:
+                skipped = True
+            elif getattr(dev,r)(cEMI):
+                dev.dataInd(cEMI)
+                done = True
+        if may_force and not done:
+            # We never saw this address. Send to every broadcast device.
+            for dev in self._l2:
+                if l2 == dev:
+                    continue
+                cEMI_x = cEMI_b if dev.hop else cEMI
+                if cEMI_x and getattr(dev,r)(cEMI, force=True):
+                    done = True
+            if done:
+                logger.debug("recv %s: unknown destination address (%s)", repr(destAddr))
+        if skipped:
+            logger.debug("recv %s: not forwarded (hopcount zero): %s from %s", l2, cEMI)
+        elif not done:
+            logger.debug("recv %s: not sendable: %s from %s", l2, cEMI)
+
+
+    def getGrOAT(self, device=None, by="gad", outFormatLevel=3):
         """ Build the Group Object Association Table
         """
 
         # Retrieve all bound gad
         gads = []
-        for gad in device.stack.agds.groups.keys():
-            gads.append(GroupAddress(gad, outFormatLevel))
+        if device is None:
+            devices = self._devices
+        else:
+            devices = (device,)
+        for dev in devices:
+            for gad in device.stack.agds.groups.keys():
+                gads.append(GroupAddress(gad, outFormatLevel))
         gads.sort()  #reverse=True)
 
         output = "\n"
@@ -227,6 +390,16 @@ class ETS(object):
     def printGroat(self, *a,**k):
         print(self.getGrOAT(*a,**k))
         
+    def mainLoop(self):
+        self.start()
+        try:
+            while True:
+                time.sleep(9999)
+        except KeyboardInterrupt:
+            pass
+        finally:
+            self._
+            self.stop()
 
 
 if __name__ == '__main__':

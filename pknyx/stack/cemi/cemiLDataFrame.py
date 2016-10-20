@@ -118,6 +118,9 @@ class CEMILDataFrame(object):
     def __str__(self):
         return repr(str(self._raw))
 
+    def copy(self):
+        return type(self)(self._raw)
+
     @property
     def raw(self):
         return self._raw

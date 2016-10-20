@@ -75,9 +75,7 @@ ets._gadMap = {1: {'name': "heating",
                 }
 
 #ets.printGroat()
-ets.printGroat(dev1,by="gad")
-ets.printGroat(dev2,by="gad")
+ets.printGroat(by="gad")
 print()
 print()
-ets.printGroat(dev1,by="go")
-ets.printGroat(dev2,by="go")
+ets.printGroat(by="go")

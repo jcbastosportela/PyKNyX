@@ -80,6 +80,9 @@ class CEMI(object):
 
         #self._payload = payload  # TODO: check validity
 
+    def copy(self):
+        raise NotImplemented
+
     #@property
     #def payload(self):
         #return self._payload
