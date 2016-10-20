@@ -198,26 +198,3 @@ class GroupObject(GroupListener):
         if self._flags.update:  # and data != self.datapoint.data:
             self.datapoint.frame = data
 
-
-if __name__ == '__main__':
-    import unittest
-
-    # Mute logger
-    logger.root.setLevel(logging.ERROR)
-
-
-    class GroupObjectTestCase(unittest.TestCase):
-
-        def setUp(self):
-            pass
-
-        def tearDown(self):
-            pass
-
-        def test_constructor(self):
-            pass
-
-
-    unittest.main()
-
-

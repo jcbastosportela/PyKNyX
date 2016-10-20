@@ -50,17 +50,32 @@ try:
 except ImportError:
     from distutils.core import setup
 
+from setuptools.command.test import test as TestCommand
+import sys
+
 from pknyx.common import config
 
-import sys
 py2_req = []
 if sys.version_info.major == 2:
     py2_req.append("argparse")
 
+class PyTest(TestCommand):
+    user_options = [('pytest-args=', 'a', "Arguments to pass to pytest")]
+
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.pytest_args = []
+
+    def run_tests(self):
+        #import here, cause outside the eggs aren't loaded
+        import pytest
+        errno = pytest.main(self.pytest_args)
+        sys.exit(errno)
+
 setup(name=config.APP_NAME,
       version=config.APP_VERSION,
 
-      description="Python KNX framework",
+      description="Python KNX framework (MoaT version)",
       long_description=open('README').read(),
       url="http://www.pknyx.org",
 
@@ -69,10 +84,10 @@ setup(name=config.APP_NAME,
 
       license="GPL",
 
-      maintainer="Frederic Mantegazza",
-      maintainer_email="fma@pknyx.org",
+      maintainer="Matthias Urlichs",
+      maintainer_email="matthias@urlichs.de",
 
-      download_url="http://www.pknyx.org/wiki/Download",
+      download_url="https://gitgub.com/knxd/pKNyX",
 
       packages=["pknyx",
                 "pknyx.common",
@@ -99,4 +114,6 @@ setup(name=config.APP_NAME,
                         "blinker",
                         "six",
                         ]+py2_req,
+      tests_require=['pytest'],
+      cmdclass = {'test': PyTest},
 )

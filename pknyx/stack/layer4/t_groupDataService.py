@@ -149,24 +149,3 @@ class T_GroupDataService(N_GroupDataListener):
         tPDU[0] |= TPCI.UNNUMBERED_DATA
         return self._ngds.groupDataReq(gad, priority, tPDU)
 
-
-if __name__ == '__main__':
-    import unittest
-
-    # Mute logger
-    logger.root.setLevel(logging.ERROR)
-
-
-    class T_GDSTestCase(unittest.TestCase):
-
-        def setUp(self):
-            pass
-
-        def tearDown(self):
-            pass
-
-        def test_constructor(self):
-            pass
-
-
-    unittest.main()

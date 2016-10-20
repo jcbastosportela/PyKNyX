@@ -177,24 +177,3 @@ class MulticastSocketTransmit(MulticastSocketBase):
         if l > 0 and l < len(data):
             raise IOError("partial transmit: %d of %d to %s", l, len(data), self) 
 
-
-if __name__ == '__main__':
-    import unittest
-
-    # Mute logger
-    logger.root.setLevel(logging.ERROR)
-
-
-    class MulticastSocketTestCase(unittest.TestCase):
-
-        def setUp(self):
-            pass
-
-        def tearDown(self):
-            pass
-
-        def test_constructor(self):
-            pass
-
-
-    unittest.main()

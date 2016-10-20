@@ -230,27 +230,3 @@ class DPTXlatorBase(object):
         """
         raise NotImplementedError
 
-
-if __name__ == '__main__':
-    import unittest
-
-    # Mute logger
-    logger.root.setLevel(logging.ERROR)
-
-
-    class DPTXlatorBaseTestCase(unittest.TestCase):
-
-        def setUp(self):
-            pass
-
-        def tearDown(self):
-            pass
-
-        def test_display(self):
-            pass
-
-        def test_constructor(self):
-            with self.assertRaises(DPTXlatorValueError):
-                DPTXlatorBase("1.001", 0)
-
-    unittest.main()

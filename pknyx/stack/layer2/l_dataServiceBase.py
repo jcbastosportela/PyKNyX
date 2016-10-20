@@ -151,23 +151,3 @@ def L_DataServiceUnicast(L_DataServiceBase):
             return False
         return True
 
-if __name__ == '__main__':
-    import unittest
-
-    # Mute logger
-    logger.root.setLevel(logging.ERROR)
-
-
-    class TransceiverTestCase(unittest.TestCase):
-
-        def setUp(self):
-            pass
-
-        def tearDown(self):
-            pass
-
-        def test_constructor(self):
-            pass
-
-
-    unittest.main()

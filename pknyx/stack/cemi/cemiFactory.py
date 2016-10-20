@@ -70,24 +70,3 @@ class CEMIFactory(object):
         """
         super(CEMIFactory, self).__init__()
 
-
-if __name__ == '__main__':
-    import unittest
-
-    # Mute logger
-    logger.root.setLevel(logging.ERROR)
-
-
-    class CEMIFactoryTestCase(unittest.TestCase):
-
-        def setUp(self):
-            pass
-
-        def tearDown(self):
-            pass
-
-        def test_constructor(self):
-            pass
-
-
-    unittest.main()

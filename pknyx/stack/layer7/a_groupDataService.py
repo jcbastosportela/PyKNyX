@@ -196,24 +196,3 @@ class A_GroupDataService(T_GroupDataListener):
         aPDU = APDU.makeGroupValue(APCI.GROUPVALUE_RES, data, size)
         return self._tgds.groupDataReq(gad, priority, aPDU)
 
-
-if __name__ == '__main__':
-    import unittest
-
-    # Mute logger
-    logger.root.setLevel(logging.ERROR)
-
-
-    class A_GDSTestCase(unittest.TestCase):
-
-        def setUp(self):
-            pass
-
-        def tearDown(self):
-            pass
-
-        def test_constructor(self):
-            pass
-
-
-    unittest.main()

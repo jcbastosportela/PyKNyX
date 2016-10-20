@@ -133,28 +133,3 @@ class GroupMonitor(A_GroupDataListener):
         """
         self._listeners.add(listener)
 
-
-if __name__ == '__main__':
-    import unittest
-
-    # Mute logger
-    logger.root.setLevel(logging.ERROR)
-
-
-    class GroupMonitorTestCase(unittest.TestCase):
-
-        def setUp(self):
-            self.group = Group("1/1/1", None)
-
-        def tearDown(self):
-            pass
-
-        def test_display(self):
-            print(repr(self.group))
-            print(self.group)
-
-        def test_constructor(self):
-            pass
-
-
-    unittest.main()

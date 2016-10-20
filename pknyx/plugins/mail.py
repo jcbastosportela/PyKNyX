@@ -135,27 +135,3 @@ class MUA(object):
         smtp.sendmail(message['From'], [message['To']], message.as_string())
         smtp.quit()
 
-
-if __name__ == '__main__':
-    import unittest
-
-    # Mute logger
-    logger.root.setLevel(logging.ERROR)
-
-
-    class MUATestCase(unittest.TestCase):
-
-        def setUp(self):
-            self.mua = MUA(smtp="localhost", subject="MUATestCase", to="pknyx@pknyx.org", from_="pknyx@pknyx.org")
-
-        def tearDown(self):
-            pass
-
-        def test_send(self):
-            self.mua.send("This is a test")
-            mua = MUA("localhost")
-            with self.assertRaises(MUAValueError):
-                mua.send("Error")
-
-
-    unittest.main()

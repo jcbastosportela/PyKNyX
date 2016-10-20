@@ -134,24 +134,3 @@ class Stack(object):
         #logger.trace("Stack.stop()")
         logger.debug("Stack.stop(): stopped")
 
-
-if __name__ == '__main__':
-    import unittest
-
-    # Mute logger
-    logger.root.setLevel(logging.ERROR)
-
-
-    class StackTestCase(unittest.TestCase):
-
-        def setUp(self):
-            pass
-
-        def tearDown(self):
-            pass
-
-        def test_constructor(self):
-            pass
-
-
-    unittest.main()
