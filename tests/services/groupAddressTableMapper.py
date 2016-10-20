@@ -4,6 +4,8 @@ from pknyx.services.groupAddressTableMapper import *
 import unittest
 
 # Mute logger
+from pknyx.services.logger import logging
+logger = logging.getLogger(__name__)
 logger.root.setLevel(logging.ERROR)
 
 GAD_MAP_TABLE = {"1/-/-": dict(name="light", desc="Lights (1/-/-)"),

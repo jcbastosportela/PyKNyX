@@ -8,6 +8,8 @@ from pknyx.services.logger import _setup; _setup()
 scheduler = Scheduler()
 
 # Mute logger
+from pknyx.services.logger import logging
+logger = logging.getLogger(__name__)
 logger.root.setLevel(logging.ERROR)
 
 class SomeClass(object):

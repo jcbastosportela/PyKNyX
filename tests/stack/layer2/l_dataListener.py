@@ -4,6 +4,8 @@ from pknyx.stack.layer2.l_dataListener import *
 import unittest
 
 # Mute logger
+from pknyx.services.logger import logging
+logger = logging.getLogger(__name__)
 logger.root.setLevel(logging.ERROR)
 
 

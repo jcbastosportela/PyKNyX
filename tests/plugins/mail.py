@@ -4,6 +4,8 @@ from pknyx.plugins.mail import *
 import unittest
 
 # Mute logger
+from pknyx.services.logger import logging
+logger = logging.getLogger(__name__)
 logger.root.setLevel(logging.ERROR)
 
 
