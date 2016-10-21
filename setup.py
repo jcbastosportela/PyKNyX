@@ -114,6 +114,6 @@ setup(name=config.APP_NAME,
                         "blinker",
                         "six",
                         ]+py2_req,
-      tests_require=['pytest'],
+      tests_require=['pytest','six'],
       cmdclass = {'test': PyTest},
 )

@@ -2,6 +2,7 @@
 
 from pknyx.stack.cemi.cemiLDataFrame import *
 import unittest
+import six
 
 # Mute logger
 from pknyx.services.logger import logging
@@ -23,7 +24,10 @@ class CEMILDataFrameTestCase(unittest.TestCase):
 
     def test_display(self):
         assert repr(self.frame2) == "<CEMILDataFrame(mc=0x29, addIL=0, ctrl1=0xbc, ctrl2=0xd0, src=0x110e, dest=0x1902)>"
-        assert str(self.frame3) == "bytearray(b')\\x00\\xbc\\xd0\\x11\\x04\\x10\\x04\\x03\\x00\\x80\\x19,')"
+        if six.PY2:
+            assert str(self.frame3) == ")\x00\xbc\xd0\x11\x04\x10\x04\x03\x00\x80\x19,"
+        else:
+            assert str(self.frame3) == "bytearray(b')\\x00\\xbc\\xd0\\x11\\x04\\x10\\x04\\x03\\x00\\x80\\x19,')"
 
     def test_constructor(self):
         with self.assertRaises(CEMIValueError):
