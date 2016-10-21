@@ -142,6 +142,6 @@ class DPTXlatorBoolean(DPTXlatorBase):
         return bytearray(struct.pack(">B", data))
 
     def frameToData(self, frame):
-        data = struct.unpack(">B", str(frame))[0]
+        data = struct.unpack(">B", frame)[0]
         return data
 

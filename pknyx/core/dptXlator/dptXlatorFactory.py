@@ -231,4 +231,5 @@ def DPTXlatorFactory():
     global dptFactory
     if dptFactory is None:
         dptFactory = DPTXlatorFactoryObject()
+    return dptFactory
 

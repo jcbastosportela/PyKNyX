@@ -12,12 +12,12 @@ class DPT4ByteSignedTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            (-2147483648, 0x80000000, "\x80\x00\x00\x00"),
-            (         -4, 0xfffffffc, "\xff\xff\xff\xfc"),
-            (         -1, 0xffffffff, "\xff\xff\xff\xff"),
-            (          0, 0x00000000, "\x00\x00\x00\x00"),
-            (          1, 0x00000001, "\x00\x00\x00\x01"),
-            ( 2147483647, 0x7fffffff, "\x7f\xff\xff\xff"),
+            (-2147483648, 0x80000000, b"\x80\x00\x00\x00"),
+            (         -4, 0xfffffffc, b"\xff\xff\xff\xfc"),
+            (         -1, 0xffffffff, b"\xff\xff\xff\xff"),
+            (          0, 0x00000000, b"\x00\x00\x00\x00"),
+            (          1, 0x00000001, b"\x00\x00\x00\x01"),
+            ( 2147483647, 0x7fffffff, b"\x7f\xff\xff\xff"),
         )
         self.dptXlator = DPTXlator4ByteSigned("13.xxx")
 

@@ -12,13 +12,13 @@ class DPTXlator2ByteFloatTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            (     0.,   0x0000, "\x00\x00"),
-            (     0.01, 0x0001, "\x00\x01"),
-            (    -0.01, 0x87ff, "\x87\xff"),
-            (    -1.,   0x879c, "\x87\x9c"),
-            (     1.,   0x0064, "\x00\x64"),
-            (  -272.96, 0xa156, "\xa1\x56"),
-            (670760.96, 0x7fff, "\x7f\xff"),
+            (     0.,   0x0000, b"\x00\x00"),
+            (     0.01, 0x0001, b"\x00\x01"),
+            (    -0.01, 0x87ff, b"\x87\xff"),
+            (    -1.,   0x879c, b"\x87\x9c"),
+            (     1.,   0x0064, b"\x00\x64"),
+            (  -272.96, 0xa156, b"\xa1\x56"),
+            (670760.96, 0x7fff, b"\x7f\xff"),
         )
         self.dptXlator = DPTXlator2ByteFloat("9.xxx")
 

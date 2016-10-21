@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pknyx.core.dptXlator.dptXlator8BitEncAbsValue import *
+from pknyx.core.dptXlator.dptXlatorBoolean import DPTXlatorBoolean
 import unittest
 
 # Mute logger
@@ -12,9 +13,9 @@ class DPT8BitUnsignedTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            (  0, 0x00, "\x00"),
-            (  1, 0x01, "\x01"),
-            (255, 0xff, "\xff"),
+            (  0, 0x00, b"\x00"),
+            (  1, 0x01, b"\x01"),
+            (255, 0xff, b"\xff"),
         )
         self.dptXlator = DPTXlator8BitEncAbsValue("20.xxx")
 
@@ -26,11 +27,6 @@ class DPT8BitUnsignedTestCase(unittest.TestCase):
 
     def test_typeSize(self):
         self.assertEqual(self.dptXlator.typeSize, 1)
-
-    def test_dpt(self):
-        self.assertEqual(self.dptXlator.dpt, DPTXlatorBoolean.DPT_Generic)
-        self.dptXlator.dpt = "1.001"
-        self.assertEqual(self.dptXlator.dpt, DPTXlatorBoolean.DPT_Switch)
 
     def testcheckValue(self):
         with self.assertRaises(DPTXlatorValueError):

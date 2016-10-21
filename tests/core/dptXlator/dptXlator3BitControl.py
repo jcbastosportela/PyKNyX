@@ -12,11 +12,11 @@ class DPT3BitControlTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            ( 0, 0x00, '\x00'),
-            ( 1, 0x09, '\x09'),
-            (-1, 0x01, '\x01'),
-            ( 7, 0x0f, '\x0f'),
-            (-7, 0x07, '\x07'),
+            ( 0, 0x00, b'\x00'),
+            ( 1, 0x09, b'\x09'),
+            (-1, 0x01, b'\x01'),
+            ( 7, 0x0f, b'\x0f'),
+            (-7, 0x07, b'\x07'),
         )
         self.stepCodeIntervalTable = (
             (1,  1),

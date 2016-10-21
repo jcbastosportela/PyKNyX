@@ -21,8 +21,8 @@ class IndividualAddressTestCase(unittest.TestCase):
         pass
 
     def test_display(self):
-        print(repr(self.ad1))
-        print(self.ad2)
+        assert repr(self.ad1) == "<IndividualAddress('1.2.3')>"
+        assert str(self.ad2) == '1.2.3'
 
     def test_constructor(self):
         #with self.assertRaises(IndividualAddressValueError):

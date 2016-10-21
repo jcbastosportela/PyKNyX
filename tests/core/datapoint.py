@@ -18,8 +18,8 @@ class DPTestCase(unittest.TestCase):
         pass
 
     def test_display(self):
-        print(repr(self.dp))
-        print(self.dp)
+        assert repr(self.dp) == "<Datapoint(name='dp', access='output', dptId='1.xxx')>"
+        assert str(self.dp) == "<Datapoint('dp')>"
 
     def test_constructor(self):
         with self.assertRaises(DatapointValueError):

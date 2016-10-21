@@ -23,8 +23,8 @@ class GroupAddressTestCase(unittest.TestCase):
         pass
 
     def test_display(self):
-        print(repr(self.ad1))
-        print(self.ad3)
+        assert repr(self.ad1) == "<GroupAddress('1/2/3')>"
+        assert str(self.ad3) == '1/2/3'
 
     def test_constructor(self):
         #with self.assertRaises(GroupAddressValueError):

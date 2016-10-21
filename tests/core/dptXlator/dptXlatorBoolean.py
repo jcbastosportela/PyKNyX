@@ -12,8 +12,8 @@ class DPTBooleanTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            (0, 0x00, "\x00"),
-            (1, 0x01, "\x01")
+            (0, 0x00, b"\x00"),
+            (1, 0x01, b"\x01")
         )
         self.dptXlator = DPTXlatorBoolean("1.xxx")
 

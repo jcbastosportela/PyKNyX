@@ -53,7 +53,6 @@ from pknyx.common.exception import PKNyXValueError
 from pknyx.common.frozenDict import FrozenDict
 from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.stack import Stack
-from pknyx.stack.transceiver.transceiver import UnicastTransceiver
 
 import time
 

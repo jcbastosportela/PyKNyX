@@ -12,9 +12,9 @@ class DPT4ByteUnsignedTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            (         0, 0x00000000, "\x00\x00\x00\x00"),
-            (         1, 0x00000001, "\x00\x00\x00\x01"),
-            (4294967295, 0xffffffff, "\xff\xff\xff\xff"),
+            (         0, 0x00000000, b"\x00\x00\x00\x00"),
+            (         1, 0x00000001, b"\x00\x00\x00\x01"),
+            (4294967295, 0xffffffff, b"\xff\xff\xff\xff"),
         )
         self.dptXlator = DPTXlator4ByteUnsigned("12.xxx")
 

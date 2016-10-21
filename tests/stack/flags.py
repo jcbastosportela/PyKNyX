@@ -18,8 +18,8 @@ class DFlagsTestCase(unittest.TestCase):
         pass
 
     def test_display(self):
-        print(repr(self.flags))
-        print(self.flags)
+        assert repr(self.flags) == "<Flags('CRWTUIS')>"
+        assert str(self.flags) == 'CRWTUIS'
 
     def test_constructor(self):
         with self.assertRaises(FlagsValueError):

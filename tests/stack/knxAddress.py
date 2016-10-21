@@ -20,8 +20,8 @@ class KnxAddressTestCase(unittest.TestCase):
         pass
 
     def test_display(self):
-        print(repr(self.ad1))
-        print(self.ad2)
+        assert repr(self.ad1) == "<KnxAddress('0x7b')>"
+        assert str(self.ad2) == "<KnxAddress('0x2231')>"
 
     def test_constructor(self):
         with self.assertRaises(KnxAddressValueError):

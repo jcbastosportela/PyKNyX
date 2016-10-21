@@ -12,11 +12,11 @@ class DPT4ByteFloatTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            (-340282346638528859811704183484516925440, 0xff7fffff, "\xff\x7f\xff\xff"),
-            (                                      -1, 0xbf800000, "\xbf\x80\x00\x00"),
-            (                                       0, 0x00000000, "\x00\x00\x00\x00"),
-            (                                       1, 0x3f800000, "\x3f\x80\x00\x00"),
-            ( 340282346638528859811704183484516925440, 0x7f7fffff, "\x7f\x7f\xff\xff"),
+            (-340282346638528859811704183484516925440, 0xff7fffff, b"\xff\x7f\xff\xff"),
+            (                                      -1, 0xbf800000, b"\xbf\x80\x00\x00"),
+            (                                       0, 0x00000000, b"\x00\x00\x00\x00"),
+            (                                       1, 0x3f800000, b"\x3f\x80\x00\x00"),
+            ( 340282346638528859811704183484516925440, 0x7f7fffff, b"\x7f\x7f\xff\xff"),
         )
         self.dptXlator = DPTXlator4ByteFloat("14.xxx")
 

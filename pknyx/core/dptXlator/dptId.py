@@ -92,11 +92,7 @@ class DPTID(object):
         """
         super(DPTID, self).__init__()
 
-        try:
-            if not re.match("^\d{1,3}\.\d{1,3}$", dptId) and not re.match("^\d{1,3}\.xxx$", dptId):
-                raise DPTIDValueError("invalid Datapoint Type ID (%r)" % repr(dptId))
-        except:
-            logger.exception("Flags.__init__()")
+        if not re.match("^\d{1,3}\.\d{1,3}$", dptId) and not re.match("^\d{1,3}\.xxx$", dptId):
             raise DPTIDValueError("invalid Datapoint Type ID (%r)" % repr(dptId))
 
         self._id = dptId
@@ -108,10 +104,10 @@ class DPTID(object):
         return self._id
 
     def __lt__(self, other):
-        return self._cmp(other) == -1
+        return self._cmp(other) < 0
 
     def __le__(self, other):
-        return self._cmp(other) in (-1, 0)
+        return self._cmp(other) <= 0
 
     def __eq__(self, other):
         return self._cmp(other) == 0
@@ -120,10 +116,10 @@ class DPTID(object):
         return self._cmp(other) != 0
 
     def __gt__(self, other):
-        return self._cmp(other) == 1
+        return self._cmp(other) > 0
 
     def __ge__(self, other):
-        return self._cmp(other) in (0, 1)
+        return self._cmp(other) >= 0
 
     def __hash__(self):
         return hash((self.main, self.sub))
@@ -134,16 +130,15 @@ class DPTID(object):
         @return: -1 if self < other, zero if self == other, +1 if self > other
         @rtype: int
         """
+
         if self.main != other.main:
-            return cmp(int(self.main), int(other.main))
-        elif self.sub == other.sub:
-            return 0
-        elif self.sub == None:
+            return self.main - other.main
+        elif other.sub is None:
+            return self.sub is not None
+        elif self.sub is None:
             return -1
-        elif other.sub == None:
-            return 1
         else:
-            return cmp(self.sub, other.sub)
+            return self.sub - other.sub
 
     @property
     def id(self):

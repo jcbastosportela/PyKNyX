@@ -12,9 +12,9 @@ class DPTStringTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            (14 * (0,),                                            0x0000000000000000000000000000, 14 * "\x00"),
-            ((48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 0, 0, 0, 0), 0x3031323334353637383900000000, "0123456789\x00\x00\x00\x00"),
-            (14 * (255,),                                          0xffffffffffffffffffffffffffff, 14 * "\xff"),
+            (14 * (0,),                                            0x0000000000000000000000000000, 14 * b"\x00"),
+            ((48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 0, 0, 0, 0), 0x3031323334353637383900000000, b"0123456789\x00\x00\x00\x00"),
+            (14 * (255,),                                          0xffffffffffffffffffffffffffff, 14 * b"\xff"),
         )
         self.dptXlator = DPTXlatorString("16.001")
 

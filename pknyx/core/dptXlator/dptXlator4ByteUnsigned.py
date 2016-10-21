@@ -92,6 +92,6 @@ class DPTXlator4ByteUnsigned(DPTXlatorBase):
         return bytearray(struct.pack(">L", data))
 
     def frameToData(self, frame):
-        data = struct.unpack(">L", str(frame))[0]
+        data = struct.unpack(">L", frame)[0]
         return data
 

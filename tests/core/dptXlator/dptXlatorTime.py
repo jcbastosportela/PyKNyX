@@ -12,9 +12,9 @@ class DPTTimeTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            ((0,  0,  0,  0), 0x000000, "\x00\x00\x00"),
-            ((1,  2,  3,  4), 0x220304, "\x22\x03\x04"),
-            ((7, 23, 59, 59), 0xf73b3b, "\xf7\x3b\x3b"),
+            ((0,  0,  0,  0), 0x000000, b"\x00\x00\x00"),
+            ((1,  2,  3,  4), 0x220304, b"\x22\x03\x04"),
+            ((7, 23, 59, 59), 0xf73b3b, b"\xf7\x3b\x3b"),
         )
         self.dptXlator = DPTXlatorTime("10.001")
 

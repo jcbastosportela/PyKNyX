@@ -12,9 +12,9 @@ class DPT8BitUnsignedTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            (  0, 0x00, "\x00"),
-            (  1, 0x01, "\x01"),
-            (255, 0xff, "\xff"),
+            (  0, 0x00, b"\x00"),
+            (  1, 0x01, b"\x01"),
+            (255, 0xff, b"\xff"),
         )
         self.dptXlator = DPTXlator8BitUnsigned("5.xxx")
 

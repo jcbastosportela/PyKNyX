@@ -12,12 +12,12 @@ class DPT8BitSignedTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            (-128, 0x80, "\x80"),
-            (  -4, 0xfc, "\xfc"),
-            (  -1, 0xff, "\xff"),
-            (   0, 0x00, "\x00"),
-            (   1, 0x01, "\x01"),
-            ( 127, 0x7f, "\x7f"),
+            (-128, 0x80, b"\x80"),
+            (  -4, 0xfc, b"\xfc"),
+            (  -1, 0xff, b"\xff"),
+            (   0, 0x00, b"\x00"),
+            (   1, 0x01, b"\x01"),
+            ( 127, 0x7f, b"\x7f"),
         )
         self.dptXlator = DPTXlator8BitSigned("6.xxx")
 

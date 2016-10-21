@@ -12,12 +12,12 @@ class DPTSceneTestCase(unittest.TestCase):
 
     def setUp(self):
         self.testTable = (
-            ((0,  0), 0x00, "\x00"),
-            ((0,  1), 0x01, "\x01"),
-            ((0, 63), 0x3f, "\x3f"),
-            ((1,  0), 0x80, "\x80"),
-            ((1,  1), 0x81, "\x81"),
-            ((1, 63), 0xbf, "\xbf"),
+            ((0,  0), 0x00, b"\x00"),
+            ((0,  1), 0x01, b"\x01"),
+            ((0, 63), 0x3f, b"\x3f"),
+            ((1,  0), 0x80, b"\x80"),
+            ((1,  1), 0x81, b"\x81"),
+            ((1, 63), 0xbf, b"\xbf"),
         )
         self.dptXlator = DPTXlatorScene("17.001")
 

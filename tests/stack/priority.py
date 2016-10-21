@@ -25,8 +25,8 @@ class PriorityTestCase(unittest.TestCase):
         pass
 
     def test_display(self):
-        print(repr(self.priority1))
-        print(self.priority1)
+        assert repr(self.priority1) == "<Priority('system')>"
+        assert str(self.priority1) == 'system'
 
     def test_constructor(self):
         with self.assertRaises(PriorityValueError):

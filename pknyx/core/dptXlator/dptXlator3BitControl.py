@@ -79,7 +79,10 @@ class DPTXlator3BitControl(DPTXlatorBase):
     def __init__(self, dptId):
         super(DPTXlator3BitControl, self).__init__(dptId, 0)
 
-        dptId_ = "1.%s" % dptId.sub
+        sub = self.dpt.id.sub
+        if sub is None:
+            sub = 'xxx'
+        dptId_ = '1.'+sub
         self._dpt2 = DPTXlatorBoolean(dptId_)
 
     def checkData(self, data):
@@ -110,7 +113,7 @@ class DPTXlator3BitControl(DPTXlatorBase):
     def frameToData(self, frame):
 
         # Note the usage of self.data, and not data!
-        data = struct.unpack(">B", str(frame))[0]
+        data = struct.unpack(">B", frame)[0]
         return data
 
     #def nbIntervalsToStepCode(self, nbIntervals):

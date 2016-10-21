@@ -25,12 +25,12 @@ class DPTIDTestCase(unittest.TestCase):
         pass
 
     def test_display(self):
-        print(repr(self.dptId))
-        print(self.dptId1)
+        assert repr(self.dptId) == "<DPTID('9.003')>"
+        assert str(self.dptId1) == '1.xxx'
 
     def test_constructor(self):
         with self.assertRaises(DPTIDValueError):
-            DPTID("1.00")
+            DPTID("1.")
         with self.assertRaises(DPTIDValueError):
             DPTID(".001")
         with self.assertRaises(DPTIDValueError):
@@ -45,10 +45,10 @@ class DPTIDTestCase(unittest.TestCase):
         self.assertEqual(dptIds, sortedDptIds)
 
     def test_main(self):
-        self.assertEqual(self.dptId.main, "9")
+        self.assertEqual(self.dptId.main, 9)
 
     def test_sub(self):
-        self.assertEqual(self.dptId.sub, "003")
+        self.assertEqual(self.dptId.sub, 3)
 
     def test_generic(self):
         self.assertEqual(self.dptId.generic, DPTID("9.xxx"))

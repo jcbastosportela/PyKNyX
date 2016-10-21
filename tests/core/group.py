@@ -18,8 +18,8 @@ class GroupTestCase(unittest.TestCase):
         pass
 
     def test_display(self):
-        print(repr(self.group))
-        print(self.group)
+        assert repr(self.group) == "<Group(gad='1/1/1')>"
+        assert str(self.group) == "<Group('1/1/1')>"
 
     def test_constructor(self):
         pass

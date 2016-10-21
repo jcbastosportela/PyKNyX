@@ -62,6 +62,8 @@ The DPTXlatorString class follows the python encoding.
 @license: GPL
 """
 
+from __future__ import division
+
 import struct
 
 from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
@@ -103,7 +105,7 @@ class DPTXlatorString(DPTXlatorBase):
     def valueToData(self, value):
         data = 0x00
         for shift in range(104, -1, -8):
-            data |= value[13 - shift / 8] << shift
+            data |= value[13 - shift // 8] << shift
         #logger.debug("DPTXlatorString.valueToData(): data=%s" % hex(data))
         return data
 
@@ -111,7 +113,7 @@ class DPTXlatorString(DPTXlatorBase):
         return bytearray(struct.pack(">14B", *self.dataToValue(data)))
 
     def frameToData(self, frame):
-        value = struct.unpack(">14B", str(frame))
+        value = struct.unpack(">14B", frame)
         data = self.valueToData(value)
         return data
 

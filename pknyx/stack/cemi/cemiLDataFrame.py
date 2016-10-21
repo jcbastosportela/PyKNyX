@@ -116,7 +116,7 @@ class CEMILDataFrame(object):
         return "<CEMILDataFrame(mc=%s, addIL=%d, ctrl1=%s, ctrl2=%s, src=%s, dest=%s)>" % (hex(self.mc), self.addIL, hex(self.ctrl1), hex(self.ctrl2), hex(self.sa), hex(self.da))
 
     def __str__(self):
-        return repr(str(self._raw))
+        return str(self._raw)
 
     def copy(self):
         return type(self)(self._raw)

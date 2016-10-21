@@ -36,8 +36,8 @@ class FunctionalBlockTestCase(unittest.TestCase):
         pass
 
     def test_display(self):
-        print(repr(self.fb1))
-        print(self.fb2)
+        assert repr(self.fb1) == "<TestFunctionalBlock(name='test1', desc='Dummy description')>"
+        assert str(self.fb2) == "<TestFunctionalBlock('test2')>"
 
     def test_constructor(self):
         pass
