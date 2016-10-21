@@ -6,7 +6,7 @@ import unittest
 # Mute logger
 from pknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logger.root.setLevel(logging.ERROR)
+logging.getLogger("pknyx").setLevel(logging.ERROR)
 
 GAD_MAP_TABLE = {"1/-/-": dict(name="light", desc="Lights (1/-/-)"),
                     "1/1/-": dict(name="light_cmd", desc="Commands (1/1/-)"),
