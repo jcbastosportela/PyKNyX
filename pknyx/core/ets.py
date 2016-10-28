@@ -146,7 +146,7 @@ class ETS(threading.Thread):
         @param device: device to register
         @type device: L{Device<pknyx.core.device>}
         """
-        self._devices.append(device)
+        self._devices.add(device)
 
         for fb in device.fb.values():
 
