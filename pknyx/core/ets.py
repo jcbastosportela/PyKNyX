@@ -71,7 +71,13 @@ class ETS(threading.Thread):
     """ ETS class
 
     @ivar _devices: registered devices
-    @type _devices: list of L{Devices<pknyx.core.device>}
+    @type _devices: list of L{Device<pknyx.core.device>}
+
+    @ivar _layer2: registered transports
+    @type _devices: list of L{L_DataServiceBase<pknyx.stack.layer2.l_dataServiceBase>}
+
+    @ivar _running: flag whether ETS has been started
+    @type _devices: bool
 
     raise ETSValueError:
     """
