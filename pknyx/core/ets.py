@@ -211,7 +211,7 @@ class ETS(threading.Thread):
     def run(self):
         self._running = True
         try:
-            for dev in self._l2:
+            for dev in self._layer2:
                 dev.start()
             for dev in self._devices:
                 dev.start()
@@ -233,7 +233,7 @@ class ETS(threading.Thread):
         self._queue.add(None,0)
         for dev in self._devices:
             dev.stop()
-        for dev in self._l2:
+        for dev in self._layer2:
             dev.stop()
 
     def processFrame(self, l2, cEMI):
@@ -272,7 +272,7 @@ class ETS(threading.Thread):
             logger.warning("recv %s: unsupported destination address type (%s)", l2, repr(destAddr))
             return
         done = skipped = False
-        for dev in self._l2:
+        for dev in self._layer2:
             if l2 == dev:
                 continue
             cEMI_x = cEMI_b if dev.hop else cEMI
@@ -283,7 +283,7 @@ class ETS(threading.Thread):
                 done = True
         if may_force and not done:
             # We never saw this address. Send to every broadcast device.
-            for dev in self._l2:
+            for dev in self._layer2:
                 if l2 == dev:
                     continue
                 cEMI_x = cEMI_b if dev.hop else cEMI
