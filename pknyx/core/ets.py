@@ -308,7 +308,7 @@ class ETS(threading.Thread):
         else:
             devices = (device,)
         for dev in devices:
-            for gad in device.stack.agds.groups.keys():
+            for gad in dev.stack.agds.groups.keys():
                 gads.append(GroupAddress(gad, outFormatLevel))
         gads.sort()  #reverse=True)
 
@@ -325,43 +325,33 @@ class ETS(threading.Thread):
             for gad in gads:
                 if gadMain != gad.main:
                     index = "%d/-/-" % gad.main
-                    if index in gadMapTable:
-                        output +=  u"%2d %-33s" % (gad.main, gadMapTable[index]['desc'].decode("utf-8"))
-                        output += "\n"
-                    else:
-                        output +=  u"%2d %-33s" % (gad.main, "")
-                        output += "\n"
+                    name = gadMapTable.get(index,{'desc':''})
+                    output +=  u"%2d %-33s\n" % (gad.main, name['desc'])
                     gadMain = gad.main
                     gadMiddle = gadSub = -1
                 if gadMiddle != gad.middle:
                     index = "%d/%d/-" % (gad.main, gad.middle)
-                    if index in gadMapTable:
-                        output +=  u" ├── %2d %-27s" % (gad.middle, gadMapTable[index]['desc'].decode("utf-8"))
-                        output += "\n"
-                    else:
-                        output +=  u" ├── %2d %-27s" % (gad.middle, "")
-                        output += "\n"
+                    name = gadMapTable.get(index,{'desc':''})
+                    output +=  u" ├── %2d %-27s\n" % (gad.middle, name['desc'])
                     gadMiddle = gad.middle
                     gadSub = -1
-                if gadSub != gad.sub:
-                    index = "%d/%d/%d" % (gad.main, gad.middle, gad.sub)
-                    if index in gadMapTable:
-                        output +=  u" │    ├── %3d %-21s" % (gad.sub, gadMapTable[index]['desc'].decode("utf-8"))
-                    else:
-                        output +=  u" │    ├── %3d %-21s" % (gad.sub, "")
-                    gadSub = gad.sub
+                index = "%d/%d/%d" % (gad.main, gad.middle, gad.sub)
+                name = gadMapTable.get(index,{'desc':''})
+                output +=  u" │    ├── %3d %-21s" % (gad.sub, name['desc'])
+                gadSub = gad.sub
 
-                for i, go in enumerate(device.stack.agds.groups[gad.address].listeners):
-                    dp = go.datapoint
-                    fb = dp.owner
-                    if not i:
-                        output +=  u"%-30s %-30s %-10s %-10s %-10s" % (dp.name, fb.name, dp.dptId, go.flags, go.priority)
-                        output += "\n"
-                    else:
-                        output +=  u" │    │                            %-30s %-30s %-10s %-10s %-10s" % (dp.name, fb.name, dp.dptId, go.flags, go.priority)
-                        output += "\n"
-
-                gad_ = gad
+                i = 0
+                for dev in devices:
+                    groups = dev.stack.agds.groups
+                    if gad.address not in groups:
+                        continue
+                    for go in groups[gad.address].listeners:
+                        dp = go.datapoint
+                        fb = dp.owner
+                        if i:
+                            output +=  u" │    │                            "
+                        output +=  u"%-30s %-30s %-10s %-10s %-10s\n" % (dp.name, fb.name, dp.dptId, go.flags, go.priority)
+                        i += 1
 
         elif by == "go":
 
@@ -373,23 +363,20 @@ class ETS(threading.Thread):
             output += "\n"
             output +=  len(title) * "-"
             output += "\n"
-            for fb in device.fb.values():
-                #output +=  "%-30s" % fb.name
-                for i, go in enumerate(fb.go.values()):
-                    output +=  "%-30s" % fb.name
-                    dp = go.datapoint
-                    #if i:
-                        #output +=  "%-30s" % ""
-                    gads_ = []
-                    for gad in gads:
-                        if go in device.stack.agds.groups[gad.address].listeners:
-                            gads_.append(gad.address)
-                    if gads_:
-                        output +=  "%-30s %-10s %-30s %-10s %-10s" % (go.name, dp.dptId, ", ".join(gads_), go.flags, go.priority)
-                        output += "\n"
-                    else:
-                        output +=  "%-30s %-10s %-30s %-10s %-10s" % (go.name, dp.dptId, "", go.flags, go.priority)
-                        output += "\n"
+            for dev in devices:
+                for fb in dev.fb.values():
+                    #output +=  "%-30s" % fb.name
+                    for i, go in enumerate(fb.go.values()):
+                        output +=  "%-30s" % ("" if i else fb.name)
+                        dp = go.datapoint
+                        gads_ = set()
+                        groups = dev.stack.agds.groups
+                        for gad in gads:
+                            if gad.address not in groups:
+                                continue
+                            if go in groups[gad.address].listeners:
+                                gads_.add(gad.address)
+                        output +=  "%-30s %-10s %-30s %-10s %-10s\n" % (go.name, dp.dptId, ", ".join(gads_), go.flags, go.priority)
 
         else:
             raise ETSValueError("by param. must be in ('gad', 'dp')")
