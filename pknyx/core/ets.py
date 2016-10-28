@@ -81,6 +81,8 @@ class ETS(threading.Thread):
 
     raise ETSValueError:
     """
+    _running = False
+
     def __init__(self, addr, addrRange=-1,
                  transCls=UDPTransceiver,
                  transParams=dict(mcastAddr="224.0.23.12", mcastPort=3671)):
