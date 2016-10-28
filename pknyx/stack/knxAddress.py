@@ -119,6 +119,9 @@ class KnxAddress(object):
         KnxAddress.__init__(obj, self._raw + incr)
         return obj
 
+    def __hash__(self):
+        return self._raw
+
     @property
     def raw(self):
         return self._raw
