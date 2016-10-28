@@ -104,8 +104,7 @@ to the ETS object. Also, ETS object is no longer a singleton. Thus, this code
 needs to be replaced with
 
 	ets = ETS("1.2.3")
-	dev = MyDevice()
-	ets.register(dev)
+	dev = MyDevice(ets)
 	ets.mainLoop()
 
 The method ``ETS.weave()`` has been removed.

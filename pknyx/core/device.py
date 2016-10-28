@@ -118,11 +118,12 @@ class Device(object):
     def __init__(self, ets, individualAddress=None):
         """ Init Device object.
         """
-        super(Device, self).__init__(ets)
+        super(Device, self).__init__()
 
-        self._stack = Stack(individualAddress)
+        self._stack = Stack(ets, individualAddress)
 
         self.init()
+        ets.register(self)
 
     @property
     def desc(self):
