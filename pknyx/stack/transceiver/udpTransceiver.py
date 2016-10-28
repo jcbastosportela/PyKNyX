@@ -66,6 +66,7 @@ from pknyx.stack.multicastSocket import MulticastSocketReceive, MulticastSocketT
 from pknyx.stack.layer2.l_dataServiceBase import L_DataServiceBroadcast
 from pknyx.stack.knxnetip.knxNetIPHeader import KNXnetIPHeader, KNXnetIPHeaderValueError
 from pknyx.stack.cemi.cemiLData import CEMILData, CEMIValueError
+from pknyx.stack.layer2.l_dataService import PRIORITY_DISTRIBUTION
 
 
 class UDPTransceiverValueError(PKNyXValueError):
@@ -99,9 +100,7 @@ class UDPTransceiver(L_DataServiceBroadcast):
 
         raise UDPTransceiverValueError:
         """
-        super(UDPTransceiver, self).__init__()
-
-        self._ets = ets
+        super(UDPTransceiver, self).__init__(ets)
 
         self._mcastAddr = mcastAddr
         self._mcastPort = mcastPort
@@ -133,10 +132,6 @@ class UDPTransceiver(L_DataServiceBroadcast):
     @property
     def localPort(self):
         return self._receiverSock.localPort
-
-    @property
-    def ets(self):
-        return self._ets
 
     def _receiverLoop(self):
         """

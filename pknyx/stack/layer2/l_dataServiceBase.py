@@ -51,6 +51,7 @@ Usage
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
+from pknyx.stack.individualAddress import IndividualAddress
 
 class NOT_REQUIRED:
     pass
@@ -80,10 +81,16 @@ class L_DataServiceBase(object):
         else:
             if individualAddress is None:
                 individualAddress = ets.allocAddress()
-            self._physAddr = IndividualAddress(individualAddress)
+            elif not isinstance(individualAddress,IndividualAddress):
+                individualAddress = IndividualAddress(individualAddress)
+            self._physAddr = individualAddress
 
         self._ets = ets
-        ets.addListener(self)
+        ets.addLayer2(self)
+
+    @property
+    def ets(self):
+        return self._ets
 
     @property
     def physAddr(self):
@@ -132,7 +139,7 @@ class L_DataServiceBroadcast(L_DataServiceBase):
         super(L_DataServiceBroadcast, self).__init__(*args, **kwargs)
 
         self._physAddrs = set()
-        self._physAddrs.add(IndividualAddress(7,15,15)) ## programming
+        self._physAddrs.add(IndividualAddress((7,15,15))) ## programming
 
     def wantsIndividualFrame(self, cEMI, force=False):
         if not force and cEMI.destinationAddress not in self._physAddrs:

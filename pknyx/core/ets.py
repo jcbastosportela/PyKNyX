@@ -94,7 +94,6 @@ class ETS(threading.Thread):
         super(ETS, self).__init__()
         self._devices = set()
         self._layer2 = set()
-        self._tc = transCls(**transParams)
         self._addr = addr
         self._addrNum = addrRange
         self._addrAlloc = addr
@@ -102,7 +101,8 @@ class ETS(threading.Thread):
 
         self._scheduler = Scheduler()
         self.setDaemon(True)
-        self.addLayer2(self._tc)
+        self._tc = transCls(self, **transParams)
+        #self.addLayer2(self._tc)
 
 
     def allocAddress(self):
