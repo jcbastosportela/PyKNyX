@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import math
 import time
+import sys
 
 from pknyx.common.utils import dd2dms, dms2dd
 
@@ -34,9 +35,6 @@ GAD_MAP = {"1": dict(name="heat", desc="Chauffage"),
 
 #BUILDING_MAP = {
                #}
-
-ets = ETS()  # , buildingMap=BUILDING_MAP
-ets._gadMap=GAD_MAP
 
 schedule = Scheduler()
 #notify = Notifier()
@@ -257,32 +255,26 @@ class WeatherStation(Device):
 
 def main():
 
-    station = WeatherStation("1.2.3")
+    ets = ETS("7.9.99")  # , buildingMap=BUILDING_MAP
+    ets._gadMap=GAD_MAP
 
-    ets.register(station)
+    station = WeatherStation(ets, "1.2.3")
 
-    # Weave weather station Datapoints to GroupAddresses
-    # @todo: allow use of gad name, from GrOAT
-
+    #ets.printGroat(by="gad")
     #print()
-    #print()
-    #ets.printGroat("gad")
-    #print()
-    #print()
-    #ets.printGroat("go")
+    #ets.printGroat(by="go")
 
     # Start the scheduler
     # @todo: move to a better place
-    print()
+    #print()
     schedule.start()
     schedule.printJobs()
-    print()
 
     # Run the stack main loop (blocking call)
-    ets.mainLoop()
+    if "pytest" not in sys.modules:
+        ets.mainLoop()
 
     schedule.stop()
-
 
 if __name__ == "__main__":
     main()

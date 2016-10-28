@@ -3,8 +3,6 @@ from pprint import pprint
 from pknyx.api import Device, FunctionalBlock
 from pknyx.core.ets import ETS
 
-ets = ETS()
-
 # Weather station class definition
 class WeatherStationFB(FunctionalBlock):
 
@@ -35,10 +33,15 @@ class WeatherStation(Device):
     LNK_04 = dict(fb="weather_fb", dp="wind_alarm", gad="1/4/1")
     LNK_05 = dict(fb="weather_fb", dp="wind_speed_limit", gad="1/5/1")
     LNK_06 = dict(fb="weather_fb", dp="wind_alarm_enable", gad="1/6/1")
-station = WeatherStation("1.2.3")
 
-# Linking weather station Datapoints to Group Addresses
-ets.register(station)
+def main():
+    ets = ETS("7.9.99")
 
-ets.printGroat(by="gad")
-ets.printGroat(by="go")
+    station = WeatherStation(ets, "1.2.3")
+
+    ets.printGroat(by="gad")
+    print()
+    ets.printGroat(by="go")
+
+if __name__ == "__main__":
+    main()

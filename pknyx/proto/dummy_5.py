@@ -30,9 +30,6 @@ GAD_MAP = {1: {'root': "heating",
               }
           }
 
-ets = ETS()
-ets._gadMap = GAD_MAP
-
 
 class WeatherBlock(FunctionalBlock):
 
@@ -115,13 +112,17 @@ class WeatherStation(Device):
     LNK_05 = dict(fb="weather_block", dp="wind_speed_limit", gad="1/1/5")
     LNK_06 = dict(fb="weather_block", dp="wind_alarm_enable", gad="1/1/6")
 
-# Instanciation of the weather station device object
-station = WeatherStation("1.2.3")
+def main():
 
-ets.register(station)
+    ets = ETS("7.9.99")
+    ets._gadMap = GAD_MAP
 
-print()
-ets.printGroat("gad")
-print()
-print()
-ets.printGroat("go")
+    # Instanciation of the weather station device object
+    station = WeatherStation(ets, "1.2.3")
+
+    ets.printGroat(by="gad")
+    print()
+    ets.printGroat(by="go")
+
+if __name__ == "__main__":
+    main()

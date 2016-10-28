@@ -66,29 +66,25 @@ class Dev2(Device):
     LNK_03 = dict(fb="dev_fb", dp="dp_3", gad="1/1/3")
     #LNK_04 = dict(fb="dev_fb", dp="dp_4", gad="1/1/4")
 
-dev1 = Dev1("1.1.1")
-dev2 = Dev2("1.1.2")
+def main():
+    ets = ETS("7.9.99")  # Borg
+    dev1 = Dev1(ets, "1.1.1")
+    dev2 = Dev2(ets, "1.1.2")
 
-ets = ETS()  # Borg
-ets._gadMap = GAD_MAP
+    ets._gadMap = GAD_MAP
 
-ets.register(dev1)
-ets.register(dev2)
+    ets.printGroat(by="gad")
+    print()
+    ets.printGroat(by="go")
 
-ets.printGroat(by="gad")
-print()
-print()
-ets.printGroat(by="go")
-print()
-print()
+    if "pytest" not in sys.modules:
+        ets.start()
+        while True:
+            try:
+                time.sleep(9999)
+            except KeyboardInterrupt:
+                ets.stop()
+                break
 
-if __name__ == '__main__':
-    dev1.start()
-    dev2.start()
-    while True:
-        try:
-            time.sleep(9999)
-        except KeyboardInterrupt:
-            dev1.stop()
-            dev2.stop()
-            break
+if __name__ == "__main__":
+    main()

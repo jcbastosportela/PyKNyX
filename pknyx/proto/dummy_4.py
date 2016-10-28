@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import time
+import sys
 
 from pknyx.api import Device, FunctionalBlock
 from pknyx.core.ets import ETS
@@ -48,25 +49,24 @@ class Lights(Device):
     LNK_01 = dict(fb="lights_fb", dp="lights_annexe", gad="6/0/8")
     LNK_01a = dict(fb="lights_fb", dp="lights_annexe", gad="6/1/8")
 
-ets = ETS()  # Borg
-ets._gadMap = GAD_MAP
+def main():
+    ets = ETS("7.99.99")  # Borg
+    ets._gadMap = GAD_MAP
 
-lights = Lights("1.1.1")
+    lights = Lights(ets, "1.1.1")
 
-ets.register(lights)
+    ets.printGroat(by="gad")
+    print()
+    ets.printGroat(by="go")
 
-ets.printGroat(by="gad")
-print()
-print()
-ets.printGroat(by="go")
-print()
-print()
+    if "pytest" not in sys.modules:
+        ets.start()
+        while True:
+            try:
+                time.sleep(9999)
+            except KeyboardInterrupt:
+                ets.stop()
+                break
 
 if __name__ == '__main__':
-    lights.start()
-    while True:
-        try:
-            time.sleep(9999)
-        except KeyboardInterrupt:
-            lights.stop()
-            break
+    main()
