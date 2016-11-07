@@ -7,3 +7,7 @@ pKNyX.egg-info
 *.vpp.*
 pKNyX.egg-info
 
+/.cache
+/.eggs
+/.pybuild
+/pKNyX_MoaT.egg-info
