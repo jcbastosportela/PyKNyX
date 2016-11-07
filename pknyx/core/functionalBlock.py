@@ -115,7 +115,7 @@ class FunctionalBlock(object):
                     try:
                         datapoint = self._datapoints[value['dp']]
                     except KeyError:
-                        raise FunctionalBlockValueError("unknown datapoint (%s)" % value['dp'])
+                        raise FunctionalBlockValueError("unknown datapoint (%s) in %s.%s" % (value['dp'],cls,key))
                     name = datapoint.name
                     if name in groupObjects:
                         raise FunctionalBlockValueError("duplicated GroupObject (%s)" % name)
