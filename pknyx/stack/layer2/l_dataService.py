@@ -56,7 +56,7 @@ from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.individualAddress import IndividualAddress
 from pknyx.stack.priorityQueue import PriorityQueue
 from pknyx.stack.layer3.n_groupDataListener import N_GroupDataListener
-from pknyx.stack.layer2.l_dataServiceBase import L_DataServiceUnicast
+from pknyx.stack.layer2.l_dataServiceBase import L_DataServiceUnicast, NOT_REQUIRED
 from pknyx.stack.cemi.cemiLData import CEMILData
 
 PRIORITY_DISTRIBUTION = (-1, 3, 2, 1)
