@@ -53,6 +53,7 @@ from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
 from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.flags import Flags
+from pknyx.stack.priority import Priority
 from pknyx.stack.individualAddress import IndividualAddress
 from pknyx.stack.groupAddress import GroupAddress
 from pknyx.services.scheduler import Scheduler
@@ -230,7 +231,7 @@ class ETS(threading.Thread):
     def stop(self):
         self._running = False
         self._scheduler.stop()
-        self._queue.add(None,0)
+        self._queue.add(None,Priority('system'))
         for dev in self._devices:
             dev.stop()
         for dev in self._layer2:

@@ -61,6 +61,7 @@ import socket
 from pknyx.common.exception import PKNyXValueError
 from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pknyx.stack.result import Result
+from pknyx.stack.priority import Priority
 from pknyx.stack.priorityQueue import PriorityQueue
 from pknyx.stack.multicastSocket import MulticastSocketReceive, MulticastSocketTransmit
 from pknyx.stack.layer2.l_dataServiceBase import L_DataServiceBroadcast
@@ -215,7 +216,7 @@ class UDPTransceiver(L_DataServiceBroadcast):
         logger.trace("UDPTransceiver.stop()")
 
         self._running = False
-        self._queue.add(None,0)
+        self._queue.add(None,Priority('system'))
         self._transmitterSock.close()
         self._receiverSock.close()
 
