@@ -109,3 +109,4 @@ def _setup():
             self._log(logging.EXCEPTION, msg, args, exc_info=exc_info, **kwargs)
     logging.Logger.exception = _exception
 
+_setup()
