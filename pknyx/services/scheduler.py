@@ -101,6 +101,8 @@ class Scheduler(object):
     TYPE_AT = "date"
     TYPE_CRON = "cron"
 
+    _apscheduler = None
+
     def __init__(self, autoStart=False, type_=BackgroundScheduler):
         """ Init the Scheduler object
 
@@ -110,12 +112,10 @@ class Scheduler(object):
         raise SchedulerValueError:
         """
         super(Scheduler, self).__init__()
-
-        self._apscheduler = type_()
-        self._apscheduler.add_listener(self._listener, mask=(EVENT_JOB_ERROR|EVENT_JOB_MISSED))
+        self._type = type_
 
         if autoStart:
-            scheduler.start()
+            self.start()
 
     def _listener(self, event):
         """ APScheduler listener.
@@ -243,6 +243,10 @@ class Scheduler(object):
         """
         logger.trace("Scheduler.start()")
 
+        if self._apscheduler is None:
+            self._apscheduler = self._type()
+            self._apscheduler.add_listener(self._listener, mask=(EVENT_JOB_ERROR|EVENT_JOB_MISSED))
+
         if not self._apscheduler.running:
             self._apscheduler.start()
 
@@ -255,8 +259,10 @@ class Scheduler(object):
         """
         logger.trace("Scheduler.stop()")
 
-        if self._apscheduler.running:
+        if self._apscheduler is not None and self._apscheduler.running:
             self._apscheduler.shutdown()
 
             logger.trace("Scheduler.stop(): stopped")
+
+        self._apscheduler = None
 
