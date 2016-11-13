@@ -11,6 +11,7 @@ import unittest
 from pknyx.services.logger import logging
 logger = logging.getLogger(__name__)
 logging.getLogger("pknyx").setLevel(logging.ERROR)
+logger.setLevel(logging.ERROR)
 
 
 # A toggle button
