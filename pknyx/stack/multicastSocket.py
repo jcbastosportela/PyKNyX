@@ -97,11 +97,6 @@ class MulticastSocketBase(socket.socket):
         self._ttl= ttl
         self._loop = loop
 
-        self.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        try:
-            self.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
-        except:
-            logger.exception("MulticastSocketBase.__init__(): system doesn't support SO_REUSEPORT")
         self.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_TTL, ttl)
         self.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_LOOP, loop)
 
@@ -124,7 +119,7 @@ class MulticastSocketBase(socket.socket):
 class MulticastSocketReceive(MulticastSocketBase):
     """
     """
-    def __init__(self, localAddr, mcastAddr, mcastPort, timeout=1, ttl=32, loop=1):
+    def __init__(self, localAddr, localPort, mcastAddr, mcastPort, timeout=1, ttl=32, loop=1):
         """
         """
 
@@ -146,6 +141,12 @@ class MulticastSocketReceive(MulticastSocketBase):
 
         @todo: use mcastAddr, instead of ""?
         """
+        self.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        try:
+            self.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+        except:
+            logger.exception("MulticastSocketBase.__init__(): system doesn't support SO_REUSEPORT")
+
         self.bind(("", self._localPort))
 
     def receive(self):
@@ -169,6 +170,8 @@ class MulticastSocketTransmit(MulticastSocketBase):
         """
         """
         self.bind((self._localAddr, self._localPort))
+        if self._localPort == 0:
+            self._localPort = self.getsockname()[1]
 
     def transmit(self, data):
         """

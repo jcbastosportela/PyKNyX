@@ -75,23 +75,30 @@ class SwitchTestCase(unittest.TestCase):
 
     def setUp(self):
         self.ets = None
+        self.ets2 = None
 
     def tearDown(self):
         if self.ets is not None:
             self.ets.stop()
+        if self.ets2 is not None:
+            self.ets2.stop()
 
     def test_multicast(self):
         self.ets = ETS("1.2.0", transParams=dict(mcastAddr="224.55.36.71", mcastPort=os.getpid()))
+        self.ets2 = ETS("1.2.0", transParams=dict(mcastAddr="224.55.36.71", mcastPort=os.getpid()))
         self._do_test()
 
     def test_switch(self):
         self.ets = ETS("1.2.0", transCls=None)
+        self.ets2 = self.ets
         self._do_test()
 
     def _do_test(self):
         self.actor = Actor(self.ets, "1.2.3")
-        self.toggle = Toggle(self.ets, "1.2.4")
+        self.toggle = Toggle(self.ets2, "1.2.4")
         self.ets.start()
+        if self.ets2 is not self.ets:
+            self.ets2.start()
         afb = self.actor.fb["actor_fb"]
         assert afb._current is None
         time.sleep(0.5)

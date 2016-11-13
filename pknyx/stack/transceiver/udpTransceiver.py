@@ -107,8 +107,8 @@ class UDPTransceiver(L_DataServiceBroadcast):
         self._mcastPort = mcastPort
 
         localAddr = socket.gethostbyname(socket.gethostname())
-        self._receiverSock = MulticastSocketReceive(localAddr, mcastAddr, mcastPort)
-        self._transmitterSock = MulticastSocketTransmit(localAddr, mcastPort, mcastAddr, mcastPort)
+        self._transmitterSock = MulticastSocketTransmit(localAddr, 0, mcastAddr, mcastPort)
+        self._receiverSock = MulticastSocketReceive(localAddr, self._transmitterSock.localPort, mcastAddr, mcastPort)
         self._queue = PriorityQueue(PRIORITY_DISTRIBUTION)
 
 
