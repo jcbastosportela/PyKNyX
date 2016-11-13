@@ -10,4 +10,5 @@ pKNyX.egg-info
 /.eggs
 /.pybuild
 /pKNyX_MoaT.egg-info
+/.coverage
 *.swp

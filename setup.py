@@ -107,6 +107,12 @@ setup(name=config.APP_NAME,
                 "pknyx.tools.templates",
                 ],
 
+      extras_require={
+        'testing': [
+            'pytest',
+            'pytest-cov',
+        ],
+      },
       scripts=["pknyx/scripts/pknyx-group.py",
                "pknyx/scripts/pknyx-admin.py"],
 
