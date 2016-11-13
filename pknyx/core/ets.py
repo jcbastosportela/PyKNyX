@@ -204,7 +204,7 @@ class ETS(threading.Thread):
         priority = cEMI.priority
 
         # Add to inQueue and notify inQueue handler
-        self._queue.add((cEMI,l2), priority)
+        self._queue.add((l2,cEMI), priority)
 
     def start(self):
         if self._running:
