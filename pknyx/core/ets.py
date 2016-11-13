@@ -219,13 +219,13 @@ class ETS(threading.Thread):
                 dev.start()
             for dev in self._devices:
                 dev.start()
+            self._scheduler.start()
             while self._running:
                 msg = self._queue.remove()
                 if msg is None:
                     return
                 l2,cEMI = msg
                 self.processFrame(l2,cEMI)
-            self._scheduler.start()
         except Exception:
             logger.exception("ETS main loop")
         finally:
