@@ -59,9 +59,9 @@ Flags in ETS:
 Usage
 =====
 
-An actor will have a single data point with one group object CW (receiving
-a command for setting the output) and another group object CRT (the
-output's state).
+An actor will have a data point with one group object CW (receiving
+a command for setting the output) and another data point with a group
+object CRT (the output's state).
 
 An input will have one data point with a group object CT (send a command)
 and another data point with its group object CWUI (receive the actor's state).
