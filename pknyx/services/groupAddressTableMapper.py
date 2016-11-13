@@ -85,11 +85,14 @@ Usage
 
 __revision__ = "$Id$"
 
+import re
 import os.path
 import imp
+import xml.etree.ElementTree as etree
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
+from pknyx.core.dptXlator.dptXlatorFactory import DPTXlatorFactory
 from pknyx.services.logger import Logger
 from pknyx.stack.groupAddress import GroupAddress, GroupAddressValueError
 
@@ -169,6 +172,47 @@ class GroupAddressTableMapper(object):
             Logger().warning("GAD map path '%s' does not exists" % path)
 
         return gadMapTable
+
+    def _loadXMLTable(self, file):
+        gadMapTable = {}
+        if os.path.exists(file):
+            Logger().debug("GroupAddressTableMapper.loadXMLTable(): loading from '%s'" % file)
+
+            tree = etree.parse(file)
+            root = tree.getroot()
+            for gad in root.findall('.//ets:GroupAddress', namespaces={'ets': 'http://knx.org/xml/project/12'}):
+                numericAddress = int(gad.get('Address'))
+                name = gad.get('Name')
+                dpt = gad.get('DatapointType')
+                dptId = None
+
+                hg = (numericAddress >> 11) & 0x0F
+                mg = (numericAddress >>  8) & 0x07
+                ga = (numericAddress >>  0) & 0xFF
+
+                dptmatch = re.search('DPT-([0-9]+)', dpt)
+                if dptmatch:
+                    dptId="%i.*" % (int(dptmatch.group(1)))
+
+                dpstmatch = re.search('DPST-([0-9]+)-([0-9]+)', dpt)
+                if dpstmatch:
+                    dptId="%i.%i" % (int(dpstmatch.group(1)), int(dpstmatch.group(2)))
+
+                gadMapTable["%i/%i/%i" % (hg,mg,ga)] = {'name': name, 'desc': None, 'dptId': dptId}
+
+        else:
+            Logger().warning("GAD map XML '%s' does not exist" % file)
+
+        return gadMapTable
+
+    def loadXML(self, file):
+        """ Load GAD map table from ETS XML Project File.
+        """
+
+        table = self._loadXMLTable(file)
+        if self.isTableValid(table):
+            self._gadMapTable = {}
+            self._gadMapTable.update(table)
 
     def loadFrom(self, path):
         """ Load GAD map table from module in GAD map path.
@@ -255,6 +299,34 @@ class GroupAddressTableMapper(object):
         except KeyError:
             raise GroupAddressTableMapperValueError("Can't find a description for given GAD/nickname (%s)" % gad)
 
+    def getDptXlator(self, gad):
+        """ Return a datapoint translator for the given GAD/nickname
+
+        @param: GAD/nickname
+        @type: str
+
+        @return: datapoint translator
+        @tpye DPTXlator
+
+        @raise GroupAddressTableMapperValueError:
+        """
+        try:
+            value = self._gadMapTable[gad]
+        except KeyError:
+            try:
+                value = self._gadMapTable[self.getGad(gad)]
+            except KeyError:
+                raise GroupAddressTableMapperValueError("Can't find GAD nor nickname '%s' in GAD map table" % gad)
+
+        try:
+            dptId = value['dptId']
+        except KeyError:
+            raise  GroupAddressTableMapperValueError("Can't find a dataponint id for given GAD/nickname (%s)" % gad)
+
+        if dptId == None:
+            return None
+
+        return DPTXlatorFactory().create(dptId)
 
 if __name__ == '__main__':
     import unittest
