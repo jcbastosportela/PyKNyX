@@ -62,7 +62,7 @@ class APDU(object):
     """ APDU class
     """
     @classmethod
-    def makeGroupValue(cls, apci, data="\x00", size=0):
+    def makeGroupValue(cls, apci, data=b"\x00", size=0):
         """ Create an APDU from apci and data
 
         @param apci: L{APCI}
