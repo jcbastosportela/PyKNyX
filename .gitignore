@@ -1,7 +1,6 @@
 *.pyc
 build
 dist
-pKNyX.egg-info
 *.wpu
 *.vpp~*
 *.vpp.*
@@ -11,3 +10,4 @@ pKNyX.egg-info
 /.eggs
 /.pybuild
 /pKNyX_MoaT.egg-info
+*.swp
