@@ -30,6 +30,27 @@ class ActorFB(FunctionalBlock):
     GO_02 = dict(dp="status", flags="CRT", priority="low")
     DESC = "ActorFB"
 
+    _current = None
+
+    @notify.datapoint(dp="change", condition="change")
+    def stateChanged(self, event):
+        if event['newValue'] == "On":
+            self.on = True
+        else:
+            self.on = False
+
+    @property
+    def on(self):
+        return self.dp["status"].value == "On"
+    @on.setter
+    def on(self, value):
+        self._current = value
+        if value:
+            self.dp["status"].value = "On"
+        else:
+            self.dp["status"].value = "Off"
+
+
 class Toggle(Device):
     FB_01 = dict(cls=ToggleFB, name="toggle_fb", desc="binary input")
 
@@ -48,26 +69,6 @@ class Actor(Device):
     LNK_01 = dict(fb="actor_fb", dp="change", gad="1/1/1")
     LNK_02 = dict(fb="actor_fb", dp="status", gad="1/2/1")
 
-    _current = None
-
-    @notify.datapoint(dp="change", condition="change")
-    def stateChanged(self, event):
-        if event['newValue'] == "On":
-            self.on = True
-        else:
-            self.on = False
-
-    @property
-    def on(self):
-        return self.fb["actor_fb"].dp["status"].value == "On"
-    @on.setter
-    def on(self, value):
-        self._current = value
-        if value:
-            self.fb["actor_fb"].dp["status"].value = "On"
-        else:
-            self.fb["actor_fb"].dp["status"].value = "Off"
-
 class SwitchTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -80,13 +81,17 @@ class SwitchTestCase(unittest.TestCase):
         self.ets.stop()
 
     def test_switch(self):
-        assert self,actor._current is None
+        afb = self.actor.fb["actor_fb"]
+        assert afb._current is None
+        time.sleep(0.5)
+        logger.debug("Set TRUE")
         self.toggle.set(True)
-        time.sleep(0.2)
-        assert self.actor._current is True
+        time.sleep(0.5)
+        assert afb._current is True
         assert self.toggle.status
+        logger.debug("Set FALSE")
         self.toggle.set(False)
-        time.sleep(0.2)
-        assert self.toggle._current is False
+        time.sleep(0.5)
+        assert afb._current is False
         assert not self.toggle.status
 
