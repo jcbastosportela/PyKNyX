@@ -117,7 +117,7 @@ class L_DataService(L_DataServiceUnicast):
         higher levels.
         """
         srcAddr = cEMI.sourceAddress
-        if self.physAddr != NOT_REQUIRED and srcAddr != self.physAddr:  # Avoid loop
+        if self.physAddr is not NOT_REQUIRED and srcAddr != self.physAddr:  # Avoid loop
             if cEMI.messageCode == CEMILData.MC_LDATA_IND:  #in (CEMILData.MC_LDATA_CON, CEMILData.MC_LDATA_IND):
                 if self._ldl is None:
                     logger.warning("L_GroupDataService.run(): not listener defined")
