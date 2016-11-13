@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 from pprint import pprint
 
 from pknyx.api import Device, FunctionalBlock, notify
@@ -73,15 +74,24 @@ class Actor(Device):
 class SwitchTestCase(unittest.TestCase):
 
     def setUp(self):
+        self.ets = None
+
+    def tearDown(self):
+        if self.ets is not None:
+            self.ets.stop()
+
+    def test_multicast(self):
+        self.ets = ETS("1.2.0", transParams=dict(mcastAddr="224.55.36.71", mcastPort=os.getpid()))
+        self._do_test()
+
+    def test_switch(self):
         self.ets = ETS("1.2.0", transCls=None)
+        self._do_test()
+
+    def _do_test(self):
         self.actor = Actor(self.ets, "1.2.3")
         self.toggle = Toggle(self.ets, "1.2.4")
         self.ets.start()
-
-    def tearDown(self):
-        self.ets.stop()
-
-    def test_switch(self):
         afb = self.actor.fb["actor_fb"]
         assert afb._current is None
         time.sleep(0.5)
