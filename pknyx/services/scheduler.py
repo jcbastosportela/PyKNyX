@@ -246,7 +246,7 @@ class Scheduler(object):
         if not self._apscheduler.running:
             self._apscheduler.start()
 
-        logger.debug("Scheduler.start(): running")
+            logger.trace("Scheduler.start(): running")
 
     def stop(self):
         """ Shutdown the scheduler
@@ -258,5 +258,5 @@ class Scheduler(object):
         if self._apscheduler.running:
             self._apscheduler.shutdown()
 
-        logger.debug("Scheduler.stop(): stopped")
+            logger.trace("Scheduler.stop(): stopped")
 
