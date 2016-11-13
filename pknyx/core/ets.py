@@ -102,7 +102,10 @@ class ETS(threading.Thread):
 
         self._scheduler = Scheduler()
         self.setDaemon(True)
-        self._tc = transCls(self, **transParams)
+        if transCls is None:
+            self._tc = None
+        else:
+            self._tc = transCls(self, **transParams)
         #self.addLayer2(self._tc)
 
 
