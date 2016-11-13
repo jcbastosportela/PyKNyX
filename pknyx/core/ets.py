@@ -198,7 +198,7 @@ class ETS(threading.Thread):
         @param cEMI:
         @type cEMI:
         """
-        logger.debug("L_DataService.putInFrame(): cEMI=%s" % cEMI)
+        logger.debug("ETS.putFrame(): cEMI=%s" % cEMI)
 
         # Get priority from cEMI
         priority = cEMI.priority
@@ -214,6 +214,7 @@ class ETS(threading.Thread):
 
     def run(self):
         self._running = True
+        logger.debug("ETS.run(): starting")
         try:
             for dev in self._layer2:
                 dev.start()
@@ -221,11 +222,14 @@ class ETS(threading.Thread):
                 dev.start()
             self._scheduler.start()
             while self._running:
+                logger.trace("ETS.run(): looping")
                 msg = self._queue.remove()
                 if msg is None:
+                    logger.trace("ETS.run(): exit: None")
                     return
                 l2,cEMI = msg
                 self.processFrame(l2,cEMI)
+            logger.trace("ETS.run(): exit: !_running")
         except Exception:
             logger.exception("ETS main loop")
         finally:
@@ -278,22 +282,28 @@ class ETS(threading.Thread):
         done = skipped = False
         for dev in self._layer2:
             if l2 == dev:
+                logger.trace("recv: same: %s", l2)
                 continue
             cEMI_x = cEMI_b if dev.hop else cEMI
             if not cEMI_x:
+                logger.trace("recv: skip: %s", l2)
                 skipped = True
             elif getattr(dev,r)(cEMI):
+                logger.trace("recv: sent: %s", l2)
                 dev.dataInd(cEMI)
                 done = True
+            else:
+                logger.trace("recv: notsent: %s", l2)
         if may_force and not done:
             # We never saw this address. Send to every broadcast device.
+            logger.trace("recv: repeat")
             for dev in self._layer2:
                 if l2 == dev:
                     continue
                 cEMI_x = cEMI_b if dev.hop else cEMI
                 if cEMI_x and getattr(dev,r)(cEMI, force=True):
                     done = True
-            if done:
+            if not done:
                 logger.debug("recv %s: unknown destination address (%s)", repr(destAddr))
         if skipped:
             logger.debug("recv %s: not forwarded (hopcount zero): %s from %s", l2, cEMI)
