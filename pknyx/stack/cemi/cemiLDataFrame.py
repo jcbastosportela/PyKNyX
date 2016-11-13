@@ -105,7 +105,9 @@ class CEMILDataFrame(object):
         if frame is not None:
             if addIL:
                 raise CEMIValueError("can't give both frame and addIL args")
-            elif len(frame) < CEMILDataFrame.BASIC_LENGTH:
+            if isinstance(frame,CEMILDataFrame):
+                frame = frame._raw
+            if len(frame) < CEMILDataFrame.BASIC_LENGTH:
                 raise CEMIValueError("data too short (%d)" % len(frame))
             self._raw = bytearray(frame)
         else:
