@@ -261,7 +261,7 @@ class ETS(threading.Thread):
             # Layer2 and then gets re-broadcast. If zero, discard.
             if hopCount:
                 cEMI_b = cEMI.copy()
-                cEMI.b.hopCount = hopCount-1
+                cEMI_b.hopCount = hopCount-1
             else:
                 cEMI_b = None
         else:
