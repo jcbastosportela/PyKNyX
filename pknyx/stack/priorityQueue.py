@@ -110,7 +110,7 @@ class PriorityQueue(object):
         # queue priority we found the last element at
         self._pos = 0
         # number of items we may (still) read before getting to lower prios
-        self._n = priorityDistribution[0]
+        self._n = priorityDistribution[:]
 
     def add(self, obj, priority):
         """ Add an element to the queue
