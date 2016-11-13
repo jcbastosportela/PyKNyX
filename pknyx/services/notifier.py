@@ -55,7 +55,7 @@ Instead of directly using the APScheduler, the Notifier class below provides the
 list of names of the decorated functions, in _pendingFuncs.
 
 Then, when a new instance of the FunctionalBlock sub-class is created, in ETS.register(), we call the
-Notifier.doRegisterJobs() method which tried to retreive the bounded method matching one of the decorated functions.
+Notifier.doRegisterJobs() method which tried to retrieve the bounded method matching one of the decorated functions.
 If found, the method is registered in APScheduler.
 
 Notifier also adds a listener to be notified when a decorated method call fails to be run, so we can log it.
@@ -83,9 +83,11 @@ See: http://www.developpez.net/forums/d1361199/autres-langages/python-zope/gener
 Idem for scheduler.
 """
 
+import six
 
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.utils import reprStr
+from pknyx.common.utils import func_name, meth_name,meth_self,meth_func
 from pknyx.common.singleton import Singleton
 from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
@@ -96,7 +98,7 @@ class NotifierValueError(PKNyXValueError):
     """
     """
 
-
+@six.add_metaclass(Singleton)
 class Notifier(object):
     """ Notifier class
 
@@ -106,7 +108,6 @@ class Notifier(object):
     @ivar _datapointJobs:
     @type _registeredJobs: dict
     """
-    __metaclass__ = Singleton
 
     def __init__(self):
         """ Init the Notifier object
@@ -203,13 +204,13 @@ class Notifier(object):
         logger.debug("Notifier.doRegisterJobs(): obj=%s" % repr(obj))
 
         for type_, func, args in self._pendingFuncs:
-            logger.debug("Notifier.doRegisterJobs(): type_=\"%s\", func=%s, args=%s" % (type_, func.func_name, repr(args)))
+            logger.debug("Notifier.doRegisterJobs(): type_=\"%s\", func=%s, args=%s" % (type_, func_name(func), repr(args)))
 
-            method = getattr(obj, func.func_name, None)
+            method = getattr(obj, func_name(func), None)
             if method is not None:
-                logger.debug("Notifier.doRegisterJobs(): add method %s() of %s" % (method.im_func.func_name, method.im_self))
+                logger.debug("Notifier.doRegisterJobs(): add method %s() of %s" % (meth_name(method), meth_self(method)))
 
-                if method.im_func is func:  # avoid name clash between FB methods
+                if meth_func(method) is func:  # avoid name clash between FB methods
 
                     if type_ == "datapoint":
                         dp, condition, thread = args
@@ -252,7 +253,7 @@ class Notifier(object):
                 for method, condition, thread_ in self._datapointJobs[obj][dp]:
                     if oldValue != newValue and condition == "change" or condition == "always":
                         try:
-                            logger.debug("Notifier.datapointNotify(): trigger method %s() of %s" % (method.im_func.func_name, method.im_self))
+                            logger.debug("Notifier.datapointNotify(): trigger method %s() of %s" % (meth_name(method), meth_self(method)))
                             event = dict(name="datapoint", dp=dp, oldValue=oldValue, newValue=newValue, condition=condition, thread=thread_)
 
                             if thread_:

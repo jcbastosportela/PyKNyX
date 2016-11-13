@@ -46,6 +46,8 @@ Usage
 @license: GPL
 """
 
+import six
+
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
 from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
@@ -60,7 +62,7 @@ class ETSValueError(PKNyXValueError):
     """
     """
 
-
+@six.add_metaclass(Singleton)
 class ETS(object):
     """ ETS class
 
@@ -72,8 +74,6 @@ class ETS(object):
 
     raise ETSValueError:
     """
-    __metaclass__ = Singleton
-
     def __init__(self):
         """
         """
@@ -110,14 +110,14 @@ class ETS(object):
         flags = None
         for fb_, dp, gad in device.lnk:
 
-            # Retreive FunctionnalBlock from device
+            # Retrieve FunctionalBlock from device
             try:
                 fb = device.fb[fb_]
 
             except KeyError:
                 raise ETSValueError("unregistered functional block (%s)" % fb_)
 
-            # Retreive GroupObject from FunctionalBlock
+            # Retrieve GroupObject from FunctionalBlock
             try:
                 groupObject = fb.go[dp]
 
@@ -151,7 +151,7 @@ class ETS(object):
         """ Build the Group Object Association Table
         """
 
-        # Retreive all bound gad
+        # Retrieve all bound gad
         gads = []
         for gad in device.stack.agds.groups.keys():
             gads.append(GroupAddress(gad, outFormatLevel))
@@ -210,7 +210,7 @@ class ETS(object):
 
         elif by == "go":
 
-            # Retreive all groupObjects, not only bound ones
+            # Retrieve all groupObjects, not only bound ones
             # @todo: use buildingMap presentation
             mapByDP = {}
             title = "%-29s %-30s %-10s %-30s %-10s %-10s" % ("Functional block", "Datapoint", "DPTID", "GAD", "Flags", "Priority")

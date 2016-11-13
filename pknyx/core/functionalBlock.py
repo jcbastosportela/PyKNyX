@@ -77,7 +77,7 @@ class FunctionalBlock(object):
     @ivar _desc: description of the device
     @type _desc:str
 
-    @ivar _params: additionnal user params
+    @ivar _params: additional user params
     @type _params: dict
 
     @ivar _datapoints: Datapoints exposed by this FunctionalBlock
@@ -91,7 +91,7 @@ class FunctionalBlock(object):
         """
         self = super(FunctionalBlock, cls).__new__(cls)
 
-        # Retreive all parents classes, to get all objects defined there
+        # Retrieve all parents classes, to get all objects defined there
         classes = cls.__mro__
 
         # class objects named B{DP_xxx} are treated as Datapoint and added to the B{_datapoints} dict
@@ -144,7 +144,7 @@ class FunctionalBlock(object):
         @param desc: description of the device
         @type desc: str
 
-        @param params: additionnal user params
+        @param params: additional user params
         @type params: dict
 
         raise FunctionalBlockValueError:
@@ -158,7 +158,7 @@ class FunctionalBlock(object):
 
         self._params = params
 
-        # Call for additionnal user init
+        # Call for additional user init
         self.init()
 
     def __repr__(self):
@@ -168,7 +168,7 @@ class FunctionalBlock(object):
         return "<%s('%s')>" % (reprStr(self.__class__), self._name)
 
     def init(self):
-        """ Additionnal user init
+        """ Additional user init
         """
         pass
 

@@ -83,6 +83,7 @@ Usage
 @license: GPL
 """
 
+import six
 import re
 import os.path
 import imp
@@ -99,7 +100,7 @@ class GroupAddressTableMapperValueError(PKNyXValueError):
     """
     """
 
-
+@six.add_metaclass(Singleton)
 class GroupAddressTableMapper(object):
     """ GroupAddressTableMapper class
 
@@ -109,7 +110,6 @@ class GroupAddressTableMapper(object):
     @ivar _gadMapTable: GroupAddress mapping table
     @type _gadMapTable: dict
     """
-    __metaclass__ = Singleton
 
     def __init__(self, module='gadMapTable'):
         """ Init the GroupAddressTableMapper.

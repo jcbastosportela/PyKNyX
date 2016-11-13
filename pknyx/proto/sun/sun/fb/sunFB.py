@@ -32,7 +32,7 @@ class SunFB(FunctionalBlock):
     DESC = "Sun position management FB"
 
     def _init(self):
-        """ Additionnal init of our functional block
+        """ Additional init of our functional block
         """
         self._sun = sun.Sun(latitude=self.dp["latitude"].value,
                             longitude = self.dp["longitude"].value,

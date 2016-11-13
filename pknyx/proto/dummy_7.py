@@ -64,7 +64,7 @@ class WeatherTemperatureBlock(FunctionalBlock):
     def updateTemperatureHumidity(self):  #, event):
         logger.trace("WeatherTemperatureBlock.updateTemperatureHumidity()")
 
-        # How we retreive the temperature/humidity is out of the scope of this proposal
+        # How we retrieve the temperature/humidity is out of the scope of this proposal
         temperature = 20.
         humidity = 55.
         self.dp["temperature"].value = temperature
@@ -90,7 +90,7 @@ class WeatherWindBlock(FunctionalBlock):
     def updateWindSpeed(self):  #, event):
         logger.trace("WeatherWindBlock.updateWindSpeed()")
 
-        # How we retreive the speed is out of the scope of this proposal
+        # How we retrieve the speed is out of the scope of this proposal
         speed = 12.
 
         # Now, write the new speed value to the Datapoint

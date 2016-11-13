@@ -41,6 +41,7 @@ Implements
 @license: GPL
 """
 
+import six
 import logging
 import logging.handlers
 

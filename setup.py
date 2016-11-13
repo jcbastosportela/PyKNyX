@@ -52,6 +52,10 @@ except ImportError:
 
 from pknyx.common import config
 
+import sys
+py2_req = []
+if sys.version_info.major == 2:
+    py2_req.append("argparse")
 
 setup(name=config.APP_NAME,
       version=config.APP_VERSION,
@@ -92,5 +96,7 @@ setup(name=config.APP_NAME,
                "pknyx/scripts/pknyx-admin.py"],
 
       install_requires=["APScheduler >= 3",
-                        "argparse"],
+                        "blinker",
+                        "six",
+                        ]+py2_req,
 )

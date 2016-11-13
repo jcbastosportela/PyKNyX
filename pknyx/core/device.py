@@ -70,7 +70,7 @@ class Device(object):
         """
         self = super(Device, cls).__new__(cls)
 
-        # Retreive all parents classes, to get all objects defined there
+        # Retrieve all parents classes, to get all objects defined there
         classes = cls.__mro__ # do we really want that?
 
         # class objects named B{FB_xxx} are treated as FunctionalBlock and added to the B{_functionalBlocks} dict
@@ -147,7 +147,7 @@ class Device(object):
         return self._links
 
     def init(self):
-        """ Additionnal user init
+        """ Additional user init
         """
         pass
 
@@ -170,7 +170,7 @@ class Device(object):
         self._stack.stop()
 
     def shutdown(self):
-        """ Additionnal user shutdown
+        """ Additional user shutdown
         """
         pass
 

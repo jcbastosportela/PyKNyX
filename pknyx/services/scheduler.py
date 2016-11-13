@@ -55,7 +55,7 @@ Instead of directly using the APScheduler, the Scheduler class below provides th
 list of names of the decorated functions, in _pendingFuncs.
 
 Then, when a new instance of the FunctionalBlock sub-class is created, in ets.register(), we call the
-Scheduler.doRegisterJobs() method which tried to retreive the bounded method matching one of the decorated functions.
+Scheduler.doRegisterJobs() method which tried to retrieve the bounded method matching one of the decorated functions.
 If found, the method is registered in APScheduler.
 
 Scheduler also adds a listener to be notified when a decorated method call fails to be run, so we can log it.
@@ -68,6 +68,7 @@ Usage
 @license: GPL
 """
 
+import six
 import traceback
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -76,6 +77,7 @@ from apscheduler.events import EVENT_JOB_ERROR,EVENT_JOB_MISSED
 from pknyx.common.exception import PKNyXValueError
 from pknyx.common.singleton import Singleton
 from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
+from pknyx.common.utils import func_name, meth_name,meth_self,meth_func
 
 scheduler = None
 
@@ -84,7 +86,7 @@ class SchedulerValueError(PKNyXValueError):
     """
     """
 
-
+@six.add_metaclass(Singleton)
 class Scheduler(object):
     """ Scheduler class
 
@@ -94,7 +96,6 @@ class Scheduler(object):
     @ivar _apscheduler: real scheduler
     @type _apscheduler: APScheduler
     """
-    __metaclass__ = Singleton
 
     TYPE_EVERY = 1
     TYPE_AT = 2
@@ -216,11 +217,11 @@ class Scheduler(object):
         logger.debug("Scheduler.doRegisterJobs(): obj=%s" % repr(obj))
 
         for type_, func, kwargs in self._pendingFuncs:
-            logger.debug("Scheduler.doRegisterJobs(): type_=\"%s\", func=%s, kwargs=%s" % (type_, func.func_name, repr(kwargs)))
-            method = getattr(obj, func.func_name, None)
+            logger.debug("Scheduler.doRegisterJobs(): type_=\"%s\", func=%s, kwargs=%s" % (type_, func_name(func), repr(kwargs)))
+            method = getattr(obj, func_name(func), None)
             if method is not None:
-                logger.debug("Scheduler.doRegisterJobs(): add method %s() of %s" % (method.im_func.func_name, method.im_self))
-                if method.im_func is func:
+                logger.debug("Scheduler.doRegisterJobs(): add method %s() of %s" % (meth_name(method), meth_self(method)))
+                if meth_func(method) is func:
                     if type_ == Scheduler.TYPE_EVERY:
                         self._apscheduler.add_job(method, trigger="interval", **kwargs)
                     elif type_ == Scheduler.TYPE_AT:
