@@ -1,20 +1,24 @@
-=========================
-The knxd Version of pknyx
-=========================
+================================
+pknxd: The knxd Version of pknyx
+================================
 
 Author: Matthias Urlichs <matthias@urlichs.de>
 
 Rationale
 =========
 
-Some aspects of pKNyX really don't work for me and shouted "Rewrite me!".
-I couldn't ignore that temptation.
-
 The KNX router I maintain (`knxd`_) is written in somewhat-dated C++ which
-requires a non-standard library. pKNyX has the potential to entirely
-replace `knxd`_. So I decided to get started.
+requires a non-standard library. When I discovered `pKNyX`_, I saw that it
+might eventually replace `knxd`_. So I decided to get started.
+
+In addition, some aspects of `pKNyX`_ didn't work for me and shouted
+"Rewrite me!". I couldn't ignore that temptation.
 
 _knxd: https://github.com/knxd/knxd
+_pKNyX: http://www.pknyx.org/
+
+Changes to pKNyX
+================
 
 The following sub-chapters describe the changes I implemented.
 
@@ -22,9 +26,11 @@ Using more than one device
 --------------------------
 
 Running an entirely separate KNX protocol stack per device does not make
-sense. That does not scale. – assume that you want to monitor a building
-with 1000 devices. That will open 2000 sockets and create 5000 OS-level
-threads.
+sense. That does not scale.
+
+Aassume that you want to monitor a building with 1000 devices. That will
+open 2000 sockets and create 5000 OS-level threads, half of which will wake
+up for each packet, only to decide that it's not for them.
 
 Thus, the "master" object in pknyx is no longer a device, but the ETS object.
 This is no longer a singleton, allowing you to run more than one ETS stack
@@ -80,6 +86,14 @@ I decided to move all tests into a "tests" directory.
 * Ability to test installed or other versions of pKNyX
 * More easily runnable by ``setup.py``
 
+Minor fixes
+-----------
+
+* Python 3 support
+* merged GrOAT listings
+* added integration tests
+* multicast socket
+
 Hop count
 +++++++++
 
@@ -111,4 +125,29 @@ The method ``ETS.weave()`` has been removed.
 
 ``ETS.printGroat()`` used to require a device argument. This is now
 optional; if not used, the returned table will contain all devices.
+
+Planned changes ("TODO")
+========================
+
+* more tests, esp. end-to-end of the example code snippets
+
+* Requiring a separate class per device isn't very Python-ish
+
+* … and doesn't lend itself to generating multiple devices from a config file
+
+* more code cleanups
+
+* declare datapoints etc. as objects, not dicts
+
+* propagate group address filtering down the stack
+
+* (adding a dispatch table instead of looping through all the data layers)
+
+* route datagrams to, and add caching of, individual addresses
+
+* add using a socket to knxd or a tunnel
+
+* possibly port more features of knxd
+
+* possibly² add code for handling large knx networks, e.g. group address filtering and translation
 
