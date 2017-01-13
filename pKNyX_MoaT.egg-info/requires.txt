@@ -1,4 +1,0 @@
-APScheduler >= 3
-blinker
-six
-argparse

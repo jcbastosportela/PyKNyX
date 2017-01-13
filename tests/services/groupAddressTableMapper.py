@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from pknyx.services.groupAddressTableMapper import *
+from pyknyx.services.groupAddressTableMapper import *
 import unittest
 
 # Mute logger
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 
 GAD_MAP_TABLE = {"1/-/-": dict(name="light", desc="Lights (1/-/-)"),
                     "1/1/-": dict(name="light_cmd", desc="Commands (1/1/-)"),

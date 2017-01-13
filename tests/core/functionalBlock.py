@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from pknyx.core.functionalBlock import *
+from pyknyx.core.functionalBlock import *
 import unittest
 
 # Mute logger
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 
 
 class FunctionalBlockTestCase(unittest.TestCase):

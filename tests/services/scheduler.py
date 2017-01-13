@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from pknyx.services.scheduler import *
+from pyknyx.services.scheduler import *
 import time
 import unittest
-from pknyx.services.logger import _setup; _setup()
+from pyknyx.services.logger import _setup; _setup()
 
 scheduler = Scheduler()
 
 # Mute logger
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 
 class SomeClass(object):
     runs = 0

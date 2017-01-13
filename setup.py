@@ -5,7 +5,8 @@
 License
 =======
 
- - B{pKNyX} (U{http://www.pknyx.org}) is Copyright:
+ - B{PyKNyX} (U{https://github.com/M-o-a-T/pyknyx}) is Copyright:
+  - (C) 2016-2017 Matthias Urlichs
   - (C) 2013-2015 Frédéric Mantegazza
 
 This program is free software; you can redistribute it and/or modify
@@ -53,7 +54,7 @@ except ImportError:
 from setuptools.command.test import test as TestCommand
 import sys
 
-from pknyx.common import config
+from pyknyx.common import config
 
 py2_req = []
 if sys.version_info.major == 2:
@@ -77,34 +78,34 @@ setup(name=config.APP_NAME,
 
       description="Python KNX framework (MoaT version)",
       long_description=open('README').read(),
-      url="http://www.pknyx.org",
+      url="https://github.com/M-o-a-T/pyknyx",
 
-      author="Frédéric Mantegazza",
-      author_email="fma@pknyx.org",
+      author="Matthias Urlichs",
+      author_email="matthias@urlichs.de",
 
       license="GPL",
 
       maintainer="Matthias Urlichs",
       maintainer_email="matthias@urlichs.de",
 
-      download_url="https://gitgub.com/knxd/pKNyX",
+      download_url="https://github.com/M-o-a-T/pyknyx",
 
-      packages=["pknyx",
-                "pknyx.common",
-                "pknyx.core",
-                "pknyx.core.dptXlator",
-                "pknyx.plugins",
-                "pknyx.services",
-                "pknyx.stack",
-                "pknyx.stack.cemi",
-                "pknyx.stack.knxnetip",
-                "pknyx.stack.layer2",
-                "pknyx.stack.layer3",
-                "pknyx.stack.layer4",
-                "pknyx.stack.layer7",
-                "pknyx.stack.transceiver",
-                "pknyx.tools",
-                "pknyx.tools.templates",
+      packages=["pyknyx",
+                "pyknyx.common",
+                "pyknyx.core",
+                "pyknyx.core.dptXlator",
+                "pyknyx.plugins",
+                "pyknyx.services",
+                "pyknyx.stack",
+                "pyknyx.stack.cemi",
+                "pyknyx.stack.knxnetip",
+                "pyknyx.stack.layer2",
+                "pyknyx.stack.layer3",
+                "pyknyx.stack.layer4",
+                "pyknyx.stack.layer7",
+                "pyknyx.stack.transceiver",
+                "pyknyx.tools",
+                "pyknyx.tools.templates",
                 ],
 
       extras_require={
@@ -113,8 +114,8 @@ setup(name=config.APP_NAME,
             'pytest-cov',
         ],
       },
-      scripts=["pknyx/scripts/pknyx-group.py",
-               "pknyx/scripts/pknyx-admin.py"],
+      scripts=["pyknyx/scripts/pyknyx-group.py",
+               "pyknyx/scripts/pyknyx-admin.py"],
 
       install_requires=["APScheduler >= 3",
                         "blinker",

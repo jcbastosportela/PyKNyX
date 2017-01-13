@@ -1,6 +1,6 @@
 #!/bin/sh
 
-epydoc -o /tmp/pKNyX -u http://www.pknyx.org -n pKNyX -v \
+epydoc -o /tmp/PyKNyX -u http://www.github.com/M-o-a-T/pyknyx -n PyKNyX -v \
        --no-imports --show-frames --graph all --introspect-only \
-       pknyx/common pknyx/core pknyx/plugins pknyx/services pknyx/stack pknyx/tools
+       pyknyx/common pyknyx/core pyknyx/plugins pyknyx/services pyknyx/stack pyknyx/tools
 

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from pknyx.stack.cemi.cemiLDataFrame import *
+from pyknyx.stack.cemi.cemiLDataFrame import *
 import unittest
 import six
 
 # Mute logger
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 
 
 class CEMILDataFrameTestCase(unittest.TestCase):

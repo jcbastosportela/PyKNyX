@@ -1,4 +1,4 @@
-Source: pknyx
+Source: pyknyx
 Maintainer: Matthias Urlichs <matthias@urlichs.de>
 Section: python
 Priority: optional
@@ -6,17 +6,22 @@ Build-Depends: python3-setuptools, python3-all, debhelper (>= 9),
   python-setuptools, dh-python, python-all,
 Standards-Version: 3.9.1
 
-Package: python3-pknyx
+Package: python3-pyknyx
 Architecture: all
 Depends: ${misc:Depends}, ${python3:Depends}
 Description: Python KNX framework
- See http://www.pknyx.org
+ PyKNyX is a KNX stack written in Python.
+ It supports virtual devices and multiple bus interfaces.
  .
+ This is the Python 3.4+ version.
 
 Package: python-pknyx
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}
 Description: Python KNX framework
- See http://www.pknyx.org
+ PyKNyX is a KNX stack written in Python.
+ It supports virtual devices and multiple bus interfaces.
  .
+ This is the Python 2.7 version.
+
 

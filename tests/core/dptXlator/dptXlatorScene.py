@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from pknyx.core.dptXlator.dptXlatorScene import *
+from pyknyx.core.dptXlator.dptXlatorScene import *
 import unittest
 
 # Mute logger
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 
 class DPTSceneTestCase(unittest.TestCase):
 

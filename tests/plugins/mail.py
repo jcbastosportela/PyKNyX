@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from pknyx.plugins.mail import *
+from pyknyx.plugins.mail import *
 import unittest
 
 # Mute logger
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 
 
 class MUATestCase(unittest.TestCase):
 
     def setUp(self):
-        self.mua = MUA(smtp="localhost", subject="MUATestCase", to="pknyx@pknyx.org", from_="pknyx@pknyx.org")
+        self.mua = MUA(smtp="localhost", subject="MUATestCase", to="pyknyx@pyknyx.org", from_="pyknyx@pyknyx.org")
 
     def tearDown(self):
         pass

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from pknyx.common.singleton import *
+from pyknyx.common.singleton import *
 import unittest
 
 # Mute logger
-from pknyx.services.logger import logging; logger = logging.getLogger(__name__)
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 
 
 @six.add_metaclass(Singleton)

@@ -3,15 +3,15 @@
 import os
 from pprint import pprint
 
-from pknyx.api import Device, FunctionalBlock, notify
-from pknyx.core.ets import ETS
-from pknyx.tools.deviceRunner import *
+from pyknyx.api import Device, FunctionalBlock, notify
+from pyknyx.core.ets import ETS
+from pyknyx.tools.deviceRunner import *
 import unittest
 
 # Mute logger
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 logger.setLevel(logging.ERROR)
 
 

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from pknyx.core.dptXlator.dptXlatorString import *
+from pyknyx.core.dptXlator.dptXlatorString import *
 import unittest
 
 # Mute logger
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 
 class DPTStringTestCase(unittest.TestCase):
 

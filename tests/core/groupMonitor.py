@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from pknyx.core.groupMonitor import *
-from pknyx.core.group import Group
+from pyknyx.core.groupMonitor import *
+from pyknyx.core.group import Group
 import unittest
 
 # Mute logger
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 
 
 class GroupMonitorTestCase(unittest.TestCase):

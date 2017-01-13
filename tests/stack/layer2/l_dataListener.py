@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from pknyx.stack.layer2.l_dataListener import *
+from pyknyx.stack.layer2.l_dataListener import *
 import unittest
 
 # Mute logger
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 
 
 class L_GDLTestCase(unittest.TestCase):

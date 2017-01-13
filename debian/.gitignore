@@ -2,5 +2,5 @@
 /*.log
 /*.debhelper
 /*.substvars
-/python3-pknyx
-/python-pknyx
+/python3-pyknyx
+/python-pyknyx

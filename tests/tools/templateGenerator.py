@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from pknyx.tools.templateGenerator import *
+from pyknyx.tools.templateGenerator import *
 import unittest
 
 # Mute logger
-from pknyx.services.logger import logging
+from pyknyx.services.logger import logging
 logger = logging.getLogger(__name__)
-logging.getLogger("pknyx").setLevel(logging.ERROR)
+logging.getLogger("pyknyx").setLevel(logging.ERROR)
 
 
 class TemplateGeneratorTestCase(unittest.TestCase):
