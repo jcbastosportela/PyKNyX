@@ -5,13 +5,15 @@ mainly because implementing KNX stuff is not one).
 Overview
 ========
 
-pKNyX is a KNX stack written in Python. It supports virtual devices and
+PyKNyX is a KNX stack written in Python. It supports virtual devices and
 multiple bus interfaces.
 
 Current status: the only interface that's actually in the code is the
 standard KNX multicast. If you want to talk to anything else, run "knxd"
 (on the same computer is fine). You'll need either the "-b ip:" or
 the "-R -S" options.
+
+PyKNyX is a fork of pKNyX. It is not API-compatible.
 
 Future plans
 ============
@@ -24,27 +26,19 @@ Support packets to a device's physical address.
 
 Drop threads in favor of asyncio (Python 3 only).
 
-Extend pKNyX to serve as a replacement for knxd.
+Possibly extend PyKNyX to serve as a replacement for knxd.
 
 Changes
 =======
 
-pyKNyX 1.0
----------
+PyKNyX 1.0
+----------
 
 The main loop has been moved to the ETS object, which is no longer a
 singleton. It is also now responsible for assigning physical addresses to
 drivers. This allows you to create more than one device per ETS instance,
 as well as more than one driver to actually talk to a bus. You can also run
 more than one ETS instance within a process.
-
-Various threads are no longer required and have been removed. Thus, an
-instance with 1000 devices (not uncommon if you want to monitor a large
-building) now uses five threads instead of 5000.
-
-Tests have been moved to a "tests/" directory. This enables testing against
-installed or otherwise out-of-tree version of pKNyX, allowing you to run
-new tests on an old copy or vice versa.
 
 History
 =======
@@ -53,5 +47,5 @@ PyKNyX is a fork of pKNyX. Its author requested a name change.
 
 The original documentation for pKNyX can be found at http://www.pknyx.org
 
-See the file "design/v2_knxd.rst" for more rationale and documentation.
+See the file "doc/rationale.rst" for more rationale and documentation.
 
