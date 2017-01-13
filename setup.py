@@ -77,7 +77,7 @@ setup(name=config.APP_NAME,
       version=config.APP_VERSION,
 
       description="Python KNX framework (MoaT version)",
-      long_description=open('README').read(),
+      long_description=open('README.rst').read(),
       url="https://github.com/M-o-a-T/pyknyx",
 
       author="Matthias Urlichs",
