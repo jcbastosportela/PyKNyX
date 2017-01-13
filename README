@@ -1,9 +1,6 @@
-The original documentation for pKNyX can be found at http://www.pknyx.org
+This is PyKNyX (pronounced somewhat like "picnic",
+mainly because implementing KNX stuff is not one).
 
-This is the "knxd version" because it has been heavily modified by the
-current principal maintainer of knxd.
-
-See the file "design/v2_knxd.rst" for more rationale and documentation.
 
 Overview
 ========
@@ -27,13 +24,12 @@ Support packets to a device's physical address.
 
 Drop threads in favor of asyncio (Python 3 only).
 
-The code base of knxd is rather dated. Extend pKNyX to serve as a
-feature-complete replacement.
+Extend pKNyX to serve as a replacement for knxd.
 
 Changes
 =======
 
-pKNyX 1.0
+pyKNyX 1.0
 ---------
 
 The main loop has been moved to the ETS object, which is no longer a
@@ -50,4 +46,12 @@ Tests have been moved to a "tests/" directory. This enables testing against
 installed or otherwise out-of-tree version of pKNyX, allowing you to run
 new tests on an old copy or vice versa.
 
+History
+=======
+
+PyKNyX is a fork of pKNyX. Its author requested a name change.
+
+The original documentation for pKNyX can be found at http://www.pknyx.org
+
+See the file "design/v2_knxd.rst" for more rationale and documentation.
 
