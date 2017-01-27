@@ -15,7 +15,7 @@ Description: Python KNX framework
  .
  This is the Python 3.4+ version.
 
-Package: python-pknyx
+Package: python-pyknyx
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}
 Description: Python KNX framework
