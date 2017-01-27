@@ -50,12 +50,12 @@ Usage
 @license: GPL
 """
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.layer7.a_groupDataListener import A_GroupDataListener
 
 
-class GroupMonitorValueError(PKNyXValueError):
+class GroupMonitorValueError(PyKNyXValueError):
     """
     """
 
@@ -97,7 +97,7 @@ class GroupMonitor(A_GroupDataListener):
         for listener in self._listeners:
             try:
                 listener.onWrite(src, gad, priority, data)
-            except PKNyXValueError:
+            except PyKNyXValueError:
                 logger.exception("GroupMonitor.groupValueWriteInd()")
 
     def groupValueReadInd(self, src, gad, priority):
@@ -105,7 +105,7 @@ class GroupMonitor(A_GroupDataListener):
         for listener in self._listeners:
             try:
                 listener.onRead(src, gad, priority)
-            except PKNyXValueError:
+            except PyKNyXValueError:
                 logger.exception("GroupMonitor.groupValueReadInd()")
 
     def groupValueReadCon(self, src, gad, priority, data):
@@ -114,7 +114,7 @@ class GroupMonitor(A_GroupDataListener):
         for listener in self._listeners:
             try:
                 listener.onResponse(src, gad, priority, data)
-            except PKNyXValueError:
+            except PyKNyXValueError:
                 logger.exception("GroupMonitor.groupValueReadCon()")
 
     @property

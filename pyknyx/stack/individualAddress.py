@@ -70,7 +70,7 @@ IndividualAddressValueError: individual address out of range
 """
 
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.knxAddress import KnxAddress, KnxAddressValueError
 

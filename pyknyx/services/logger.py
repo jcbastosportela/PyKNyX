@@ -55,7 +55,7 @@ import os.path
 import time
 
 from pyknyx.common import config
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.common.singleton import Singleton
 from pyknyx.services.loggerFormatter import DefaultFormatter, ColorFormatter, \
                                            SpaceFormatter, SpaceColorFormatter

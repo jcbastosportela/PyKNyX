@@ -60,7 +60,7 @@ import sys
 import time
 
 from pyknyx.common import config
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.services.scheduler import Scheduler
 from pyknyx.services.groupAddressTableMapper import GroupAddressTableMapper
@@ -69,7 +69,7 @@ from pyknyx.stack.individualAddress import IndividualAddress
 from pyknyx.stack.groupAddress import GroupAddress, GroupAddressValueError
 
 
-class DeviceRunnerValueError(PKNyXValueError):
+class DeviceRunnerValueError(PyKNyXValueError):
     """
     """
 

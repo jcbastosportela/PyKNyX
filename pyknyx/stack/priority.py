@@ -63,11 +63,11 @@ PriorityValueError: priority level 15 not in (0x00, 0x01, 0x02, 0x03)
 """
 
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 
-class PriorityValueError(PKNyXValueError):
+class PriorityValueError(PyKNyXValueError):
     """
     """
 

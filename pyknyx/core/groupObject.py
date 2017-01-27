@@ -48,14 +48,14 @@ Usage
 @license: GPL
 """
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.core.groupListener import GroupListener
 from pyknyx.stack.flags import Flags
 from pyknyx.stack.priority import Priority
 
 
-class GroupObjectValueError(PKNyXValueError):
+class GroupObjectValueError(PyKNyXValueError):
     """
     """
 

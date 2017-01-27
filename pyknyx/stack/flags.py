@@ -84,11 +84,11 @@ Write.
 
 import re
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 
-class FlagsValueError(PKNyXValueError):
+class FlagsValueError(PyKNyXValueError):
     """
     """
 

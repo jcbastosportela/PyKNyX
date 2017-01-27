@@ -64,11 +64,11 @@ KnxAddressValueError: address -0x1 not in range(0, 0xffff)
 import functools
 import struct
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 
 
-class KnxAddressValueError(PKNyXValueError):
+class KnxAddressValueError(PyKNyXValueError):
     """
     """
 

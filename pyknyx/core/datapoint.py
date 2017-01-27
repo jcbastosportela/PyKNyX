@@ -60,7 +60,7 @@ Usage
 @license: GPL
 """
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.common.signal import Signal
 from pyknyx.core.dptXlator.dptXlatorFactory import DPTXlatorFactory
@@ -69,7 +69,7 @@ from pyknyx.stack.flags import Flags
 from pyknyx.stack.priority import Priority
 
 
-class DatapointValueError(PKNyXValueError):
+class DatapointValueError(PyKNyXValueError):
     """
     """
 

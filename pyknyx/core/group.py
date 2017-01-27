@@ -52,13 +52,13 @@ Usage
 @license: GPL
 """
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.layer7.a_groupDataListener import A_GroupDataListener
 from pyknyx.stack.groupAddress import GroupAddress
 
 
-class GroupValueError(PKNyXValueError):
+class GroupValueError(PyKNyXValueError):
     """
     """
 
@@ -107,7 +107,7 @@ class Group(A_GroupDataListener):
         for listener in self._listeners:
             try:
                 listener.onWrite(src, data)
-            except PKNyXValueError:
+            except PyKNyXValueError:
                 logger.exception("Group.groupValueWriteInd()")
 
     def groupValueReadInd(self, src, priority):
@@ -115,7 +115,7 @@ class Group(A_GroupDataListener):
         for listener in self._listeners:
             try:
                 listener.onRead(src)
-            except PKNyXValueError:
+            except PyKNyXValueError:
                 logger.exception("Group.groupValueReadInd()")
 
     def groupValueReadCon(self, src, priority, data):
@@ -123,7 +123,7 @@ class Group(A_GroupDataListener):
         for listener in self._listeners:
             try:
                 listener.onResponse(src, data)
-            except PKNyXValueError:
+            except PyKNyXValueError:
                 logger.exception("Group.groupValueReadCon()")
 
     @property

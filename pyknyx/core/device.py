@@ -49,7 +49,7 @@ Usage
 """
 
 from pyknyx.common import config
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.common.frozenDict import FrozenDict
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.stack import Stack
@@ -57,7 +57,7 @@ from pyknyx.stack.stack import Stack
 import time
 
 
-class DeviceValueError(PKNyXValueError):
+class DeviceValueError(PyKNyXValueError):
     """
     """
 

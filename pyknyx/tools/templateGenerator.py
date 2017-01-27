@@ -54,14 +54,14 @@ import stat
 import os
 
 from pyknyx.common import config
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 
 MODE_EXEC = stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
 MODE_0664 = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IWGRP | stat.S_IROTH
 MODE_0775 = MODE_0664 | MODE_EXEC
 
 
-class TemplateGeneratorValueError(PKNyXValueError):
+class TemplateGeneratorValueError(PyKNyXValueError):
     """
     """
 

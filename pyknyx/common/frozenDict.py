@@ -45,10 +45,10 @@ Usage
 @license: PSF License
 """
 
-from pyknyx.common.exception import PKNyXAttributeError
+from pyknyx.common.exception import PyKNyXAttributeError
 
 
-class FrozenDictAttributeError(PKNyXAttributeError):
+class FrozenDictAttributeError(PyKNyXAttributeError):
     """
     """
 

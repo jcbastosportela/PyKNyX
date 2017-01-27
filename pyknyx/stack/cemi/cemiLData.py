@@ -52,7 +52,7 @@ Usage
 """
 
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.cemi.cemi import CEMI, CEMIValueError
 from pyknyx.stack.cemi.cemiLDataFrame import CEMILDataFrame

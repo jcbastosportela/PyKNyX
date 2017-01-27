@@ -49,7 +49,7 @@ Usage
 import six
 import threading
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.common.singleton import Singleton
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.flags import Flags
@@ -64,7 +64,7 @@ from pyknyx.stack.layer2.l_dataService import PRIORITY_DISTRIBUTION
 from pyknyx.stack.transceiver.udpTransceiver import UDPTransceiver
 
 
-class ETSValueError(PKNyXValueError):
+class ETSValueError(PyKNyXValueError):
     """
     """
 

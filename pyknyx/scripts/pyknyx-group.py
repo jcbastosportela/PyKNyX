@@ -60,7 +60,7 @@ import os.path
 import argparse
 import threading
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.services.groupAddressTableMapper import GroupAddressTableMapper, GroupAddressTableMapperValueError
 from pyknyx.core.dptXlator.dptXlatorFactory import DPTXlatorFactory

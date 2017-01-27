@@ -49,7 +49,7 @@ Usage
 @license: GPL
 """
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.common.utils import reprStr
 from pyknyx.common.frozenDict import FrozenDict
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
@@ -58,7 +58,7 @@ from pyknyx.core.datapoint import Datapoint
 from pyknyx.core.groupObject import GroupObject
 
 
-class FunctionalBlockValueError(PKNyXValueError):
+class FunctionalBlockValueError(PyKNyXValueError):
     """
     """
 

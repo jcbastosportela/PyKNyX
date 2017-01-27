@@ -33,7 +33,7 @@ Custom exceptions
 Implements
 ==========
 
- - PKNyXError
+ - PyKNyXError
  - HardwareError
  - KNXFormatError
  - OutOfLimitsError
@@ -44,15 +44,15 @@ Implements
 """
 
 
-class PKNyXError(Exception):
+class PyKNyXError(Exception):
     """ Base class for pKNyX errors
     """
 
 
-class PKNyXValueError(PKNyXError,ValueError):
+class PyKNyXValueError(PyKNyXError,ValueError):
     """ Base class for pKNyX value errors
     """
 
-class PKNyXAttributeError(PKNyXError,AttributeError):
+class PyKNyXAttributeError(PyKNyXError,AttributeError):
     """ Base class for pKNyX attribute errors
     """

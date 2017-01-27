@@ -50,7 +50,7 @@ Usage
 
 import time
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.individualAddress import IndividualAddress
 from pyknyx.stack.layer7.a_groupDataService import A_GroupDataService
@@ -60,7 +60,7 @@ from pyknyx.stack.layer2.l_dataService import L_DataService
 from pyknyx.stack.priority import Priority
 
 
-class StackValueError(PKNyXValueError):
+class StackValueError(PyKNyXValueError):
     """
     """
 

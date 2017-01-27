@@ -49,13 +49,13 @@ Usage
 @license: GPL
 """
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.common.utils import reprStr
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.core.dptXlator.dptId import DPTID
 
 
-class DPTXlatorValueError(PKNyXValueError):
+class DPTXlatorValueError(PyKNyXValueError):
     """
     """
 

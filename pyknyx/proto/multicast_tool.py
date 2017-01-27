@@ -1,7 +1,7 @@
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.stack.priority import Priority
 
-class MulticastValueError(PKNyXValueError):
+class MulticastValueError(PyKNyXValueError):
     """
     """
 

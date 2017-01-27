@@ -47,7 +47,7 @@ Usage
 """
 
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.groupAddress import GroupAddress
 from pyknyx.stack.individualAddress import IndividualAddress
@@ -55,7 +55,7 @@ from pyknyx.stack.layer2.l_dataListener import L_DataListener
 from pyknyx.stack.cemi.cemiLData import CEMILData, CEMIValueError
 
 
-class N_GDSValueError(PKNyXValueError):
+class N_GDSValueError(PyKNyXValueError):
     """
     """
 

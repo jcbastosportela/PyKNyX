@@ -74,7 +74,7 @@ import traceback
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.events import EVENT_JOB_ERROR,EVENT_JOB_MISSED
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.common.singleton import Singleton
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.common.utils import func_name, meth_name,meth_self,meth_func
@@ -82,7 +82,7 @@ from pyknyx.common.utils import func_name, meth_name,meth_self,meth_func
 scheduler = None
 
 
-class SchedulerValueError(PKNyXValueError):
+class SchedulerValueError(PyKNyXValueError):
     """
     """
 

@@ -58,7 +58,7 @@ import time
 import threading
 import socket
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.result import Result
 from pyknyx.stack.priority import Priority
@@ -70,7 +70,7 @@ from pyknyx.stack.cemi.cemiLData import CEMILData, CEMIValueError
 from pyknyx.stack.layer2.l_dataService import PRIORITY_DISTRIBUTION
 
 
-class UDPTransceiverValueError(PKNyXValueError):
+class UDPTransceiverValueError(PyKNyXValueError):
     """
     """
 

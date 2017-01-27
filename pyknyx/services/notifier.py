@@ -85,7 +85,7 @@ Idem for scheduler.
 
 import six
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.common.utils import reprStr
 from pyknyx.common.utils import func_name, meth_name,meth_self,meth_func
 from pyknyx.common.singleton import Singleton
@@ -94,7 +94,7 @@ from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 scheduler = None
 
 
-class NotifierValueError(PKNyXValueError):
+class NotifierValueError(PyKNyXValueError):
     """
     """
 

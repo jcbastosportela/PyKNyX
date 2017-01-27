@@ -58,14 +58,14 @@ import os.path
 import argparse
 
 from pyknyx.common import config
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.tools.deviceRunner import DeviceRunner
 from pyknyx.tools.templateGenerator import TemplateGenerator
 from pyknyx.tools.templates.deviceTemplate import ADMIN, INIT, SETTINGS, DEVICE, FB
 
 
-class AdminUtilityValueError(PKNyXValueError):
+class AdminUtilityValueError(PyKNyXValueError):
     """
     """
 

@@ -47,13 +47,13 @@ Usage
 """
 
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.layer4.tpci import TPCI
 from pyknyx.stack.layer3.n_groupDataListener import N_GroupDataListener
 
 
-class T_GDSValueError(PKNyXValueError):
+class T_GDSValueError(PyKNyXValueError):
     """
     """
 

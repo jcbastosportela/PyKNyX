@@ -83,7 +83,7 @@ GroupAddressValueError: outFormatLevel 4 must be 2 or 3
 """
 
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.knxAddress import KnxAddress, KnxAddressValueError
 

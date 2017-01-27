@@ -89,14 +89,14 @@ import os.path
 import imp
 import xml.etree.ElementTree as etree
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.common.singleton import Singleton
 from pyknyx.core.dptXlator.dptXlatorFactory import DPTXlatorFactory
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.groupAddress import GroupAddress, GroupAddressValueError
 
 
-class GroupAddressTableMapperValueError(PKNyXValueError):
+class GroupAddressTableMapperValueError(PyKNyXValueError):
     """
     """
 

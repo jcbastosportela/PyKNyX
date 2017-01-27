@@ -97,12 +97,12 @@ Usage
 @license: GPL
 """
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.core.dptXlator.dptId import DPTID
 
 
-class DPTValueError(PKNyXValueError):
+class DPTValueError(PyKNyXValueError):
     """
     """
 

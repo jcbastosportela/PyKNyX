@@ -47,7 +47,7 @@ Usage
 """
 
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.core.group import Group
 from pyknyx.core.groupMonitor import GroupMonitor
@@ -57,7 +57,7 @@ from pyknyx.stack.layer7.apdu import APDU
 from pyknyx.stack.layer4.t_groupDataListener import T_GroupDataListener
 
 
-class A_GDSValueError(PKNyXValueError):
+class A_GDSValueError(PyKNyXValueError):
     """
     """
 

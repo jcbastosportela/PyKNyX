@@ -51,7 +51,7 @@ Usage
 import time
 import threading
 
-from pyknyx.common.exception import PKNyXValueError
+from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.stack.individualAddress import IndividualAddress
 from pyknyx.stack.priorityQueue import PriorityQueue
@@ -61,7 +61,7 @@ from pyknyx.stack.cemi.cemiLData import CEMILData
 
 PRIORITY_DISTRIBUTION = (-1, 3, 2, 1)
 
-class L_DSValueError(PKNyXValueError):
+class L_DSValueError(PyKNyXValueError):
     """
     """
 
