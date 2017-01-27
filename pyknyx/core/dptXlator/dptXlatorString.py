@@ -5,7 +5,7 @@
 License
 =======
 
- - B{PyKNyX} (U{http://www.pyknyx.org}) is Copyright:
+ - B{PyKNyX} (U{https://github.com/knxd/pyknyx}) is Copyright:
   - © 2016-2017 Matthias Urlichs
   - PyKNyX is a fork of pKNyX
    - © 2013-2015 Frédéric Mantegazza
