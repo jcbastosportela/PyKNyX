@@ -5,7 +5,7 @@
 License
 =======
 
- - B{pKNyX} (U{http://www.pyknyx.org}) is Copyright:
+ - B{PyKNyX} (U{http://www.pyknyx.org}) is Copyright:
   - (C) 2013-2015 Frédéric Mantegazza
 
 This program is free software; you can redistribute it and/or modify
@@ -45,14 +45,14 @@ Implements
 
 
 class PyKNyXError(Exception):
-    """ Base class for pKNyX errors
+    """ Base class for PyKNyX errors
     """
 
 
 class PyKNyXValueError(PyKNyXError,ValueError):
-    """ Base class for pKNyX value errors
+    """ Base class for PyKNyX value errors
     """
 
 class PyKNyXAttributeError(PyKNyXError,AttributeError):
-    """ Base class for pKNyX attribute errors
+    """ Base class for PyKNyX attribute errors
     """

@@ -5,7 +5,7 @@
 License
 =======
 
- - B{pKNyX} (U{http://www.pyknyx.org}) is Copyright:
+ - B{PyKNyX} (U{http://www.pyknyx.org}) is Copyright:
   - (C) 2013-2015 Frédéric Mantegazza
 
 This program is free software; you can redistribute it and/or modify
@@ -155,7 +155,7 @@ class AdminUtility(object):
 
         # Main parser
         mainParser = argparse.ArgumentParser(prog="pyknyx-admin.py",
-                                             description="This tool is used to manage pKNyX devices.",
+                                             description="This tool is used to manage PyKNyX devices.",
                                              epilog="Under developement...")
 
         # Create sub-parsers

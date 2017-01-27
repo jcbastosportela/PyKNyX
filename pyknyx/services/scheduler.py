@@ -5,7 +5,7 @@
 License
 =======
 
- - B{pKNyX} (U{http://www.pyknyx.org}) is Copyright:
+ - B{PyKNyX} (U{http://www.pyknyx.org}) is Copyright:
   - (C) 2013-2015 Frédéric Mantegazza
 
 This program is free software; you can redistribute it and/or modify
@@ -39,8 +39,8 @@ Implements
 Documentation
 =============
 
-One of the nice feature of B{pKNyX} is to be able to register some L{FunctionalBlock<pyknyx.core.functionalBlock>}
-sub-classes methods to have them executed at specific times. For that, B{pKNyX} uses the nice third-party module
+One of the nice feature of B{PyKNyX} is to be able to register some L{FunctionalBlock<pyknyx.core.functionalBlock>}
+sub-classes methods to have them executed at specific times. For that, B{PyKNyX} uses the nice third-party module
 U{APScheduler<http://pythonhosted.org/APScheduler>}.
 
 The idea is to use the decorators syntax to register these methods

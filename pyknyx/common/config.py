@@ -5,7 +5,7 @@
 License
 =======
 
- - B{pKNyX} (U{http://www.pyknyx.org}) is Copyright:
+ - B{PyKNyX} (U{http://www.pyknyx.org}) is Copyright:
   - (C) 2013-2015 Frédéric Mantegazza
 
 This program is free software; you can redistribute it and/or modify
@@ -40,7 +40,7 @@ import os.path
 
 
 # Name
-APP_NAME = "pKNyX knxd"
+APP_NAME = "PyKNyX knxd"
 APP_VERSION = "2.0.0.dev.1"
 
 # Logger

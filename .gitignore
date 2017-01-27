@@ -4,11 +4,11 @@ dist
 *.wpu
 *.vpp~*
 *.vpp.*
-pKNyX.egg-info
+PyKNyX.egg-info
 
 /.cache
 /.eggs
 /.pybuild
-/pKNyX_MoaT.egg-info
+/PyKNyX_MoaT.egg-info
 /.coverage
 *.swp

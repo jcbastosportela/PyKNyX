@@ -12,7 +12,7 @@ config.LOGGER_LEVEL = "info"
 # Email settings
 FROM = "pyknyx@localhost"  # From' header field
 TO = "pyknyx@localhost"  # 'To' header field
-SUBJECT = "pKNyX alert"  # 'Subject' header field
+SUBJECT = "PyKNyX alert"  # 'Subject' header field
 SMTP = "localhost"  # SMTP server name
 
 # Temperatures limits
