@@ -3,7 +3,7 @@
 import os
 from pprint import pprint
 
-from pyknyx.api import Device, FunctionalBlock, notify
+from pyknyx.api import Device, FunctionalBlock, notify, DP, GO
 from pyknyx.core.ets import ETS
 from pyknyx.tools.deviceRunner import *
 import unittest
@@ -19,17 +19,17 @@ logger.setLevel(logging.ERROR)
 class ToggleFB(FunctionalBlock):
 
     # Datapoints (= Group Objects) definition
-    DP_01 = dict(name="change", dptId="1.001", default="Off", access="output")
+    change = DP(dptId="1.001", default="Off", access="output")
     DP_02 = dict(name="status", dptId="1.001", default="Off", access="input")
-    GO_01 = dict(dp="change", flags="CT", priority="low")
+    GO_01 = GO(dp=change, flags="CT", priority="low")
     GO_02 = dict(dp="status", flags="CWUI", priority="low")
     DESC = "ToggleFB"
 
 class ActorFB(FunctionalBlock):
-    DP_01 = dict(name="change", dptId="1.001", default="Off", access="input")
+    change = DP(dptId="1.001", default="Off", access="input")
     DP_02 = dict(name="status", dptId="1.001", default="Off", access="output")
-    GO_01 = dict(dp="change", flags="CW", priority="low")
-    GO_02 = dict(dp="status", flags="CRT", priority="low")
+    GO_01 = dict(dp=change, flags="CW", priority="low")
+    GO_02 = GO(dp="status", flags="CRT", priority="low")
     DESC = "ActorFB"
 
     _current = None

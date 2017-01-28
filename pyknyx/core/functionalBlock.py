@@ -56,8 +56,8 @@ from pyknyx.common.utils import reprStr
 from pyknyx.common.frozenDict import FrozenDict
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.services.notifier import Notifier
-from pyknyx.core.datapoint import Datapoint
-from pyknyx.core.groupObject import GroupObject
+from pyknyx.core.datapoint import Datapoint, DP
+from pyknyx.core.groupObject import GroupObject, GO
 
 
 class FunctionalBlockValueError(PyKNyXValueError):
@@ -88,51 +88,57 @@ class FunctionalBlock(object):
     @ivar _groupObjects: GroupObjects exposed by this FunctionalBlock
     @type _groupObjects: dict of L{GroupObject}
     """
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, name, *args, **kwargs):
         """ Init the class with all available types for this DPT
         """
         self = super(FunctionalBlock, cls).__new__(cls)
+        self._name = name
 
         # Retrieve all parents classes, to get all objects defined there
         classes = cls.__mro__
 
-        # class objects named B{DP_xxx} are treated as Datapoint and added to the B{_datapoints} dict
+        # objects named B{DP_xxx} or of type DP are treated as Datapoint and added to the B{_datapoints} dict
         datapoints = {}
-        for cls_ in classes:
+        for cls_ in classes[::-1]:
             for key, value in cls_.__dict__.items():
-                if key.startswith("DP_"):
-                    logger.debug("FunctionalBlock.__new__(): %s=(%s)" % (key, repr(value)))
-                    name = value['name']
-                    if name in datapoints:
-                        raise FunctionalBlockValueError("duplicated Datapoint (%s)" % name)
-                    datapoints[name] = Datapoint(self, **value)
+                if key.startswith("DP_") and isinstance(value,dict):
+                    assert 'name' in value, value
+                    value = DP(**value)
+                    key = value.name
+
+                if isinstance(value, DP):
+                    ov = value
+                    value = value.gen(self, key)
+                    logger.debug("%s: new DP %s: %s", self, repr(key), value)
+                    datapoints[key] = value
+                elif key in datapoints and value is None:
+                    logger.debug("%s: drop DP %s", self, repr(key))
+                    del datapoints[key]
+
         self._datapoints = FrozenDict(datapoints)
 
-        # class objects named B{GO_xxx} are treated as GroupObjects and added to the B{_groupObjects} dict
+        # objects named B{GO_xxx} or of type GO are treated as GroupObjects and added to the B{_groupObjects} dict
         groupObjects = {}
-        for cls_ in classes:
+        for cls_ in classes[::-1]:
             for key, value in cls_.__dict__.items():
-                if key.startswith("GO_"):
-                    logger.debug("FunctionalBlock.__new__(): %s=(%s)" % (key, repr(value)))
-                    try:
-                        datapoint = self._datapoints[value['dp']]
-                    except KeyError:
-                        raise FunctionalBlockValueError("unknown datapoint (%s) in %s.%s" % (value['dp'],cls,key))
-                    name = datapoint.name
-                    if name in groupObjects:
-                        raise FunctionalBlockValueError("duplicated GroupObject (%s)" % name)
+                if key.startswith("GO_") and isinstance(value, dict):
+                    key = value.get('name',key)
+                    value = GO(**value)
 
-                    # Remove 'dp' key from GO_xxx dict
-                    # Use a copy to let original untouched
-                    value_ = dict(value)
-                    value_.pop('dp')
-                    groupObjects[name] = GroupObject(datapoint, **value_)
+                if isinstance(value, GO):
+                    value = value.gen(self)
+                    key = value.datapoint.name
+                    logger.debug("%s: new GO %s: %s", self, repr(key), value)
+                    groupObjects[key] = value
+                elif key in groupObjects and value is None:
+                    logger.debug("%s: drop GO %s", self, repr(key))
+                    del groupObjects[key]
         self._groupObjects = FrozenDict(groupObjects)
 
         try:
             self._desc = cls.__dict__["DESC"]
         except KeyError:
-            logger.exception("FunctionalBlock.__new__()")
+            logger.exception("%s: missing DESCription",self)
             self._desc = "FB"
 
         return self
@@ -152,8 +158,6 @@ class FunctionalBlock(object):
         raise FunctionalBlockValueError:
         """
         super(FunctionalBlock, self).__init__()
-
-        self._name = name
 
         if desc is not None:
             self._desc = "%s::%s" % (self._desc, desc)

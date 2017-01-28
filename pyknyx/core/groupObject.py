@@ -53,6 +53,7 @@ Usage
 from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.core.groupListener import GroupListener
+from pyknyx.core.datapoint import DP
 from pyknyx.stack.flags import Flags
 from pyknyx.stack.priority import Priority
 
@@ -61,6 +62,29 @@ class GroupObjectValueError(PyKNyXValueError):
     """
     """
 
+class GO(object):
+    """
+    """
+    def __init__(self, dp, *args, **kwargs):
+        self.dp = dp
+        self.args = args
+        self.kwargs = kwargs
+    
+    def gen(self, obj, name=None):
+        dp = self.dp
+        if isinstance(self.dp,DP):
+            for key,value in obj.dp.items():
+                if value._factory is dp:
+                    dp = value
+                    break
+            else:
+                raise KeyError("I could not find the DP factory %s on %s",self.dp,obj)
+        else:
+            assert isinstance(self.dp,str), self.dp
+            dp = obj.dp[self.dp]
+        go = GroupObject(dp, *self.args, **self.kwargs)
+        go._factory = self
+        return go
 
 class GroupObject(GroupListener):
     """ GroupObject class

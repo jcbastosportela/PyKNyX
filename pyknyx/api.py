@@ -48,6 +48,8 @@ Usage
 
 from pyknyx.core.device import Device
 from pyknyx.core.functionalBlock import FunctionalBlock
+from pyknyx.core.datapoint import DP
+from pyknyx.core.groupObject import GO
 
 from pyknyx.services.scheduler import Scheduler
 from pyknyx.services.notifier import Notifier

@@ -75,6 +75,44 @@ class DatapointValueError(PyKNyXValueError):
     """
     """
 
+class DP(object):
+    """ Datapoint factory
+        
+    This class collects arguments for instantiating a L{Datapoint} when a
+    L{FunctionalBlock} is created.
+
+    Arguments are the same as L{Datapoint}, except that the B{obj} is
+    missing – it does not exist yet.
+    """ 
+
+    def __init__(self, name=None, *args, **kwargs):
+        """ Remember parameters for eventual instantiation of a L{Datapoint}.
+
+        See B{Datapoint.__init__} for parameters (except for B{obj}).
+        """
+        self.name = name
+        self.args = args
+        self.kwargs = kwargs
+
+    def gen(self, obj, name=None):
+        """ Instantiate the datapoint.
+
+        If no name is passed in here, the one used in creating this object
+        is used as a fallback.
+
+        @param owner: owner of the datapoint.
+        @type owner: L{FunctionalBlock<pyknyx.core.functionalBloc>}
+
+        @param name: name of the datapoint. 
+        @type name: str
+        """
+        if name is None:
+            name = self.name
+        assert name, "A Datapoint needs to be named"
+
+        dp = Datapoint(obj, name, *self.args, **self.kwargs)
+        dp._factory = self # required for finding it in GroupObject creation
+        return dp
 
 class Datapoint(object):
     """ Datapoint handling class
