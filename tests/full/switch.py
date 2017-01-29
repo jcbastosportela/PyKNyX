@@ -3,7 +3,7 @@
 import os
 from pprint import pprint
 
-from pyknyx.api import Device, FunctionalBlock, notify, DP, GO
+from pyknyx.api import Device, FunctionalBlock, notify, DP, GO, FB, LNK
 from pyknyx.core.ets import ETS
 from pyknyx.tools.deviceRunner import *
 import unittest
@@ -54,9 +54,9 @@ class ActorFB(FunctionalBlock):
 
 
 class Toggle(Device):
-    FB_01 = dict(cls=ToggleFB, name="toggle_fb", desc="binary input")
+    toggle_fb = FB(ToggleFB, desc="binary input")
 
-    LNK_01 = dict(fb="toggle_fb", dp="change", gad="1/1/1")
+    LNK_01 = LNK(toggle_fb.change, gad="1/1/1")
     LNK_02 = dict(fb="toggle_fb", dp="status", gad="1/2/1")
 
     def set(self, value):

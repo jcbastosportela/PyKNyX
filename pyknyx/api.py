@@ -46,8 +46,8 @@ Usage
 @license: GPL
 """
 
-from pyknyx.core.device import Device
-from pyknyx.core.functionalBlock import FunctionalBlock
+from pyknyx.core.device import Device, LNK
+from pyknyx.core.functionalBlock import FunctionalBlock, FB
 from pyknyx.core.datapoint import DP
 from pyknyx.core.groupObject import GO
 

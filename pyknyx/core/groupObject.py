@@ -73,9 +73,9 @@ class GO(object):
     def gen(self, obj, name=None):
         dp = self.dp
         if isinstance(self.dp,DP):
-            for key,value in obj.dp.items():
-                if value._factory is dp:
-                    dp = value
+            for val in obj.dp.values():
+                if val._factory is dp:
+                    dp = val
                     break
             else:
                 raise KeyError("I could not find the DP factory %s on %s",self.dp,obj)

@@ -160,22 +160,7 @@ class ETS(threading.Thread):
             Scheduler().doRegisterJobs(fb)
             Notifier().doRegisterJobs(fb)
 
-        for fb_, dp, gad in device.lnk:
-
-            # Retrieve FunctionalBlock from device
-            try:
-                fb = device.fb[fb_]
-
-            except KeyError:
-                raise ETSValueError("unregistered functional block (%s)" % fb_)
-
-            # Retrieve GroupObject from FunctionalBlock
-            try:
-                groupObject = fb.go[dp]
-
-            except KeyError:
-                raise ETSValueError("no Group Object associated with this datapoint (%s)" % dp)
-
+        for groupObject, gad in device.lnk:
             # Get GroupAddress
             if not isinstance(gad, GroupAddress):
                 gad = GroupAddress(gad)

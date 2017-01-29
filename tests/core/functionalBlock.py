@@ -29,15 +29,15 @@ class FunctionalBlockTestCase(unittest.TestCase):
         DESC = "Dummy description"
 
     def setUp(self):
-        self.fb1 = FunctionalBlockTestCase.TestFunctionalBlock(name="test1")
-        self.fb2 = FunctionalBlockTestCase.TestFunctionalBlock(name="test2", desc="pipo")
+        self.fb1 = FunctionalBlockTestCase.TestFunctionalBlock(dev="foo", name="test1")
+        self.fb2 = FunctionalBlockTestCase.TestFunctionalBlock(dev="bar", name="test2", desc="pipo")
 
     def tearDown(self):
         pass
 
     def test_display(self):
-        assert repr(self.fb1) == "<TestFunctionalBlock(name='test1', desc='Dummy description')>"
-        assert str(self.fb2) == "<TestFunctionalBlock('test2')>"
+        assert repr(self.fb1) == "<TestFunctionalBlock(foo, name='test1', desc='Dummy description')>"
+        assert str(self.fb2) == "<TestFunctionalBlock(bar, 'test2')>"
 
     def test_constructor(self):
         pass

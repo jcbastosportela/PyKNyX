@@ -64,6 +64,68 @@ class FunctionalBlockValueError(PyKNyXValueError):
     """
     """
 
+class FB_DP(object):
+    def __init__(self, fb,dp):
+        self.fb = fb
+        self.dp = dp
+
+    def gen(self,obj):
+        fb = obj.fb[self.fb.name]
+        if isinstance(self.dp,str):
+            return fb.go[self.dp]
+        else:
+            for val in fb.go.values():
+                if val._factory.dp is self.dp:
+                    return val
+            else:
+                raise KeyError("I could not find the DP factory %s on %s",self.dp,obj)
+
+
+class FB(object):
+    """ FunctionalBlock factory
+        
+    This class collects arguments for instantiating a L{FunctionalBlock} when a
+    L{Device} is created.
+
+    Arguments are the same as L{FunctionalBlock}.
+    """ 
+    def __init__(self, cls, name=None, *args, **kwargs):
+        """ Remember parameters for eventual instantiation of a L{Datapoint}.
+
+        See B{FunctionalBlock.__init__} for parameters.
+        """
+        self.cls = cls
+        self.name = name
+        self.args = args
+        self.kwargs = kwargs
+
+    def __getattr__(self, key):
+        """
+        Required for LNK(fb_name.dp_name) to work
+        """
+        return FB_DP(self, getattr(self.cls,key))
+
+    def gen(self, obj, name=None):
+        """ Instantiate the funcional block.
+
+        If no name is passed in here, the one used in creating this object
+        is used as a fallback.
+
+        @param owner: owner of the datapoint.
+        @type owner: L{FunctionalBlock<pyknyx.core.functionalBloc>}
+
+        @param name: name of the datapoint. 
+        @type name: str
+        """
+        if self.name is not None:
+            assert name is None or name == self.name
+            name = self.name
+        assert name, "A FunctionalBlock needs to be named"
+
+        fb = self.cls(obj, name, *self.args, **self.kwargs)
+        fb._factory = self # required for finding it in Link creation
+        return fb
+
 
 class FunctionalBlock(object):
     """ FunctionalBlock class
@@ -73,8 +135,11 @@ class FunctionalBlock(object):
 
     Same for GroupObject.
 
-    @ivar _name: name of the device
-    @type _name:str
+    @ivar _name: name of the functional block
+    @type _name: str
+
+    @ivar _device: device
+    @type _device: L{Device} instance
 
     @ivar _desc: description of the device
     @type _desc:str
@@ -88,11 +153,13 @@ class FunctionalBlock(object):
     @ivar _groupObjects: GroupObjects exposed by this FunctionalBlock
     @type _groupObjects: dict of L{GroupObject}
     """
-    def __new__(cls, name, *args, **kwargs):
+    def __new__(cls, dev, name, *args, **kwargs):
         """ Init the class with all available types for this DPT
         """
         self = super(FunctionalBlock, cls).__new__(cls)
         self._name = name
+
+        self._device = dev
 
         # Retrieve all parents classes, to get all objects defined there
         classes = cls.__mro__
@@ -137,12 +204,12 @@ class FunctionalBlock(object):
         try:
             self._desc = cls.__dict__["DESC"]
         except KeyError:
-            logger.exception("%s: missing DESCription",self)
+            logger.error("%s: missing DESCription", cls)
             self._desc = "FB"
 
         return self
 
-    def __init__(self, name, desc=None, params={}):
+    def __init__(self, dev, name, desc=None, params={}):
         """
 
         @param name: name of the device
@@ -167,10 +234,10 @@ class FunctionalBlock(object):
         self.init()
 
     def __repr__(self):
-        return "<%s(name='%s', desc='%s')>" % (reprStr(self.__class__), self._name, self._desc)
+        return "<%s(%s, name='%s', desc='%s')>" % (reprStr(self.__class__), self._device, self._name, self._desc)
 
     def __str__(self):
-        return "<%s('%s')>" % (reprStr(self.__class__), self._name)
+        return "<%s(%s, '%s')>" % (reprStr(self.__class__), self._device, self._name)
 
     def init(self):
         """ Additional user init
@@ -184,6 +251,10 @@ class FunctionalBlock(object):
     @property
     def desc(self):
         return self._desc
+
+    @property
+    def device(self):
+        return self._device
 
     @property
     def params(self):
