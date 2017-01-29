@@ -97,16 +97,13 @@ class A_GroupDataService(T_GroupDataListener):
         if length >= 0:
             apci = aPDU[0] << 8 | aPDU[1]
 
-            if gad.address in self._groups.keys():
+            try:
                 group = self._groups[gad.address]
-            else:
+            except KeyError:
                 logger.debug("A_GroupDataService.groupDataInd(): no registered group for that GAD (%s)" % repr(gad))
                 group = None
 
-            if "0/0/0" in self._groups.keys():
-                groupMonitor = self._groups["0/0/0"]
-            else:
-                groupMonitor = None
+            groupMonitor = self._groups.get("0/0/0",None)
 
             if (apci & APCI._4) == APCI.GROUPVALUE_WRITE:
                 data = APDU.getGroupValue(aPDU)

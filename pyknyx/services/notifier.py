@@ -250,21 +250,19 @@ class Notifier(object):
         """
         logger.debug("Notifier.datapointNotify(): obj=%s, dp=%s, oldValue=%s, newValue=%s" % (obj.name, dp, repr(oldValue), repr(newValue)))
 
-        if obj in self._datapointJobs.keys():
-            if dp in self._datapointJobs[obj].keys():
-                for method, condition, thread_ in self._datapointJobs[obj][dp]:
-                    if oldValue != newValue and condition == "change" or condition == "always":
-                        try:
-                            logger.debug("Notifier.datapointNotify(): trigger method %s() of %s" % (meth_name(method), meth_self(method)))
-                            event = dict(name="datapoint", dp=dp, oldValue=oldValue, newValue=newValue, condition=condition, thread=thread_)
+        for method, condition, thread_ in self._datapointJobs.get(obj,{}).get(dp,()):
+            if oldValue != newValue and condition == "change" or condition == "always":
+                try:
+                    logger.debug("Notifier.datapointNotify(): trigger method %s() of %s" % (meth_name(method), meth_self(method)))
+                    event = dict(name="datapoint", dp=dp, oldValue=oldValue, newValue=newValue, condition=condition, thread=thread_)
 
-                            if thread_:
-                                thread.start_new_thread(self._execute, (method, event))
-                                #TODO: register threads, so they can be killed (how?) when stopping the device
-                            else:
-                                self._execute(method, event)
-                        except:
-                            logger.exception("Notifier.datapointNotify()")
+                    if thread_:
+                        thread.start_new_thread(self._execute, (method, event))
+                        #TODO: register threads, so they can be killed (how?) when stopping the device
+                    else:
+                        self._execute(method, event)
+                except:
+                    logger.exception("Notifier.datapointNotify()")
 
     def printJobs(self):
         """ Print registered jobs
