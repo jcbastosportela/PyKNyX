@@ -180,7 +180,7 @@ class Device(object):
 
         return self
 
-    def __init__(self, ets, individualAddress=None):
+    def __init__(self, ets, individualAddress=None, links=()):
         """ Init Device object.
         """
         super(Device, self).__init__()
@@ -188,7 +188,7 @@ class Device(object):
         self._stack = Stack(ets, individualAddress)
 
         self.init()
-        ets.register(self)
+        ets.register(self, links=(x.gen(self) for x in links))
 
     @property
     def desc(self):

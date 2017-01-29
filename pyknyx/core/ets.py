@@ -50,6 +50,7 @@ Usage
 
 import six
 import threading
+from itertools import chain
 
 from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.common.singleton import Singleton
@@ -143,7 +144,7 @@ class ETS(threading.Thread):
         if self._running:
             layer2.start()
 
-    def register(self, device, buildingMap='root'):
+    def register(self, device, buildingMap='root', links=()):
         """
         Register a device
 
@@ -160,7 +161,7 @@ class ETS(threading.Thread):
             Scheduler().doRegisterJobs(fb)
             Notifier().doRegisterJobs(fb)
 
-        for groupObject, gad in device.lnk:
+        for groupObject, gad in chain(device.lnk,links):
             # Get GroupAddress
             if not isinstance(gad, GroupAddress):
                 gad = GroupAddress(gad)

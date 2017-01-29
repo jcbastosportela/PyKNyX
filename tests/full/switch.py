@@ -27,7 +27,7 @@ class ToggleFB(FunctionalBlock):
 
 class ActorFB(FunctionalBlock):
     change = DP(dptId="1.001", default="Off", access="input")
-    DP_02 = dict(name="status", dptId="1.001", default="Off", access="output")
+    status = DP(dptId="1.001", default="Off", access="output")
     GO_01 = dict(dp=change, flags="CW", priority="low")
     GO_02 = GO(dp="status", flags="CRT", priority="low")
     DESC = "ActorFB"
@@ -66,10 +66,7 @@ class Toggle(Device):
         return self.fb["toggle_fb"].dp["status"].value == "On"
 
 class Actor(Device):
-    FB_01 = dict(cls=ActorFB, name="actor_fb", desc="binary output")
-
-    LNK_01 = dict(fb="actor_fb", dp="change", gad="1/1/1")
-    LNK_02 = dict(fb="actor_fb", dp="status", gad="1/2/1")
+    actor_fb = FB(ActorFB, desc="binary output")
 
 class SwitchTestCase(unittest.TestCase):
 
@@ -94,7 +91,9 @@ class SwitchTestCase(unittest.TestCase):
         self._do_test()
 
     def _do_test(self):
-        self.actor = Actor(self.ets, "1.2.3")
+        self.actor = Actor(self.ets, "1.2.3",
+            links=(LNK(Actor.actor_fb.change, "1/1/1"),
+                   LNK(Actor.actor_fb.status, "1/2/1")))
         self.toggle = Toggle(self.ets2, "1.2.4")
         self.ets.start()
         if self.ets2 is not self.ets:

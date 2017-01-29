@@ -82,6 +82,7 @@ class GO(object):
         else:
             assert isinstance(self.dp,str), self.dp
             dp = obj.dp[self.dp]
+            self.dp = dp._factory # required for symbolic LNK() to work
         go = GroupObject(dp, *self.args, **self.kwargs)
         go._factory = self
         return go
