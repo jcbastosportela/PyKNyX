@@ -174,6 +174,8 @@ class FunctionalBlock(object):
                     key = value.name
 
                 if isinstance(value, DP):
+                    if value.name is None:
+                        value.name = key
                     value = value.gen(self, key)
                     logger.debug("%s: new DP %s: %s", self, repr(key), value)
                     datapoints[key] = value
