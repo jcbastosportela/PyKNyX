@@ -78,7 +78,7 @@ class FB_DP(object):
                 if val._factory.dp is self.dp:
                     return val
             else:
-                raise KeyError("I could not find the DP factory %s on %s",self.dp,obj)
+                raise KeyError("I could not find the GO for DP '%s' in FB '%s'"%(self.dp.name, fb.__class__.__name__))
 
 
 class FB(object):
