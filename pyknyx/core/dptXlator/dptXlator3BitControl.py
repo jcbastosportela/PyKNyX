@@ -93,7 +93,7 @@ class DPTXlator3BitControl(DPTXlatorBase):
 
     def checkValue(self, value):
         if not self._dpt.limits[0] <= value <= self._dpt.limits[1]:
-            raise DPTXlatorValueError("value %d not in range %r" % (value, repr(self._dpt.limits)))
+            raise DPTXlatorValueError("value %d not in range %s" % (value, repr(self._dpt.limits)))
 
     def dataToValue(self, data):
         ctrl = (data & 0x08) >> 3

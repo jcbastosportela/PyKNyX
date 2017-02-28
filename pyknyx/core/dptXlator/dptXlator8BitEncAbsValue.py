@@ -79,7 +79,7 @@ class DPTXlator8BitEncAbsValue(DPTXlatorBase):
     def checkValue(self, value):
         if self.dpt is self.DPT_Generic:
             if not self._dpt.limits[0] <= value <= self._dpt.limits[1]:
-                raise DPTXlatorValueError("value not in range %r" % repr(self._dpt.limits))
+                raise DPTXlatorValueError("value not in range %s" % repr(self._dpt.limits))
         elif value not in self._dpt.limits:
             raise DPTXlatorValueError("value not in %r" % repr(self._dpt.limits))
 

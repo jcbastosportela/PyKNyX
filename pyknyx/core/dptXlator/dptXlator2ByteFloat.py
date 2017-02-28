@@ -100,7 +100,7 @@ class DPTXlator2ByteFloat(DPTXlatorBase):
 
     def checkValue(self, value):
         if not self._dpt.limits[0] <= value <= self._dpt.limits[1]:
-            raise DPTXlatorValueError("Value not in range %r" % repr(self._dpt.limits))
+            raise DPTXlatorValueError("Value not in range %s" % repr(self._dpt.limits))
 
     def dataToValue(self, data):
         sign = (data & 0x8000) >> 15

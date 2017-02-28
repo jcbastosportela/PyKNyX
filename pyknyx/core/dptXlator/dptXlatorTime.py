@@ -83,7 +83,7 @@ class DPTXlatorTime(DPTXlatorBase):
     def checkValue(self, value):
         for index in range(4):
             if not self._dpt.limits[0][index] <= value[index] <= self._dpt.limits[1][index]:
-                raise DPTXlatorValueError("value not in range %r" % repr(self._dpt.limits))
+                raise DPTXlatorValueError("value not in range %s" % repr(self._dpt.limits))
 
     def dataToValue(self, data):
         wDay = (data >> 21) & 0x07

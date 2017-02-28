@@ -81,7 +81,7 @@ class DPTXlatorScene(DPTXlatorBase):
     def checkValue(self, value):
         for index in range(2):
             if not self._dpt.limits[0][index] <= value[index] <= self._dpt.limits[1][index]:
-                raise DPTXlatorValueError("value not in range %r" % repr(self._dpt.limits))
+                raise DPTXlatorValueError("value not in range %s" % repr(self._dpt.limits))
 
     def dataToValue(self, data):
         ctrl = (data >> 7) & 0x01

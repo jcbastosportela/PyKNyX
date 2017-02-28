@@ -97,7 +97,7 @@ class DPTXlatorString(DPTXlatorBase):
     def checkValue(self, value):
         for index in range(14):
             if not self._dpt.limits[0][index] <= value[index] <= self._dpt.limits[1][index]:
-                raise DPTXlatorValueError("value not in range %r" % repr(self._dpt.limits))
+                raise DPTXlatorValueError("value not in range %s" % repr(self._dpt.limits))
 
     def dataToValue(self, data):
         value = tuple([int((data >> shift) & 0xff) for shift in range(104, -1, -8)])

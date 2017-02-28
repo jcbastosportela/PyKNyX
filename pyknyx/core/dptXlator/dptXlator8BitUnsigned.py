@@ -83,7 +83,7 @@ class DPTXlator8BitUnsigned(DPTXlatorBase):
 
     def checkValue(self, value):
         if not self._dpt.limits[0] <= value <= self._dpt.limits[1]:
-            raise DPTXlatorValueError("value not in range %r" % repr(self._dpt.limits))
+            raise DPTXlatorValueError("value not in range %s" % repr(self._dpt.limits))
 
     def dataToValue(self, data):
         value = data
