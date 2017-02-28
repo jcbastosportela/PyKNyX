@@ -98,9 +98,9 @@ class ETS(threading.Thread):
         super(ETS, self).__init__()
         self._devices = set()
         self._layer2 = set()
-        self._addr = addr
+        self._addr = IndividualAddress(addr)
         self._addrNum = addrRange
-        self._addrAlloc = addr
+        self._addrAlloc = self._addr
         self._queue = PriorityQueue(PRIORITY_DISTRIBUTION)
 
         self._scheduler = Scheduler()
