@@ -1,6 +1,7 @@
-/files
-/*.log
+/debhelper-build-stamp
+/*.debhelper.log
 /*.debhelper
 /*.substvars
-/python3-pyknyx
-/python-pyknyx
+/python-pyknyx/
+/python3-pyknyx/
+/files
