@@ -18,10 +18,6 @@ PyKNyX is a fork of pKNyX. It is not API-compatible.
 Future plans
 ============
 
-Rewrite FunctionalBlock and Device setup. Using special class variables
-causes errors to be hard to find; setting up a device in code requires a
-class per device instead of per device type which is unnecessary.
-
 Support packets to a device's physical address.
 
 Drop threads in favor of asyncio (Python 3 only).
@@ -39,6 +35,11 @@ singleton. It is also now responsible for assigning physical addresses to
 drivers. This allows you to create more than one device per ETS instance,
 as well as more than one driver to actually talk to a bus. You can also run
 more than one ETS instance within a process.
+
+FunctionalBlock and Device setup has been rewritten. Devices can now be set
+up by passing its physical address and the group address linkage to the
+object's constructor; it is no loger required to create a new class for
+each object.
 
 History
 =======
