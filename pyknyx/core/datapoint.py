@@ -292,5 +292,5 @@ class Datapoint(object):
         self._setData(data)
 
         # Notify owner (FunctionalBlock)
-        self._owner.notify(self.name, oldValue, self.value)
+        self._owner.notify(self, oldValue, self.value)
 

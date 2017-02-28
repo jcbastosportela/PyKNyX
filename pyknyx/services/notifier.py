@@ -250,7 +250,7 @@ class Notifier(object):
         """
         logger.debug("Notifier.datapointNotify(): obj=%s, dp=%s, oldValue=%s, newValue=%s" % (obj.name, dp, repr(oldValue), repr(newValue)))
 
-        for method, condition, thread_ in self._datapointJobs.get(obj,{}).get(dp,()):
+        for method, condition, thread_ in self._datapointJobs.get(obj,{}).get(dp._factory,()):
             if oldValue != newValue and condition == "change" or condition == "always":
                 try:
                     logger.debug("Notifier.datapointNotify(): trigger method %s() of %s" % (meth_name(method), meth_self(method)))
