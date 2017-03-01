@@ -113,6 +113,9 @@ class Flags(object):
         """
         super(Flags, self).__init__()
 
+        if isinstance(raw,Flags):
+            raw = raw._raw
+
         try:
             if not re.match("^C?R?W?T?U?I?S?$", raw):
                 raise FlagsValueError("invalid flags set (%r)" % repr(raw))
