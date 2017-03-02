@@ -41,6 +41,15 @@ up by passing its physical address and the group address linkage to the
 object's constructor; it is no loger required to create a new class for
 each object.
 
+DP/GO/FB specs can now be done by creating an object. This improves error
+handling and allows us to refer to them by name.
+
+Datapoints can now auto-create the Group Object referring to them, for the
+common case where there's only one.
+
+Notifiers can now access data points directly, instead of referring to them
+by name.
+
 History
 =======
 
