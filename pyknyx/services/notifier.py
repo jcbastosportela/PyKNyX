@@ -216,6 +216,8 @@ class Notifier(object):
 
                     if type_ == "datapoint":
                         dp, condition, thread = args
+                        if isinstance(dp,str):
+                            dp = obj.dp[dp]._factory
                         try:
                             self._datapointJobs[obj][dp].append((method, condition, thread))
                         except KeyError:

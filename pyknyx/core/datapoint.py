@@ -294,7 +294,7 @@ class Datapoint(object):
         self._signalChanged.emit(oldValue=oldValue, newValue=self.value)
 
         # Notify owner (FunctionalBlock)
-        self._owner.notify(self.name, oldValue, self.value)  # TBD
+        self._owner.notify(self, oldValue, self.value)  # TBD
 
     @property
     def unit(self):
