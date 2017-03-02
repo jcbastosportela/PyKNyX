@@ -125,7 +125,7 @@ class Notifier(object):
     def _execute(self, method, event):
         """ Execute given method
 
-        Used to add the try/except statement when launched in a thread
+        Used to add the try/except statement
 
         @todo: add a more explicite message for enduser?
         """
@@ -134,7 +134,7 @@ class Notifier(object):
         except:
             logger.exception("Notifier._execute()")
 
-    def addDatapointJob(self, func, dp, condition="change", thread=False):
+    def addDatapointJob(self, func, dp, condition="change"):
         """ Add a job for a datapoint change
 
         @param func: job to register
@@ -145,16 +145,13 @@ class Notifier(object):
 
         @param condition: watching condition, in ("change", "always")
         @type condition: str
-
-        @param thread: flag to execute job in a thread
-        @type thread: bool
         """
         logger.debug("Notifier.addDatapointJob(): func=%s, dp=%s" % (repr(func), repr(dp)))
 
         if condition not in ("change", "always"):
             raise NotifierValueError("invalid condition (%s)" % repr(condition))
 
-        self._pendingFuncs.append(("datapoint", func, (dp, condition, thread)))
+        self._pendingFuncs.append(("datapoint", func, (dp, condition)))
 
     def datapoint(self, dp, *args, **kwargs):
         """ Decorator for addDatapointJob()
@@ -215,16 +212,16 @@ class Notifier(object):
                 if meth_func(method) is func:  # avoid name clash between FB methods
 
                     if type_ == "datapoint":
-                        dp, condition, thread = args
+                        dp, condition = args
                         if isinstance(dp,str):
                             dp = obj.dp[dp]._factory
                         try:
-                            self._datapointJobs[obj][dp].append((method, condition, thread))
+                            self._datapointJobs[obj][dp].append((method, condition))
                         except KeyError:
                             try:
-                                self._datapointJobs[obj][dp] = [(method, condition, thread)]
+                                self._datapointJobs[obj][dp] = [(method, condition)]
                             except KeyError:
-                                self._datapointJobs[obj] = {dp: [(method, condition, thread)]}
+                                self._datapointJobs[obj] = {dp: [(method, condition)]}
 
                     #elif type_ == "group":
                         #gad = args
@@ -252,17 +249,13 @@ class Notifier(object):
         """
         logger.debug("Notifier.datapointNotify(): obj=%s, dp=%s, oldValue=%s, newValue=%s" % (obj.name, dp, repr(oldValue), repr(newValue)))
 
-        for method, condition, thread_ in self._datapointJobs.get(obj,{}).get(dp._factory,()):
+        for method, condition in self._datapointJobs.get(obj,{}).get(dp._factory,()):
             if oldValue != newValue and condition == "change" or condition == "always":
                 try:
                     logger.debug("Notifier.datapointNotify(): trigger method %s() of %s" % (meth_name(method), meth_self(method)))
-                    event = dict(name="datapoint", dp=dp, oldValue=oldValue, newValue=newValue, condition=condition, thread=thread_)
+                    event = dict(name="datapoint", dp=dp, oldValue=oldValue, newValue=newValue, condition=condition)
 
-                    if thread_:
-                        thread.start_new_thread(self._execute, (method, event))
-                        #TODO: register threads, so they can be killed (how?) when stopping the device
-                    else:
-                        self._execute(method, event)
+                    self._execute(method, event)
                 except:
                     logger.exception("Notifier.datapointNotify()")
 
