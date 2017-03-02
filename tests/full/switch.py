@@ -27,9 +27,9 @@ class ToggleFB(FunctionalBlock):
 
 class ActorFB(FunctionalBlock):
     change = DP(dptId="1.001", default="Off", access="input")
-    status = DP(dptId="1.001", default="Off", access="output")
+    status = DP(dptId="1.001", default="Off", access="output", flags="CRT")
     GO_01 = dict(dp=change, flags="CW", priority="low")
-    GO_02 = GO(dp="status", flags="CRT", priority="low")
+    # GO_02 = GO(dp="status", flags="CRT", priority="low")
     DESC = "ActorFB"
 
     _current = None
