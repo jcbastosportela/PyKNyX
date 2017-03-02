@@ -53,7 +53,7 @@ Usage
 from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
 from pyknyx.core.groupListener import GroupListener
-from pyknyx.core.datapoint import DP
+from pyknyx.core.datapoint import DP, Datapoint
 from pyknyx.stack.flags import Flags
 from pyknyx.stack.priority import Priority
 
@@ -72,7 +72,9 @@ class GO(object):
     
     def gen(self, obj, name=None):
         dp = self.dp
-        if isinstance(self.dp,DP):
+        if isinstance(self.dp,Datapoint):
+            dp = self.dp
+        elif isinstance(self.dp,DP):
             for val in obj.dp.values():
                 if val._factory is dp:
                     dp = val
@@ -125,6 +127,8 @@ class GroupObject(GroupListener):
         if not isinstance(flags, Flags):
             flags = Flags(flags)
         self._flags = flags
+        if priority is None:
+            priority = "low"
         if not isinstance(priority, Priority):
             priority = Priority(priority)
         self._priority = priority

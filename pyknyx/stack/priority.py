@@ -91,7 +91,9 @@ class Priority(object):
         """
         super(Priority, self).__init__()
 
-        if isinstance(level, str):
+        if isinstance(level, Priority):
+            level = level.level
+        elif isinstance(level, str):
             try:
                 level = Priority.CONV_TABLE[level]
             except KeyError:

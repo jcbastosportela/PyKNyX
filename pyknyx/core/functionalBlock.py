@@ -185,8 +185,13 @@ class FunctionalBlock(object):
 
         self._datapoints = FrozenDict(datapoints)
 
-        # objects named B{GO_xxx} or of type GO are treated as GroupObjects and added to the B{_groupObjects} dict
+        # If a Datapoint has Flags, auto-generate a GO for it as a shortcut
         groupObjects = {}
+        for key, value in datapoints.items():
+            if value.flags is not None:
+                groupObjects[key] = GO(value._factory, flags=value.flags, priority=value.priority).gen(self)
+
+        # objects named B{GO_xxx} or of type GO are treated as GroupObjects and added to the B{_groupObjects} dict
         for cls_ in classes[::-1]:
             for key, value in cls_.__dict__.items():
                 if key.startswith("GO_") and isinstance(value, dict):

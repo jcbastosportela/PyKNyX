@@ -147,6 +147,12 @@ class Datapoint(object):
     @ivar _dptXlatorGeneric: generic DPT translator associated with this Datapoint
     @type _dptXlatorGeneric: L{DPTXlator<pyknyx.core.dptXlator>}
 
+    @ivar _flags: Flags used to auto-instantiate a GO
+    @type _flags: L{Flags<pyknyx.stack.flags>}
+
+    @ivar _priority: Priority used to auto-instantiate a GO, require Flags to be set
+    @type _priority: L{Flags<pyknyx.stack.priority>}
+
     @ivar _signalChanged: emitted when the datapoint value has been updated by the owner
                           Used to notify associated GroupObject (and other proxies), if any
                           Params sent are datapoint name, old and new values.
@@ -155,7 +161,7 @@ class Datapoint(object):
     @todo: add desc. param
     @todo: take 'access' into account when transmit/receive
     """
-    def __init__(self, owner, name, access, dptId=DPTID(), default=None):
+    def __init__(self, owner, name, access, dptId=DPTID(), default=None, flags=None, priority=None):
         """
 
         @param owner: owner of the datapoint
@@ -172,6 +178,9 @@ class Datapoint(object):
 
         @param default: value to use as default
         @type default: depend on the DPT
+
+        @param flags: Flags to auto-instantiate a GO
+        @type flags: Flags
         """
         super(Datapoint, self).__init__()
 
@@ -190,6 +199,8 @@ class Datapoint(object):
         self._access = access
         self._default = default
         self._data = None
+        self._flags = None if flags is None else Flags(flags)
+        self._priority = None if priority is None else Priority(priority)
 
         self._dptXlator = DPTXlatorFactory().create(dptId)
         if dptId != dptId.generic:
@@ -222,6 +233,14 @@ class Datapoint(object):
     @property
     def dptId(self):
         return self._dptId
+
+    @property
+    def flags(self):
+        return self._flags
+
+    @property
+    def priority(self):
+        return self._priority
 
     @property
     def access(self):
