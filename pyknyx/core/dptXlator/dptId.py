@@ -84,7 +84,7 @@ class DPTID(object):
     @ivar _id: Datapoint Type ID
     @type _id: str
     """
-    def __init__(self, dptId="1.xxx"):
+    def __init__(self, dptId=None, main=None,sub=None):
         """ Create a new Datapoint Type ID from the given id
 
         @param dptId: Datapoint Type ID to create
@@ -94,7 +94,14 @@ class DPTID(object):
         """
         super(DPTID, self).__init__()
 
-        if not re.match("^\d{1,3}\.\d{1,3}$", dptId) and not re.match("^\d{1,3}\.xxx$", dptId):
+        if dptId is None:
+            assert main is not None
+            if sub is None:
+                dptId = "%d.xxx" % (main,)
+            else:
+                dptId = "%d.%03d" % (main,sub)
+
+        elif not re.match("^\d{1,3}\.\d{1,3}$", dptId) and not re.match("^\d{1,3}\.xxx$", dptId):
             raise DPTIDValueError("invalid Datapoint Type ID (%r)" % repr(dptId))
 
         self._id = dptId
