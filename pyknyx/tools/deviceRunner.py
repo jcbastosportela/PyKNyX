@@ -100,9 +100,7 @@ class DeviceRunner(object):
         logger.info("Device path is '%s'" % devicePath)
         logger.info("Device name is '%s'" % DEVICE_NAME)
 
-        self._deviceIndAddr = DEVICE_IND_ADDR
-        if not isinstance(self._deviceIndAddr, IndividualAddress):
-            self._deviceIndAddr = IndividualAddress(self._deviceIndAddr)
+        self._deviceIndAddr = IndividualAddress(DEVICE_IND_ADDR)
         if self._deviceIndAddr.isNull:
             logger.warning("Device Individual Address is null")
         else:
