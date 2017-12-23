@@ -161,7 +161,7 @@ class Datapoint(object):
     @todo: add desc. param
     @todo: take 'access' into account when transmit/receive
     """
-    def __init__(self, owner, name, access, dptId=DPTID(), default=None, flags=None, priority=None):
+    def __init__(self, owner, name, access, dptId, default=None, flags=None, priority=None):
         """
 
         @param owner: owner of the datapoint

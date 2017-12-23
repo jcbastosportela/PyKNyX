@@ -118,7 +118,10 @@ class GroupAddress(KnxAddress):
         """
         #logger.debug("GroupAddress.__init__(): address=%s" % repr(address))
 
-        if isinstance(address, str):
+        if isinstance(address, GroupAddress):
+            address = address._raw
+
+        elif isinstance(address, str):
             address = address.strip().split('/')
             try:
                 address = [int(val) for val in address]
@@ -153,13 +156,10 @@ class GroupAddress(KnxAddress):
 
     @property
     def address(self):
-        address = []
-        address.append("%d" % self.main)
         if self._outFormatLevel == 3:
-            address.append("%d" % self.middle)
-        address.append("%d" % self.sub)
-
-        return '/'.join(address)
+            return "%d/%d/%d" % (self.main, self.middle, self.sub)
+        else:
+            return "%d/%d" % (self.main, self.sub)
 
     @property
     def main(self):

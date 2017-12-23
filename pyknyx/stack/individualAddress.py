@@ -97,13 +97,16 @@ class IndividualAddress(KnxAddress):
         """
         #logger.debug("IndividualAddress.__init__(): address=%s" % repr(address))
 
-        if isinstance(address, str):
+        if isinstance(address,IndividualAddress): # copy
+            address = address._raw
+        elif isinstance(address, str):
             address = address.strip().split('.')
             try:
                 address = [int(val) for val in address]
             except ValueError:
                 logger.exception("IndividualAddress.__init__()")
                 raise IndividualAddressValueError("invalid individual address")
+
         try:
             if len(address) == 3:
                 if not 0 <= address[0] <= 0xf or not 0 <= address[1] <= 0xf or not 0 <= address[2] <= 0xff:
@@ -126,12 +129,7 @@ class IndividualAddress(KnxAddress):
 
     @property
     def address(self):
-        address = []
-        address.append("%d" % self.area)
-        address.append("%d" % self.line)
-        address.append("%d" % self.device)
-
-        return '.'.join(address)
+        return "%d.%d.%d" % (self.area, self.line, self.device)
 
     @property
     def area(self):
