@@ -141,7 +141,7 @@ class L_DataServiceBroadcast(L_DataServiceBase):
         super(L_DataServiceBroadcast, self).__init__(*args, **kwargs)
 
         self._physAddrs = set()
-        self._physAddrs.add(IndividualAddress((7,15,15))) ## programming
+        self._physAddrs.add(IndividualAddress("7.15.15")) ## programming
 
     def wantsIndividualFrame(self, cEMI, force=False):
         if not force and cEMI.destinationAddress not in self._physAddrs:

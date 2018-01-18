@@ -63,7 +63,8 @@ import time
 
 from pyknyx.common import config
 from pyknyx.common.exception import PyKNyXValueError
-from pyknyx.services.logger import logging; logger = logging.getLogger(__name__)
+from pyknyx.services.logger import logging
+logger = logging.getLogger(__name__)
 from pyknyx.services.scheduler import Scheduler
 from pyknyx.services.groupAddressTableMapper import GroupAddressTableMapper
 from pyknyx.core.ets import ETS
@@ -94,7 +95,7 @@ class DeviceRunner(object):
             config.LOGGER_LEVEL = loggerLevel
 
         # DO NOT USE LOGGER BEFORE THIS POINT!
-        Logger("%s-%s" % (DEVICE_NAME, DEVICE_IND_ADDR))
+        #logger("%s-%s" % (DEVICE_NAME, DEVICE_IND_ADDR), loggerLevel)
         logger.info("Logger level is '%s'" % config.LOGGER_LEVEL)
 
         logger.info("Device path is '%s'" % devicePath)
@@ -138,7 +139,7 @@ class DeviceRunner(object):
 
         # Create device from user 'device' module
         from device import DEVICE
-        self._device = DEVICE(self._deviceIndAddr)
+        self._device = DEVICE(self.ets, self._deviceIndAddr)
 
         self.ets.register(self._device)
 
@@ -157,5 +158,5 @@ class DeviceRunner(object):
             logger.info("Run process as daemon...")
             self._doubleFork()
 
-        ets.mainLoop()
+        self.ets.mainLoop()
 

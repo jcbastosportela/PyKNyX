@@ -105,7 +105,7 @@ class Scheduler(object):
 
     _apscheduler = None
 
-    def __init__(self, autoStart=False, type_=BackgroundScheduler):
+    def __init__(self, autoStart=True, type_=BackgroundScheduler):
         """ Init the Scheduler object
 
         @param autoStart: if True, automatically starts the scheduler

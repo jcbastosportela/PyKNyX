@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pyknyx.api import FunctionalBlock
-from pyknyx.api import logger, schedule, notify
+from pyknyx.api import logging, schedule, notify
 
 
 class TimerFB(FunctionalBlock):

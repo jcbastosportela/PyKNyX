@@ -51,6 +51,7 @@ from pyknyx.core.functionalBlock import FunctionalBlock, FB
 from pyknyx.core.datapoint import DP
 from pyknyx.core.groupObject import GO
 from pyknyx.core.ets import ETS
+from pyknyx.services.logger import logging
 
 from pyknyx.services.scheduler import Scheduler
 from pyknyx.services.notifier import Notifier
@@ -61,6 +62,7 @@ from pyknyx.plugins.mail import MUA
 # Instanciate some global objects
 schedule = Scheduler()
 notify = Notifier()
+logger = logging.getLogger( __name__ )
 
 # Del unused imported classes
 del Scheduler

@@ -107,17 +107,17 @@ class IndividualAddress(KnxAddress):
                 logger.exception("IndividualAddress.__init__()")
                 raise IndividualAddressValueError("invalid individual address")
 
-        try:
-            if len(address) == 3:
-                if not 0 <= address[0] <= 0xf or not 0 <= address[1] <= 0xf or not 0 <= address[2] <= 0xff:
-                    raise IndividualAddressValueError("individual address out of range")
-                address = address[0] << 12 | address[1] << 8 | address[2]
-            else:
-                raise IndividualAddressValueError("invalid individual address")
-        except TypeError:
-            if not isinstance(address, int):
-                logger.exception("IndividualAddress.__init__()")
-                raise IndividualAddressValueError("invalid individual address")
+            try:
+                if len(address) == 3:
+                    if not 0 <= address[0] <= 0xf or not 0 <= address[1] <= 0xf or not 0 <= address[2] <= 0xff:
+                        raise IndividualAddressValueError("individual address out of range")
+                    address = address[0] << 12 | address[1] << 8 | address[2]
+                else:
+                    raise IndividualAddressValueError("invalid individual address")
+            except TypeError:
+                if not isinstance(address, int):
+                    logger.exception("IndividualAddress.__init__()")
+                    raise IndividualAddressValueError("invalid individual address")
 
         super(IndividualAddress, self).__init__(address)
 

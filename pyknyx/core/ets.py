@@ -65,7 +65,7 @@ from pyknyx.services.groupAddressTableMapper import GroupAddressTableMapper
 from pyknyx.stack.priorityQueue import PriorityQueue
 from pyknyx.stack.layer2.l_dataService import PRIORITY_DISTRIBUTION
 from pyknyx.stack.transceiver.udpTransceiver import UDPTransceiver
-
+import time
 
 class ETSValueError(PyKNyXValueError):
     """
@@ -396,6 +396,5 @@ class ETS(threading.Thread):
         except KeyboardInterrupt:
             pass
         finally:
-            self._
             self.stop()
 
