@@ -48,7 +48,7 @@ APP_VERSION = "2.0.0.dev.1"
 # Logger
 LOGGER_STREAM_FORMAT = "%(threadName)s::%(message)s"
 LOGGER_FILE_FORMAT = "%(asctime)s::%(threadName)s::%(levelname)s::%(message)s"
-LOGGER_LEVEL = "INFO"
+LOGGER_LEVEL = "DEBUG"
 LOGGER_DIR = "/tmp"
 LOGGER_MAX_BYTES = 4096 * 1024
 LOGGER_BACKUP_COUNT = 4  # set to 0 to disable logging on file

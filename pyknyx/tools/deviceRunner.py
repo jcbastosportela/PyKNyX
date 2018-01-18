@@ -64,7 +64,7 @@ import time
 from pyknyx.common import config
 from pyknyx.common.exception import PyKNyXValueError
 from pyknyx.services.logger import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__);
 from pyknyx.services.scheduler import Scheduler
 from pyknyx.services.groupAddressTableMapper import GroupAddressTableMapper
 from pyknyx.core.ets import ETS
@@ -96,7 +96,9 @@ class DeviceRunner(object):
 
         # DO NOT USE LOGGER BEFORE THIS POINT!
         #logger("%s-%s" % (DEVICE_NAME, DEVICE_IND_ADDR), loggerLevel)
-        logger.info("Logger level is '%s'" % config.LOGGER_LEVEL)
+        logger.debug("D:Logger level is '%s'" % config.LOGGER_LEVEL)
+        logger.info("I:Logger level is '%s'" % config.LOGGER_LEVEL)
+        logger.warning("W:Logger level is '%s'" % config.LOGGER_LEVEL)
 
         logger.info("Device path is '%s'" % devicePath)
         logger.info("Device name is '%s'" % DEVICE_NAME)
